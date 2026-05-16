@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fafaf7;
+  --foreground: #111111;
+  --muted: #6b6b66;
+  --subtle: #e5e3dc;
+  --hairline: #ebe9e2;
+  --accent: #1f4d3a;
+  --positive: #1f6b48;
+  --negative: #8b2e2e;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-hairline: var(--hairline);
+  --color-accent: var(--accent);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo,
+    monospace;
+  --font-serif: var(--font-serif), ui-serif, Georgia, "Times New Roman", serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0c0c0b;
+    --foreground: #f1efe9;
+    --muted: #8a8880;
+    --subtle: #1a1a18;
+    --hairline: #1f1f1d;
+    --accent: #74c69d;
+    --positive: #6cc28d;
+    --negative: #d97a7a;
+  }
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+  font-feature-settings: "ss01", "ss02";
+}
