@@ -166,15 +166,38 @@ async function findInfoTableUrl(cik: string, accessionNumber: string): Promise<s
   return `https://www.sec.gov/Archives/edgar/data/${cik}/${accDashless}/${chosen.name}`;
 }
 
+type HoldingsCacheEntry = { at: number; holdings: Holding[] };
+const HOLDINGS_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
+const holdingsCache = new Map<string, HoldingsCacheEntry>();
+
 export async function getHoldings(
   cik: string,
   accessionNumber: string,
 ): Promise<Holding[]> {
   const cleanCik = cik.replace(/^0+/, "");
+  const key = `${cleanCik}|${accessionNumber}`;
+  const cached = holdingsCache.get(key);
+  if (cached && Date.now() - cached.at < HOLDINGS_TTL_MS) {
+    return cached.holdings;
+  }
+
   const xmlUrl = await findInfoTableUrl(cleanCik, accessionNumber);
-  const xmlRes = await edgarFetch(xmlUrl);
+  // Fetch XML directly without Next data cache — large info tables
+  // (Citadel's is 10MB) exceed Next.js's 2MB fetch cache cap.
+  const xmlRes = await fetch(xmlUrl, {
+    headers: {
+      "User-Agent": USER_AGENT,
+      "Accept-Encoding": "gzip, deflate",
+    },
+    cache: "no-store",
+  });
+  if (!xmlRes.ok) {
+    throw new Error(`SEC EDGAR ${xmlRes.status} ${xmlRes.statusText}: ${xmlUrl}`);
+  }
   const xml = await xmlRes.text();
-  return parseInfoTable(xml);
+  const holdings = parseInfoTable(xml);
+  holdingsCache.set(key, { at: Date.now(), holdings });
+  return holdings;
 }
 
 export function isValueInThousands(filingDateIso: string): boolean {

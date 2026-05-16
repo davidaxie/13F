@@ -50,6 +50,12 @@ export default function RootLayout({
               >
                 Search
               </Link>
+              <Link
+                href="/dashboard"
+                className="transition-colors hover:text-foreground"
+              >
+                Dashboard
+              </Link>
               <a
                 href="https://www.sec.gov/divisions/investment/13ffaq"
                 target="_blank"
