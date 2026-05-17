@@ -134,6 +134,7 @@ async function _runBacktest(
   fundName: string,
   startingCash: number,
   mode: "recent" | "all",
+  maxQuarters?: number,
 ): Promise<FundBacktest> {
   const cleanCik = cik.replace(/^0+/, "");
 
@@ -146,13 +147,15 @@ async function _runBacktest(
     .reduce<Filing[]>((acc, f) => {
       const last = acc[acc.length - 1];
       if (last && last.reportDate === f.reportDate) {
-        // Replace with newer filing
         acc[acc.length - 1] = f;
       } else {
         acc.push(f);
       }
       return acc;
-    }, []);
+    }, [])
+    // Optionally cap to most recent N quarters so backtests fit serverless
+    // function timeouts (Vercel Hobby = 60s).
+    .slice(maxQuarters && maxQuarters > 0 ? -maxQuarters : 0);
 
   // 2. Pull holdings for each filing concurrently.
   const holdingsByAccession = await pMap(
@@ -502,13 +505,19 @@ function emptyBacktest(
   };
 }
 
+// On Vercel we cap to the most recent 20 quarters (~5 years) so backtests
+// finish inside the function timeout on a cold container. Locally we use
+// the full history (disk-cached) since we're not bounded.
+const DEFAULT_MAX_QUARTERS = process.env.VERCEL ? 20 : 0;
+
 export const runBacktest = cache(
   async (
     cik: string,
     fundName: string,
     startingCash = 10000,
     mode: "recent" | "all" = "all",
+    maxQuarters: number = DEFAULT_MAX_QUARTERS,
   ): Promise<FundBacktest> => {
-    return _runBacktest(cik, fundName, startingCash, mode);
+    return _runBacktest(cik, fundName, startingCash, mode, maxQuarters);
   },
 );

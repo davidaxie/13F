@@ -18,13 +18,12 @@ async function safeBacktest(
 }
 
 export async function Leaderboard() {
-  // Run funds sequentially so SEC and OpenFIGI aren't slammed in parallel.
-  // Cold cache: this is the slow path (~5-10 min total); subsequent loads
-  // resolve from disk cache instantly.
-  const results: Array<FundBacktest | null> = [];
-  for (const f of MARQUEE_FUNDS) {
-    results.push(await safeBacktest(f.cik, f.displayName));
-  }
+  // Run all funds in parallel. The global queues inside edgar/openfigi/prices
+  // serialize the actual outbound requests at safe rates, so concurrency here
+  // mainly hides per-fund latency rather than amplifying load.
+  const results = await Promise.all(
+    MARQUEE_FUNDS.map((f) => safeBacktest(f.cik, f.displayName)),
+  );
 
   type Row = { fund: (typeof MARQUEE_FUNDS)[number]; bt: FundBacktest };
   const rows: Row[] = results

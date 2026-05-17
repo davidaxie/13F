@@ -1,16 +1,15 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import { CrossFundHighlights } from "@/components/cross-fund-highlights";
 import {
   FundCardSkeleton,
   HighlightsSkeleton,
-  LeaderboardSkeleton,
 } from "@/components/dashboard-skeletons";
 import { FundCard } from "@/components/fund-card";
-import { Leaderboard } from "@/components/leaderboard";
 import { MARQUEE_FUNDS } from "@/lib/dashboard";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 300;
+export const maxDuration = 60;
 
 export default function DashboardPage() {
   return (
@@ -26,15 +25,17 @@ export default function DashboardPage() {
           Quarter-over-quarter changes from leading institutional managers — new
           positions, full exits, and the largest adds and trims.
         </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link
+            href="/leaderboard"
+            className="inline-flex items-center gap-2 border-b border-accent/30 pb-0.5 text-sm text-accent transition-colors hover:border-accent"
+          >
+            View backtest leaderboard →
+          </Link>
+        </div>
       </div>
 
       <div className="mt-16">
-        <Suspense fallback={<LeaderboardSkeleton />}>
-          <Leaderboard />
-        </Suspense>
-      </div>
-
-      <div className="mt-20">
         <Suspense fallback={<HighlightsSkeleton />}>
           <CrossFundHighlights />
         </Suspense>
