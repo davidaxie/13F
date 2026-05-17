@@ -510,13 +510,17 @@ function emptyBacktest(
 // container. Locally we use the full history (disk-cached) since we're
 // not bounded.
 const DEFAULT_MAX_QUARTERS = process.env.VERCEL ? 12 : 0;
+// On Vercel, default to "recent" mode (SEC's last-1000-filings list) to
+// skip the historical archive-page fetches that long-history filers like
+// Citadel and Two Sigma trigger. Locally default to "all" for completeness.
+const DEFAULT_MODE: "recent" | "all" = process.env.VERCEL ? "recent" : "all";
 
 export const runBacktest = cache(
   async (
     cik: string,
     fundName: string,
     startingCash = 10000,
-    mode: "recent" | "all" = "all",
+    mode: "recent" | "all" = DEFAULT_MODE,
     maxQuarters: number = DEFAULT_MAX_QUARTERS,
   ): Promise<FundBacktest> => {
     return _runBacktest(cik, fundName, startingCash, mode, maxQuarters);

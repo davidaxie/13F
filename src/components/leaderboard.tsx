@@ -11,7 +11,8 @@ async function safeBacktest(
   name: string,
 ): Promise<FundBacktest | null> {
   try {
-    return await runBacktest(cik, name, 10000, "all");
+    // Use runBacktest defaults — on Vercel that's recent + 12 quarters.
+    return await runBacktest(cik, name);
   } catch (err) {
     console.warn(`leaderboard: backtest failed for ${name}: ${err}`);
     return null;
