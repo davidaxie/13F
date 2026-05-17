@@ -1,4 +1,5 @@
 import { readJson, writeJson } from "./disk-cache";
+import seedData from "./cusip-seed.json";
 
 export type CusipMapping = {
   ticker: string | null;
@@ -7,12 +8,21 @@ export type CusipMapping = {
 };
 
 const CACHE_FILE = "cusip-to-ticker.json";
+
 const memCache = new Map<string, CusipMapping>();
 let loaded = false;
 let saveScheduled = false;
 
+// Seed the in-memory cache at module load with the bundled snapshot
+// (~8.5k CUSIP→ticker mappings). Covers virtually every marquee-fund
+// holding so the app doesn't have to call OpenFIGI at all in the common
+// case — no API key required to render the leaderboard.
+const seedRecord = seedData as Record<string, CusipMapping>;
+for (const [k, v] of Object.entries(seedRecord)) memCache.set(k, v);
+
 async function load() {
   if (loaded) return;
+  // Disk cache (per-deploy, per-container) overlays the seed.
   const data = await readJson<Record<string, CusipMapping>>(CACHE_FILE);
   if (data) {
     for (const [k, v] of Object.entries(data)) memCache.set(k, v);
