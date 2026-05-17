@@ -5,11 +5,12 @@ import { PnlStairstepChart } from "@/components/charts/pnl-stairstep";
 import { TradeScatterChart } from "@/components/charts/trade-scatter";
 import { getFundInfo } from "@/lib/edgar";
 import { runBacktest, type BacktestTrade } from "@/lib/backtest";
+import { getSnapshot } from "@/lib/snapshots";
 import { formatDate, formatPct, formatUSD, quarterLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 300;
+export const maxDuration = 60;
 
 export default async function PerformancePage({
   params,
@@ -17,6 +18,12 @@ export default async function PerformancePage({
   params: Promise<{ cik: string }>;
 }) {
   const { cik } = await params;
+
+  // Prefer the bundled snapshot — instant + always works on Vercel.
+  // Fall back to a live backtest for non-marquee funds (or for cases
+  // where the snapshot didn't ship for some reason).
+  const snapshot = getSnapshot(cik);
+
   let info;
   try {
     info = await getFundInfo(cik, "recent");
@@ -25,7 +32,8 @@ export default async function PerformancePage({
   }
   if (!info.name) notFound();
 
-  const result = await runBacktest(info.cik, info.name, 10000, "all");
+  const result =
+    snapshot ?? (await runBacktest(info.cik, info.name, 10000, "all"));
 
   const {
     trades,

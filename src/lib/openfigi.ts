@@ -149,8 +149,14 @@ function enqueue<T>(work: () => Promise<T>): Promise<T> {
  * permanent identifiers. All callers across the process share one rate-limit
  * queue so concurrent fund backtests don't simultaneously hammer OpenFIGI.
  *
- * Without OPENFIGI_API_KEY this is ~25 req/min in batches of 10, so a cold
- * cache for ~500 unique CUSIPs takes ~2 minutes. With a key, ~30 seconds.
+ * Set `OPENFIGI_DISABLE=1` to skip API calls entirely and rely solely on the
+ * bundled seed map + disk cache. The seed covers all the large-cap holdings
+ * the marquee funds care about; small unmapped positions just don't get
+ * included in the backtest. Recommended for snapshot generation and prod
+ * (no rate-limit pain).
+ *
+ * Without OPENFIGI_API_KEY (and without DISABLE) this is ~25 req/min in
+ * batches of 10. With a key, ~100 req/min in batches of 100.
  */
 export async function lookupCusips(
   cusips: Iterable<string>,
@@ -171,24 +177,23 @@ export async function lookupCusips(
   }
   if (missing.length === 0) return result;
 
+  // When disabled, mark all unknowns as unmapped and return without
+  // any API call. Saves us from OpenFIGI's strict rate limit entirely.
+  if (process.env.OPENFIGI_DISABLE === "1") {
+    for (const c of missing) {
+      result.set(c, { ticker: null, name: "", exchCode: null });
+    }
+    return result;
+  }
+
   for (let i = 0; i < missing.length; i += BATCH_SIZE) {
     const batch = missing.slice(i, i + BATCH_SIZE);
-    let outcome = await enqueue(async () => {
+    const outcome = await enqueue(async () => {
       const r = await fetchBatch(batch);
       // Pace the next caller regardless of outcome.
       await new Promise((res) => setTimeout(res, RATE_DELAY_MS));
       return r;
     });
-
-    // One retry for transient errors (with a longer cooldown).
-    if (outcome.kind === "transient") {
-      await new Promise((r) => setTimeout(r, 8000));
-      outcome = await enqueue(async () => {
-        const r = await fetchBatch(batch);
-        await new Promise((res) => setTimeout(res, RATE_DELAY_MS));
-        return r;
-      });
-    }
 
     if (outcome.kind === "ok") {
       for (let j = 0; j < batch.length; j++) {
