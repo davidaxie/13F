@@ -1,7 +1,12 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const ROOT = path.join(process.cwd(), ".cache");
+// Vercel serverless filesystem is read-only except for /tmp (which is also
+// per-container, not persistent across cold starts). Locally we cache into
+// .cache/ in the project root.
+const ROOT = process.env.VERCEL
+  ? "/tmp/13f-cache"
+  : path.join(process.cwd(), ".cache");
 
 export async function readJson<T>(rel: string): Promise<T | null> {
   try {
