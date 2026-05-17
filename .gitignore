@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# backtest disk cache (holdings XML, openfigi mappings, yahoo prices)
+/.cache/
+
 # production
 /build
 

@@ -3,11 +3,14 @@ import { CrossFundHighlights } from "@/components/cross-fund-highlights";
 import {
   FundCardSkeleton,
   HighlightsSkeleton,
+  LeaderboardSkeleton,
 } from "@/components/dashboard-skeletons";
 import { FundCard } from "@/components/fund-card";
+import { Leaderboard } from "@/components/leaderboard";
 import { MARQUEE_FUNDS } from "@/lib/dashboard";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
+export const maxDuration = 300;
 
 export default function DashboardPage() {
   return (
@@ -25,9 +28,17 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      <Suspense fallback={<HighlightsSkeleton />}>
-        <CrossFundHighlights />
-      </Suspense>
+      <div className="mt-16">
+        <Suspense fallback={<LeaderboardSkeleton />}>
+          <Leaderboard />
+        </Suspense>
+      </div>
+
+      <div className="mt-20">
+        <Suspense fallback={<HighlightsSkeleton />}>
+          <CrossFundHighlights />
+        </Suspense>
+      </div>
 
       <div className="mt-20 border-b border-hairline pb-3">
         <h2 className="font-serif text-2xl text-foreground">By fund</h2>

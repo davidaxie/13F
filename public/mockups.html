@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>13F · Chart concepts</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap"
+    />
+    <style>
+      :root {
+        --background: #fafaf7;
+        --foreground: #111111;
+        --muted: #6b6b66;
+        --subtle: #e5e3dc;
+        --hairline: #ebe9e2;
+        --accent: #1f4d3a;
+        --positive: #1f6b48;
+        --negative: #8b2e2e;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--background);
+        color: var(--foreground);
+        font-family: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      .container { max-width: 1080px; margin: 0 auto; padding: 64px 32px 96px; }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      h1 {
+        font-family: "Instrument Serif", ui-serif, Georgia, serif;
+        font-weight: 400;
+        font-size: 52px;
+        line-height: 1.05;
+        letter-spacing: -0.01em;
+        margin: 8px 0 0;
+      }
+      h1 em { color: var(--accent); font-style: italic; }
+      .lede {
+        max-width: 640px;
+        margin: 20px 0 0;
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+      .mocks { margin-top: 64px; }
+      .mock { padding-top: 56px; }
+      .mock + .mock { border-top: 1px solid var(--hairline); margin-top: 56px; }
+      .mock-head { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
+      .mock-head h2 {
+        font-family: "Instrument Serif", ui-serif, Georgia, serif;
+        font-weight: 400;
+        font-size: 32px;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+      .mock-head .tag {
+        font-family: "Geist Mono", ui-monospace, monospace;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .mock-sub { margin: 6px 0 28px; font-size: 14px; color: var(--muted); max-width: 720px; line-height: 1.6; }
+      .chart { background: transparent; }
+      .axis text { font-family: "Geist Mono", ui-monospace, monospace; font-size: 10px; fill: var(--muted); }
+      .gridline { stroke: var(--hairline); stroke-width: 1; }
+      .baseline { stroke: var(--hairline); stroke-width: 1; }
+      .line-mirror { stroke: var(--foreground); stroke-width: 1.75; fill: none; }
+      .line-spy { stroke: var(--muted); stroke-width: 1.25; fill: none; stroke-dasharray: 4 4; }
+      .area-mirror { fill: var(--foreground); fill-opacity: 0.04; }
+      .legend { display: flex; gap: 24px; margin-top: 12px; font-size: 12px; color: var(--muted); }
+      .legend-swatch { display: inline-block; width: 22px; height: 2px; vertical-align: middle; margin-right: 8px; background: var(--foreground); }
+      .legend-swatch.dashed { background: linear-gradient(to right, var(--muted) 50%, transparent 50%); background-size: 8px 2px; background-repeat: repeat-x; }
+      .stat-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 32px;
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid var(--hairline);
+      }
+      .stat-label {
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .stat-value {
+        font-family: "Instrument Serif", ui-serif, Georgia, serif;
+        font-weight: 400;
+        font-size: 28px;
+        margin-top: 6px;
+        font-feature-settings: "tnum";
+      }
+      .stat-value.up { color: var(--positive); }
+      .stat-value.dn { color: var(--negative); }
+      .pros-cons {
+        margin-top: 28px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+      .pros-cons h4 {
+        font-family: "Geist", sans-serif;
+        font-weight: 500;
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--foreground);
+        margin: 0 0 8px;
+      }
+      ul.dashed { padding: 0; list-style: none; margin: 0; }
+      ul.dashed li { padding-left: 16px; position: relative; }
+      ul.dashed li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
+      .dot { fill: var(--foreground); }
+      .dot.up { fill: var(--positive); }
+      .dot.dn { fill: var(--negative); }
+      .barbox { fill: var(--positive); }
+      .barbox.dn { fill: var(--negative); }
+      .leaderboard {
+        margin-top: 32px;
+        border-top: 1px solid var(--hairline);
+        padding-top: 24px;
+      }
+      .leaderboard h3 {
+        font-family: "Instrument Serif", ui-serif, Georgia, serif;
+        font-weight: 400;
+        font-size: 22px;
+        margin: 0 0 16px;
+      }
+      .lb-row {
+        display: grid;
+        grid-template-columns: 32px 1fr 180px 80px;
+        align-items: center;
+        gap: 16px;
+        padding: 10px 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--hairline) 60%, transparent);
+        font-size: 13px;
+      }
+      .lb-row .rank { font-family: "Geist Mono", monospace; font-size: 11px; color: var(--muted); }
+      .lb-row .name { font-family: "Instrument Serif", serif; font-size: 17px; }
+      .lb-row .spark { height: 28px; }
+      .lb-row .pct { text-align: right; font-feature-settings: "tnum"; font-size: 14px; }
+      .lb-row .pct.up { color: var(--positive); }
+      .lb-row .pct.dn { color: var(--negative); }
+      .note {
+        margin-top: 64px;
+        padding: 20px 24px;
+        border-left: 2px solid var(--accent);
+        background: color-mix(in srgb, var(--accent) 4%, transparent);
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .note b { color: var(--foreground); font-weight: 500; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="eyebrow">Chart concepts</div>
+      <h1>Pick the chart, then I'll <em>build it.</em></h1>
+      <p class="lede">
+        All three sketches use a 5-year window for Berkshire Hathaway with
+        representative (not yet real) numbers. The leaderboard preview at the
+        top is how each one would look on the dashboard. Pick the one that
+        matches what you had in mind — or mix and match.
+      </p>
+
+      <!--  ───────────────  LEADERBOARD PREVIEW  ───────────────  -->
+      <div class="leaderboard">
+        <h3>Leaderboard preview <span style="font-family:'Geist Mono',monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">· last 5 years vs SPY</span></h3>
+
+        <!-- Row: rank · name · sparkline · pct -->
+        <div class="lb-row">
+          <span class="rank">01</span>
+          <span class="name">Pershing Square</span>
+          <svg viewBox="0 0 180 28" class="spark" preserveAspectRatio="none">
+            <path d="M0,22 L20,18 L40,20 L60,12 L80,15 L100,8 L120,11 L140,4 L160,6 L180,2" stroke="#1f6b48" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="pct up">+184% vs SPY +96%</span>
+        </div>
+        <div class="lb-row">
+          <span class="rank">02</span>
+          <span class="name">Tiger Global</span>
+          <svg viewBox="0 0 180 28" class="spark" preserveAspectRatio="none">
+            <path d="M0,18 L20,12 L40,8 L60,4 L80,14 L100,22 L120,18 L140,12 L160,8 L180,5" stroke="#1f6b48" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="pct up">+118%</span>
+        </div>
+        <div class="lb-row">
+          <span class="rank">03</span>
+          <span class="name">Berkshire Hathaway</span>
+          <svg viewBox="0 0 180 28" class="spark" preserveAspectRatio="none">
+            <path d="M0,22 L20,20 L40,17 L60,18 L80,14 L100,11 L120,9 L140,6 L160,7 L180,4" stroke="#1f6b48" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="pct up">+108%</span>
+        </div>
+        <div class="lb-row">
+          <span class="rank">04</span>
+          <span class="name">Renaissance Technologies</span>
+          <svg viewBox="0 0 180 28" class="spark" preserveAspectRatio="none">
+            <path d="M0,18 L20,15 L40,12 L60,14 L80,10 L100,12 L120,9 L140,11 L160,8 L180,9" stroke="#1f6b48" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="pct up">+92%</span>
+        </div>
+        <div class="lb-row">
+          <span class="rank">05</span>
+          <span class="name">Bridgewater Associates</span>
+          <svg viewBox="0 0 180 28" class="spark" preserveAspectRatio="none">
+            <path d="M0,18 L20,16 L40,18 L60,14 L80,12 L100,15 L120,13 L140,15 L160,12 L180,14" stroke="#6b6b66" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="pct up">+78%</span>
+        </div>
+        <div class="lb-row">
+          <span class="rank">06</span>
+          <span class="name">Citadel Advisors</span>
+          <svg viewBox="0 0 180 28" class="spark" preserveAspectRatio="none">
+            <path d="M0,18 L20,17 L40,15 L60,16 L80,14 L100,16 L120,13 L140,14 L160,12 L180,14" stroke="#6b6b66" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="pct up">+71%</span>
+        </div>
+        <div class="lb-row">
+          <span class="rank">07</span>
+          <span class="name">Two Sigma Investments</span>
+          <svg viewBox="0 0 180 28" class="spark" preserveAspectRatio="none">
+            <path d="M0,17 L20,18 L40,16 L60,17 L80,15 L100,17 L120,16 L140,18 L160,16 L180,17" stroke="#6b6b66" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="pct up">+62%</span>
+        </div>
+        <div class="lb-row">
+          <span class="rank">08</span>
+          <span class="name">Soros Fund Management</span>
+          <svg viewBox="0 0 180 28" class="spark" preserveAspectRatio="none">
+            <path d="M0,16 L20,18 L40,15 L60,19 L80,17 L100,21 L120,18 L140,22 L160,19 L180,21" stroke="#8b2e2e" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="pct dn">+38%</span>
+        </div>
+        <div class="lb-row">
+          <span class="rank">09</span>
+          <span class="name">Appaloosa</span>
+          <svg viewBox="0 0 180 28" class="spark" preserveAspectRatio="none">
+            <path d="M0,14 L20,16 L40,15 L60,18 L80,17 L100,20 L120,19 L140,22 L160,20 L180,23" stroke="#8b2e2e" stroke-width="1.5" fill="none"/>
+          </svg>
+          <span class="pct dn">+24%</span>
+        </div>
+
+        <p style="margin-top:20px;font-size:13px;color:var(--muted);line-height:1.6;max-width:620px;">
+          Above each fund's name, the sparkline is whichever big-chart concept you pick below — same data, just shrunken. Clicking any row drills into the detailed chart for that fund.
+        </p>
+      </div>
+
+      <!--  ───────────────  MOCK 1: EQUITY CURVE  ───────────────  -->
+      <div class="mocks">
+        <section class="mock">
+          <div class="mock-head">
+            <h2>Concept A · Equity Curve</h2>
+            <span class="tag">Berkshire · $10k mirrored · 2020 → 2025</span>
+          </div>
+          <p class="mock-sub">
+            Start with $10k on day one. Every 13F filing, rebalance your portfolio
+            to match the fund's reported holdings. Track your account value daily
+            using real prices. Overlay $10k put in SPY as a benchmark.
+          </p>
+
+          <svg viewBox="0 0 880 320" class="chart" width="100%">
+            <!-- gridlines + Y labels -->
+            <g class="axis">
+              <line class="gridline" x1="60" y1="40" x2="860" y2="40"/>
+              <line class="gridline" x1="60" y1="100" x2="860" y2="100"/>
+              <line class="gridline" x1="60" y1="160" x2="860" y2="160"/>
+              <line class="gridline" x1="60" y1="220" x2="860" y2="220"/>
+              <line class="baseline" x1="60" y1="280" x2="860" y2="280"/>
+              <text x="50" y="44" text-anchor="end">$22k</text>
+              <text x="50" y="104" text-anchor="end">$18k</text>
+              <text x="50" y="164" text-anchor="end">$14k</text>
+              <text x="50" y="224" text-anchor="end">$10k</text>
+              <text x="50" y="284" text-anchor="end">$6k</text>
+            </g>
+
+            <!-- mirror area -->
+            <path
+              class="area-mirror"
+              d="M60,225 L100,215 L140,200 L180,180 L220,160 L260,140 L300,135 L340,118 L380,135 L420,165 L460,150 L500,130 L540,100 L580,75 L620,55 L660,40 L700,55 L740,42 L780,30 L820,22 L860,15 L860,280 L60,280 Z"
+            />
+
+            <!-- SPY (dashed gray) -->
+            <path
+              class="line-spy"
+              d="M60,225 L100,217 L140,210 L180,200 L220,190 L260,180 L300,178 L340,170 L380,180 L420,200 L460,195 L500,182 L540,165 L580,150 L620,138 L660,120 L700,128 L740,118 L780,108 L820,98 L860,88"
+            />
+
+            <!-- Mirror (solid foreground) -->
+            <path
+              class="line-mirror"
+              d="M60,225 L100,215 L140,200 L180,180 L220,160 L260,140 L300,135 L340,118 L380,135 L420,165 L460,150 L500,130 L540,100 L580,75 L620,55 L660,40 L700,55 L740,42 L780,30 L820,22 L860,15"
+            />
+
+            <!-- filing-date tick marks (vertical hairlines at quarterly points) -->
+            <g class="axis" stroke="var(--hairline)" stroke-width="1">
+              <line x1="100" y1="280" x2="100" y2="285"/>
+              <line x1="180" y1="280" x2="180" y2="285"/>
+              <line x1="260" y1="280" x2="260" y2="285"/>
+              <line x1="340" y1="280" x2="340" y2="285"/>
+              <line x1="420" y1="280" x2="420" y2="285"/>
+              <line x1="500" y1="280" x2="500" y2="285"/>
+              <line x1="580" y1="280" x2="580" y2="285"/>
+              <line x1="660" y1="280" x2="660" y2="285"/>
+              <line x1="740" y1="280" x2="740" y2="285"/>
+              <line x1="820" y1="280" x2="820" y2="285"/>
+            </g>
+
+            <g class="axis">
+              <text x="60" y="305" text-anchor="middle">2020</text>
+              <text x="220" y="305" text-anchor="middle">2021</text>
+              <text x="380" y="305" text-anchor="middle">2022</text>
+              <text x="540" y="305" text-anchor="middle">2023</text>
+              <text x="700" y="305" text-anchor="middle">2024</text>
+              <text x="860" y="305" text-anchor="middle">2025</text>
+            </g>
+
+            <!-- annotations -->
+            <g class="axis">
+              <line x1="500" y1="130" x2="500" y2="80" stroke="var(--accent)" stroke-width="1"/>
+              <circle cx="500" cy="130" r="3" fill="var(--accent)"/>
+              <text x="506" y="75" fill="var(--foreground)" style="font-family:'Instrument Serif',serif;font-size:13px;">
+                Q2 2023 — added AAPL position
+              </text>
+            </g>
+          </svg>
+
+          <div class="legend">
+            <span><span class="legend-swatch"></span>Mirror Berkshire</span>
+            <span><span class="legend-swatch dashed"></span>SPY benchmark</span>
+          </div>
+
+          <div class="stat-row">
+            <div>
+              <div class="stat-label">Mirror — final value</div>
+              <div class="stat-value up">$21,800</div>
+            </div>
+            <div>
+              <div class="stat-label">SPY — final value</div>
+              <div class="stat-value">$17,900</div>
+            </div>
+            <div>
+              <div class="stat-label">Alpha vs SPY</div>
+              <div class="stat-value up">+22%</div>
+            </div>
+            <div>
+              <div class="stat-label">Max drawdown</div>
+              <div class="stat-value dn">−18%</div>
+            </div>
+          </div>
+
+          <div class="pros-cons">
+            <div>
+              <h4>Strengths</h4>
+              <ul class="dashed">
+                <li>Single intuitive number: "what would $10k be today?"</li>
+                <li>Apples-to-apples vs SPY, with real drawdowns</li>
+                <li>Captures the manager's full portfolio activity, not just new picks</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Trade-offs</h4>
+              <ul class="dashed">
+                <li>Heaviest to compute — needs every CUSIP's daily prices</li>
+                <li>Mostly tracks market beta; manager skill shows up as a slow divergence</li>
+                <li>Doesn't surface which specific picks drove the outperformance</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!--  ───────────────  MOCK 2: CUMULATIVE P&L  ───────────────  -->
+        <section class="mock">
+          <div class="mock-head">
+            <h2>Concept B · Cumulative P&amp;L of completed trades</h2>
+            <span class="tag">Berkshire · realized P&amp;L on closed positions</span>
+          </div>
+          <p class="mock-sub">
+            Each "trade" is one position opened in a filing and closed in a later
+            filing. When the fund exits, the trade is realized: entry price vs.
+            exit price × position size = profit/loss. Plot the running total over
+            time. Like a trader's P&amp;L curve.
+          </p>
+
+          <svg viewBox="0 0 880 320" class="chart" width="100%">
+            <g class="axis">
+              <line class="gridline" x1="60" y1="40" x2="860" y2="40"/>
+              <line class="gridline" x1="60" y1="100" x2="860" y2="100"/>
+              <line class="gridline" x1="60" y1="160" x2="860" y2="160"/>
+              <line class="gridline" x1="60" y1="220" x2="860" y2="220"/>
+              <line class="baseline" x1="60" y1="280" x2="860" y2="280"/>
+              <text x="50" y="44" text-anchor="end">+$8k</text>
+              <text x="50" y="104" text-anchor="end">+$6k</text>
+              <text x="50" y="164" text-anchor="end">+$4k</text>
+              <text x="50" y="224" text-anchor="end">+$2k</text>
+              <text x="50" y="284" text-anchor="end">$0</text>
+            </g>
+
+            <!-- stair-step path: cumulative realized P&L -->
+            <path
+              class="line-mirror"
+              d="M60,280 L140,280 L140,265 L220,265 L220,240 L300,240 L300,250 L380,250 L380,210 L460,210 L460,190 L540,190 L540,205 L620,205 L620,140 L700,140 L700,110 L780,110 L780,80 L860,80"
+            />
+
+            <!-- vertical "trade closed" markers w/ small dots and labels -->
+            <g>
+              <circle cx="140" cy="265" r="4" class="dot up"/>
+              <circle cx="220" cy="240" r="4" class="dot up"/>
+              <circle cx="300" cy="250" r="4" class="dot dn"/>
+              <circle cx="380" cy="210" r="4" class="dot up"/>
+              <circle cx="460" cy="190" r="4" class="dot up"/>
+              <circle cx="540" cy="205" r="4" class="dot dn"/>
+              <circle cx="620" cy="140" r="4" class="dot up"/>
+              <circle cx="700" cy="110" r="4" class="dot up"/>
+              <circle cx="780" cy="80" r="4" class="dot up"/>
+            </g>
+
+            <g class="axis">
+              <text x="140" y="258" text-anchor="middle" fill="var(--positive)">+$340</text>
+              <text x="220" y="233" text-anchor="middle" fill="var(--positive)">+$870</text>
+              <text x="300" y="243" text-anchor="middle" fill="var(--negative)">−$220</text>
+              <text x="380" y="203" text-anchor="middle" fill="var(--positive)">+$1.24k</text>
+              <text x="460" y="183" text-anchor="middle" fill="var(--positive)">+$640</text>
+              <text x="540" y="198" text-anchor="middle" fill="var(--negative)">−$450</text>
+              <text x="620" y="133" text-anchor="middle" fill="var(--positive)">+$2.10k</text>
+              <text x="700" y="103" text-anchor="middle" fill="var(--positive)">+$980</text>
+              <text x="780" y="73" text-anchor="middle" fill="var(--positive)">+$1.05k</text>
+            </g>
+
+            <g class="axis">
+              <text x="60" y="305" text-anchor="middle">2020</text>
+              <text x="220" y="305" text-anchor="middle">2021</text>
+              <text x="380" y="305" text-anchor="middle">2022</text>
+              <text x="540" y="305" text-anchor="middle">2023</text>
+              <text x="700" y="305" text-anchor="middle">2024</text>
+              <text x="860" y="305" text-anchor="middle">2025</text>
+            </g>
+          </svg>
+
+          <div class="legend">
+            <span><span class="legend-swatch"></span>Cumulative realized P&amp;L</span>
+            <span><span class="legend-swatch" style="background:var(--positive);"></span>Winning trade closed</span>
+            <span><span class="legend-swatch" style="background:var(--negative);"></span>Losing trade closed</span>
+          </div>
+
+          <div class="stat-row">
+            <div>
+              <div class="stat-label">Total realized P&amp;L</div>
+              <div class="stat-value up">+$6,560</div>
+            </div>
+            <div>
+              <div class="stat-label">Closed trades</div>
+              <div class="stat-value">38</div>
+            </div>
+            <div>
+              <div class="stat-label">Hit rate</div>
+              <div class="stat-value">68%</div>
+            </div>
+            <div>
+              <div class="stat-label">Avg per trade</div>
+              <div class="stat-value up">+$173</div>
+            </div>
+          </div>
+
+          <div class="pros-cons">
+            <div>
+              <h4>Strengths</h4>
+              <ul class="dashed">
+                <li>Each "trade" is a discrete event you can name — Apple closed +18%, Tesla closed −12%</li>
+                <li>Naturally surfaces big winners and losers as labeled steps</li>
+                <li>Hit-rate &amp; average-per-trade are interpretable</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Trade-offs</h4>
+              <ul class="dashed">
+                <li>Ignores still-open positions (Apple has been held for years — not in this chart)</li>
+                <li>Needs a clear "exit" definition — when shares drop to zero, or just reduced?</li>
+                <li>Cumulative $ depends on a position-sizing rule (equal-weight? mirror weight?)</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!--  ───────────────  MOCK 3: TRADE SCATTER  ───────────────  -->
+        <section class="mock">
+          <div class="mock-head">
+            <h2>Concept C · Trade scatter / hit-rate</h2>
+            <span class="tag">Berkshire · every new position 2020 → 2025</span>
+          </div>
+          <p class="mock-sub">
+            Every new position opens one dot. X is entry date (when first
+            reported). Y is total return — at exit if closed, marked-to-market
+            if still held. Size of dot scales with position size at entry.
+            Color: above zero is green, below is red.
+          </p>
+
+          <svg viewBox="0 0 880 360" class="chart" width="100%">
+            <g class="axis">
+              <line class="gridline" x1="60" y1="40" x2="860" y2="40"/>
+              <line class="gridline" x1="60" y1="100" x2="860" y2="100"/>
+              <line class="gridline" x1="60" y1="160" x2="860" y2="160"/>
+              <line class="baseline" x1="60" y1="220" x2="860" y2="220" stroke="var(--foreground)" stroke-width="1"/>
+              <line class="gridline" x1="60" y1="280" x2="860" y2="280"/>
+              <line class="gridline" x1="60" y1="320" x2="860" y2="320"/>
+              <text x="50" y="44" text-anchor="end">+100%</text>
+              <text x="50" y="104" text-anchor="end">+60%</text>
+              <text x="50" y="164" text-anchor="end">+30%</text>
+              <text x="50" y="224" text-anchor="end">0%</text>
+              <text x="50" y="284" text-anchor="end">−30%</text>
+              <text x="50" y="324" text-anchor="end">−60%</text>
+            </g>
+
+            <!-- dots (positive in green, negative in red) -->
+            <g>
+              <circle cx="100" cy="180" r="6" class="dot up" fill-opacity="0.85"/>
+              <circle cx="135" cy="100" r="14" class="dot up" fill-opacity="0.85"/>
+              <circle cx="170" cy="240" r="5" class="dot dn" fill-opacity="0.85"/>
+              <circle cx="205" cy="145" r="9" class="dot up" fill-opacity="0.85"/>
+              <circle cx="240" cy="60" r="11" class="dot up" fill-opacity="0.85"/>
+              <circle cx="275" cy="200" r="6" class="dot up" fill-opacity="0.85"/>
+              <circle cx="310" cy="280" r="7" class="dot dn" fill-opacity="0.85"/>
+              <circle cx="345" cy="170" r="10" class="dot up" fill-opacity="0.85"/>
+              <circle cx="380" cy="125" r="13" class="dot up" fill-opacity="0.85"/>
+              <circle cx="415" cy="250" r="6" class="dot dn" fill-opacity="0.85"/>
+              <circle cx="450" cy="195" r="8" class="dot up" fill-opacity="0.85"/>
+              <circle cx="485" cy="80" r="16" class="dot up" fill-opacity="0.85"/>
+              <circle cx="520" cy="155" r="9" class="dot up" fill-opacity="0.85"/>
+              <circle cx="555" cy="220" r="5" class="dot up" fill-opacity="0.85" style="fill:#5a5a55"/>
+              <circle cx="590" cy="135" r="11" class="dot up" fill-opacity="0.85"/>
+              <circle cx="625" cy="265" r="7" class="dot dn" fill-opacity="0.85"/>
+              <circle cx="660" cy="180" r="9" class="dot up" fill-opacity="0.85"/>
+              <circle cx="695" cy="110" r="14" class="dot up" fill-opacity="0.85"/>
+              <circle cx="730" cy="190" r="8" class="dot up" fill-opacity="0.85"/>
+              <circle cx="765" cy="150" r="10" class="dot up" fill-opacity="0.85"/>
+              <circle cx="800" cy="225" r="6" class="dot dn" fill-opacity="0.85"/>
+              <circle cx="835" cy="165" r="9" class="dot up" fill-opacity="0.85"/>
+            </g>
+
+            <!-- callouts -->
+            <g class="axis">
+              <line x1="485" y1="80" x2="540" y2="50" stroke="var(--accent)" stroke-width="1"/>
+              <text x="546" y="46" fill="var(--foreground)" style="font-family:'Instrument Serif',serif;font-size:13px;">
+                AAPL · +94% · $4.6B entry
+              </text>
+            </g>
+            <g class="axis">
+              <line x1="135" y1="100" x2="200" y2="70" stroke="var(--accent)" stroke-width="1"/>
+              <text x="206" y="66" fill="var(--foreground)" style="font-family:'Instrument Serif',serif;font-size:13px;">
+                CVX · +68%
+              </text>
+            </g>
+
+            <g class="axis">
+              <text x="60" y="350" text-anchor="middle">2020</text>
+              <text x="220" y="350" text-anchor="middle">2021</text>
+              <text x="380" y="350" text-anchor="middle">2022</text>
+              <text x="540" y="350" text-anchor="middle">2023</text>
+              <text x="700" y="350" text-anchor="middle">2024</text>
+              <text x="860" y="350" text-anchor="middle">2025</text>
+            </g>
+          </svg>
+
+          <div class="legend">
+            <span><span class="legend-swatch" style="background:var(--positive);"></span>Positive return</span>
+            <span><span class="legend-swatch" style="background:var(--negative);"></span>Negative return</span>
+            <span style="color:var(--muted);">Bubble size = position size at entry</span>
+          </div>
+
+          <div class="stat-row">
+            <div>
+              <div class="stat-label">Win rate</div>
+              <div class="stat-value">74%</div>
+            </div>
+            <div>
+              <div class="stat-label">Median return</div>
+              <div class="stat-value up">+22%</div>
+            </div>
+            <div>
+              <div class="stat-label">Best pick</div>
+              <div class="stat-value up">+94%</div>
+            </div>
+            <div>
+              <div class="stat-label">Worst pick</div>
+              <div class="stat-value dn">−38%</div>
+            </div>
+          </div>
+
+          <div class="pros-cons">
+            <div>
+              <h4>Strengths</h4>
+              <ul class="dashed">
+                <li>Visually shows manager skill — clustered above zero = picks winners</li>
+                <li>Outliers (the home runs) jump off the page</li>
+                <li>Hover any dot to see ticker / entry size / return — fits a research workflow</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Trade-offs</h4>
+              <ul class="dashed">
+                <li>No "what would I have made" — just per-pick performance</li>
+                <li>Doesn't reward big winners more than small ones (only bubble size hints)</li>
+                <li>Doesn't compare to SPY in a way that's intuitive</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="note">
+        <b>Hybrid option.</b> Probably the most useful research tool: the
+        leaderboard at the top of the dashboard, with sparklines using
+        <b>Concept A (equity curve)</b>. Click a fund → fund detail page shows
+        all three (big equity curve up top, P&amp;L stair-step below, scatter
+        below that). That way the leaderboard answers "who's hot" and the drill-in
+        answers "what did they actually do." Let me know which way you want to
+        go and I'll start building.
+      </div>
+    </div>
+  </body>
+</html>

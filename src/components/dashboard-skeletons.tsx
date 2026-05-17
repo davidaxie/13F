@@ -1,3 +1,37 @@
+export function LeaderboardSkeleton() {
+  return (
+    <div className="animate-pulse">
+      <div className="border-b border-hairline pb-3">
+        <div className="h-6 w-40 rounded bg-hairline" />
+      </div>
+      <ul className="mt-2">
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+          <li
+            key={i}
+            className="grid grid-cols-[28px_minmax(0,1.4fr)_240px_minmax(0,1fr)] items-center gap-4 border-b border-hairline/60 py-4"
+          >
+            <div className="h-3 w-5 rounded bg-hairline" />
+            <div>
+              <div className="h-4 w-44 rounded bg-hairline" />
+              <div className="mt-2 h-2 w-32 rounded bg-hairline/60" />
+            </div>
+            <div className="h-9 w-full rounded bg-hairline/40" />
+            <div className="text-right">
+              <div className="ml-auto h-4 w-20 rounded bg-hairline" />
+              <div className="ml-auto mt-2 h-3 w-28 rounded bg-hairline/60" />
+            </div>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-4 text-xs leading-relaxed text-muted">
+        Computing backtests — first load fetches CUSIP-to-ticker mappings via
+        OpenFIGI (~2 min on cold cache) and daily prices via Yahoo Finance
+        (~30s). Subsequent loads are instant.
+      </p>
+    </div>
+  );
+}
+
 export function HighlightsSkeleton() {
   return (
     <div className="mt-12 animate-pulse">

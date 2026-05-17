@@ -45,6 +45,14 @@ export default async function FundPage({
             {fund.filings.length === 1 ? "filing" : "filings"} on record
           </span>
         </div>
+        <div className="mt-6">
+          <Link
+            href={`/fund/${fund.cik}/performance`}
+            className="inline-block border-b border-accent/30 pb-0.5 text-sm text-accent transition-colors hover:border-accent"
+          >
+            View backtest &amp; performance →
+          </Link>
+        </div>
       </div>
 
       {fund.filings.length === 0 ? (
