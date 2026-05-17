@@ -33,11 +33,25 @@ npm run dev
 
 Open <http://localhost:3000>.
 
-### Why the User-Agent matters
+### Environment variables
 
-SEC requires every request to EDGAR to include a `User-Agent` header that
-identifies you (per their fair-access policy). Set it via
-`EDGAR_USER_AGENT="Your Name your.email@example.com"` in `.env.local`.
+| Var | Required? | Why |
+| --- | --- | --- |
+| `EDGAR_USER_AGENT` | yes | SEC fair-access policy. Format: `"Your Name your.email@example.com"`. |
+| `OPENFIGI_API_KEY` | recommended | Without a key, OpenFIGI rate-limits CUSIP→ticker lookups to 25 req/min in batches of 10. With a free key, it's 100 req/min in batches of 100 (~40× faster). Critical for the leaderboard on Vercel. Get one at <https://openfigi.com/api>. |
+| `HTTPS_PROXY` | dev only | Set when Yahoo Finance geo-blocks your IP (e.g. routing through ClashX or a similar proxy). Picked up by `src/instrumentation.ts`. |
+
+### Production deployment
+
+This is a Next.js App Router app — deploys cleanly to Vercel. Two caveats:
+
+1. **Function timeouts.** The backtest engine fits Vercel Hobby's 60s limit
+   for single-fund pages but the leaderboard's 9-fund cold start can exceed
+   it. Pro plan's 300s ceiling removes the problem.
+2. **Persistent cache.** Local dev caches to `.cache/`; Vercel caches to
+   `/tmp`, which is per-container and resets on cold starts. For an
+   always-fast leaderboard, wire a persistent store (Vercel KV / Upstash
+   Redis) and have `lib/disk-cache.ts` read/write through that.
 
 ## Notes on 13F data
 
