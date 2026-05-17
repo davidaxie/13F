@@ -505,10 +505,11 @@ function emptyBacktest(
   };
 }
 
-// On Vercel we cap to the most recent 20 quarters (~5 years) so backtests
-// finish inside the function timeout on a cold container. Locally we use
-// the full history (disk-cached) since we're not bounded.
-const DEFAULT_MAX_QUARTERS = process.env.VERCEL ? 20 : 0;
+// On Vercel we cap to the most recent 12 quarters (~3 years) so the 9-fund
+// leaderboard finishes inside Hobby's 60s function timeout on a cold
+// container. Locally we use the full history (disk-cached) since we're
+// not bounded.
+const DEFAULT_MAX_QUARTERS = process.env.VERCEL ? 12 : 0;
 
 export const runBacktest = cache(
   async (
