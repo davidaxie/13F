@@ -79,7 +79,7 @@ export async function searchManagers(query: string): Promise<ManagerHit[]> {
   const url = `https://efts.sec.gov/LATEST/search-index?forms=13F-HR&entityName=${encodeURIComponent(
     q,
   )}`;
-  const res = await edgarFetch(url, 600);
+  const res = await edgarFetch(url, { revalidate: 600 });
   const data = (await res.json()) as { hits?: { hits?: EftsHit[] } };
   const map = new Map<string, ManagerHit>();
   for (const hit of data.hits?.hits ?? []) {
