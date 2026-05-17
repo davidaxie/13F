@@ -12,6 +12,14 @@ import { quarterLabel } from "./format";
 export type MarqueeFund = {
   cik: string;
   displayName: string;
+  /**
+   * True for filers whose 13F info tables are too large to backtest inside
+   * a 60s serverless function (Citadel & Two Sigma file ~10MB and ~3MB
+   * info tables respectively). They still appear on the dashboard QoQ
+   * cards, but are skipped on the leaderboard so the rest of the funds
+   * actually finish loading.
+   */
+  heavy?: boolean;
 };
 
 export const MARQUEE_FUNDS: MarqueeFund[] = [
@@ -20,11 +28,15 @@ export const MARQUEE_FUNDS: MarqueeFund[] = [
   { cik: "1167483", displayName: "Tiger Global" },
   { cik: "1037389", displayName: "Renaissance Technologies" },
   { cik: "1350694", displayName: "Bridgewater Associates" },
-  { cik: "1423053", displayName: "Citadel Advisors" },
+  { cik: "1423053", displayName: "Citadel Advisors", heavy: true },
   { cik: "1029160", displayName: "Soros Fund Management" },
   { cik: "1656456", displayName: "Appaloosa" },
-  { cik: "1179392", displayName: "Two Sigma Investments" },
+  { cik: "1179392", displayName: "Two Sigma Investments", heavy: true },
 ];
+
+export const LEADERBOARD_FUNDS: MarqueeFund[] = MARQUEE_FUNDS.filter(
+  (f) => !f.heavy,
+);
 
 export type MoveType = "new" | "exited" | "added" | "trimmed";
 

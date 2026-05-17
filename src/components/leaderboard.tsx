@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { MARQUEE_FUNDS } from "@/lib/dashboard";
+import { LEADERBOARD_FUNDS } from "@/lib/dashboard";
 import { runBacktest, type FundBacktest } from "@/lib/backtest";
 import { Sparkline } from "@/components/charts/sparkline";
 import { formatPct, formatUSD } from "@/lib/format";
@@ -32,7 +32,7 @@ export function Leaderboard() {
       </div>
 
       <ul className="mt-2">
-        {MARQUEE_FUNDS.map((f, i) => (
+        {LEADERBOARD_FUNDS.map((f, i) => (
           <li key={f.cik} className="border-b border-hairline/60">
             <Suspense fallback={<RowSkeleton fund={f} rank={i + 1} />}>
               <Row fund={f} fallbackRank={i + 1} />
@@ -55,7 +55,7 @@ function RowSkeleton({
   fund,
   rank,
 }: {
-  fund: (typeof MARQUEE_FUNDS)[number];
+  fund: (typeof LEADERBOARD_FUNDS)[number];
   rank: number;
 }) {
   return (
@@ -81,7 +81,7 @@ async function Row({
   fund,
   fallbackRank,
 }: {
-  fund: (typeof MARQUEE_FUNDS)[number];
+  fund: (typeof LEADERBOARD_FUNDS)[number];
   fallbackRank: number;
 }) {
   const bt = await safeBacktest(fund.cik, fund.displayName);
