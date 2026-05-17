@@ -505,11 +505,11 @@ function emptyBacktest(
   };
 }
 
-// On Vercel we cap to the most recent 12 quarters (~3 years) so the 9-fund
+// On Vercel we cap to the most recent 8 quarters (~2 years) so the
 // leaderboard finishes inside Hobby's 60s function timeout on a cold
 // container. Locally we use the full history (disk-cached) since we're
 // not bounded.
-const DEFAULT_MAX_QUARTERS = process.env.VERCEL ? 12 : 0;
+const DEFAULT_MAX_QUARTERS = process.env.VERCEL ? 8 : 0;
 // On Vercel, default to "recent" mode (SEC's last-1000-filings list) to
 // skip the historical archive-page fetches that long-history filers like
 // Citadel and Two Sigma trigger. Locally default to "all" for completeness.

@@ -5,8 +5,8 @@ const USER_AGENT =
   process.env.EDGAR_USER_AGENT ?? "13F Research Tool research@example.com";
 
 // Single process-wide queue for SEC EDGAR. SEC's published rate limit is
-// 10 req/sec per IP; we target ~9/sec by spacing acquisitions by ~110ms.
-const SEC_MIN_DELAY_MS = 110;
+// 10 req/sec per IP; we target ~9.5/sec by spacing acquisitions by 105ms.
+const SEC_MIN_DELAY_MS = 105;
 let secChain: Promise<void> = Promise.resolve();
 
 async function secAcquire(): Promise<void> {
