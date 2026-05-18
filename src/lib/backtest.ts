@@ -38,6 +38,32 @@ export type PnlPoint = {
   trade: BacktestTrade;
 };
 
+/**
+ * A single "buy signal" — every quarter a fund either opens a new position OR
+ * increases shares in an existing one. Different from BacktestTrade, which
+ * tracks one position's full lifespan (open→close); a single position can
+ * generate multiple BuySignals (initial open + each subsequent add) that all
+ * close on the same exit filing.
+ *
+ * Used by the "follower" backtest: a hypothetical follower who buys $X each
+ * time the fund discloses a buy, and sells everything when the fund's next
+ * filing no longer shows the position.
+ */
+export type BuySignal = {
+  cusip: string;
+  ticker: string | null;
+  issuer: string;
+  buyAccession: string;
+  buyDate: string;             // filing date when the buy was disclosed
+  buyPrice: number;            // price per share at the filing date
+  sharesAdded: number;         // delta vs prior filing (positive)
+  sellAccession: string | null;
+  sellDate: string | null;     // filing date of the next filing without the CUSIP
+  sellPrice: number | null;    // mark-to-market if still open
+  returnPct: number;
+  status: "closed" | "open";
+};
+
 export type FundBacktest = {
   cik: string;
   fundName: string;
@@ -45,6 +71,7 @@ export type FundBacktest = {
   endDate: string;
   startingCash: number;
   trades: BacktestTrade[];
+  buySignals: BuySignal[];
   equityCurve: EquityCurvePoint[];
   pnlSeries: PnlPoint[];
   filingCount: number;
@@ -296,6 +323,96 @@ async function _runBacktest(
     trades.push(trade);
   }
 
+  // 6b. Buy signals: every quarter where shares went up for a CUSIP (new
+  //     position OR add). All open lots for a CUSIP close together on the
+  //     next filing where it's absent. Used by the "follower" backtest —
+  //     each signal = one $X buy at filing-date price, sold on exit.
+  const buySignals: BuySignal[] = [];
+  type OpenLot = { signal: BuySignal };
+  const openLots = new Map<string, OpenLot[]>();
+  const prevPositions = new Map<string, AggPos>();
+
+  for (let i = 0; i < filingsWithPositions.length; i++) {
+    const fp = filingsWithPositions[i];
+    const filingUnix = fp.filingUnix;
+    const present = fp.positions;
+
+    // First: detect exits and close all lots for missing CUSIPs.
+    for (const [cusip] of prevPositions) {
+      if (present.has(cusip)) continue;
+      const lots = openLots.get(cusip);
+      if (!lots || lots.length === 0) {
+        openLots.delete(cusip);
+        continue;
+      }
+      const tk = tickerOf(cusip);
+      const exitPrice = tk
+        ? priceAt(pricesByTicker.get(tk) ?? [], filingUnix)
+        : null;
+      for (const { signal } of lots) {
+        signal.sellAccession = fp.filing.accessionNumber;
+        signal.sellDate = fp.filing.filingDate;
+        if (exitPrice != null && signal.buyPrice > 0) {
+          signal.sellPrice = exitPrice;
+          signal.returnPct = (exitPrice / signal.buyPrice - 1) * 100;
+        }
+        signal.status = "closed";
+        buySignals.push(signal);
+      }
+      openLots.delete(cusip);
+    }
+
+    // Then: emit buy signals for new + added positions.
+    for (const [cusip, pos] of present) {
+      const tk = tickerOf(cusip);
+      if (!tk) continue;
+      const prev = prevPositions.get(cusip);
+      const sharesAdded = prev ? pos.shares - prev.shares : pos.shares;
+      if (sharesAdded <= 0) continue;
+      const price = priceAt(pricesByTicker.get(tk) ?? [], filingUnix);
+      if (price == null || price <= 0) continue;
+      const signal: BuySignal = {
+        cusip,
+        ticker: tk,
+        issuer: pos.issuer,
+        buyAccession: fp.filing.accessionNumber,
+        buyDate: fp.filing.filingDate,
+        buyPrice: price,
+        sharesAdded,
+        sellAccession: null,
+        sellDate: null,
+        sellPrice: null,
+        returnPct: 0,
+        status: "open",
+      };
+      const lots = openLots.get(cusip) ?? [];
+      lots.push({ signal });
+      openLots.set(cusip, lots);
+    }
+
+    // Update prev for the next iteration.
+    prevPositions.clear();
+    for (const [cusip, pos] of present) prevPositions.set(cusip, pos);
+  }
+
+  // Remaining open lots — mark to market with the latest price.
+  for (const [cusip, lots] of openLots) {
+    const tk = tickerOf(cusip);
+    if (!tk) {
+      for (const { signal } of lots) buySignals.push(signal);
+      continue;
+    }
+    const bars = pricesByTicker.get(tk) ?? [];
+    const latest = bars.length > 0 ? bars[bars.length - 1].c : null;
+    for (const { signal } of lots) {
+      if (latest != null && signal.buyPrice > 0) {
+        signal.sellPrice = latest;
+        signal.returnPct = (latest / signal.buyPrice - 1) * 100;
+      }
+      buySignals.push(signal);
+    }
+  }
+
   // 7. Equity curve: at each filing, rebalance to fund weights. Between filings,
   //    hold the same shares; daily value tracks daily prices. Sample weekly.
   const SAMPLE_DAYS = 7;
@@ -446,6 +563,7 @@ async function _runBacktest(
     endDate: equityCurve[equityCurve.length - 1]?.date ?? earliestFilingDate,
     startingCash,
     trades,
+    buySignals,
     equityCurve,
     pnlSeries,
     filingCount: filingsWithPositions.length,
@@ -482,6 +600,7 @@ function emptyBacktest(
     endDate: today,
     startingCash,
     trades: [],
+    buySignals: [],
     equityCurve: [],
     pnlSeries: [],
     filingCount: 0,
