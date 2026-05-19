@@ -68,6 +68,12 @@ export default function RootLayout({
               >
                 Follower
               </Link>
+              <Link
+                href="/backtest/conviction"
+                className="transition-colors hover:text-foreground"
+              >
+                Conviction
+              </Link>
               <a
                 href="https://www.sec.gov/divisions/investment/13ffaq"
                 target="_blank"

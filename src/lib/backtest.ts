@@ -72,6 +72,12 @@ export type FundBacktest = {
   startingCash: number;
   trades: BacktestTrade[];
   buySignals: BuySignal[];
+  /**
+   * Latest available close price per ticker referenced anywhere in this
+   * fund's buy signals. Needed for "hold to today" backtest mode — for
+   * closed signals, we want today's price, not the fund's exit price.
+   */
+  latestPriceByTicker: Record<string, number>;
   equityCurve: EquityCurvePoint[];
   pnlSeries: PnlPoint[];
   filingCount: number;
@@ -565,6 +571,14 @@ async function _runBacktest(
     ? closedTrades.reduce((a, b) => (a.returnPct < b.returnPct ? a : b))
     : null;
 
+  // Build latest-price-per-ticker map for the "hold to today" mode.
+  const latestPriceByTicker: Record<string, number> = {};
+  for (const s of buySignals) {
+    if (!s.ticker || s.ticker in latestPriceByTicker) continue;
+    const bars = pricesByTicker.get(s.ticker) ?? [];
+    if (bars.length > 0) latestPriceByTicker[s.ticker] = bars[bars.length - 1].c;
+  }
+
   return {
     cik: cleanCik,
     fundName,
@@ -573,6 +587,7 @@ async function _runBacktest(
     startingCash,
     trades,
     buySignals,
+    latestPriceByTicker,
     equityCurve,
     pnlSeries,
     filingCount: filingsWithPositions.length,
@@ -610,6 +625,7 @@ function emptyBacktest(
     startingCash,
     trades: [],
     buySignals: [],
+    latestPriceByTicker: {},
     equityCurve: [],
     pnlSeries: [],
     filingCount: 0,
