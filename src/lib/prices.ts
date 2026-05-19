@@ -33,7 +33,11 @@ async function saveToDisk(ticker: string, data: Cached): Promise<void> {
 
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // refresh daily
 
-type ChartQuote = { date?: Date | string; close?: number | null };
+type ChartQuote = {
+  date?: Date | string;
+  close?: number | null;
+  adjclose?: number | null;
+};
 type ChartResult = { quotes?: ChartQuote[] };
 
 async function fetchYahoo(ticker: string, from: Date): Promise<Bar[]> {
@@ -42,13 +46,18 @@ async function fetchYahoo(ticker: string, from: Date): Promise<Bar[]> {
     period1: from,
     period2,
     interval: "1d",
+    events: "div|split", // ensures Yahoo includes dividend + split events
   })) as ChartResult;
   const quotes = result.quotes ?? [];
   const bars: Bar[] = [];
   for (const q of quotes) {
-    if (q.close == null || !isFinite(q.close) || !q.date) continue;
+    // Prefer adjclose (total-return adjusted — splits AND dividends). Yahoo's
+    // bare `close` is split-adjusted but NOT dividend-adjusted; using it would
+    // understate every return, especially SPY (~2%/yr in dividends).
+    const c = q.adjclose ?? q.close;
+    if (c == null || !isFinite(c) || !q.date) continue;
     const t = Math.floor(new Date(q.date).getTime() / 1000);
-    bars.push({ t, c: q.close });
+    bars.push({ t, c });
   }
   return bars;
 }

@@ -169,15 +169,24 @@ async function _runBacktest(
   const info = await getFundInfo(cleanCik, mode);
   const allFilings = info.filings
     .filter((f) => f.filingDate && f.reportDate)
-    // Treat the same period twice (HR + HR/A) by keeping only the latest filing per quarter.
-    .reverse() // chronological
+    .reverse() // chronological by reportDate ASC, then by filingDate ASC within same reportDate
     .reduce<Filing[]>((acc, f) => {
       const last = acc[acc.length - 1];
       if (last && last.reportDate === f.reportDate) {
-        acc[acc.length - 1] = f;
-      } else {
-        acc.push(f);
+        // Same reporting period — prefer the ORIGINAL 13F-HR over a 13F-HR/A
+        // amendment. Confidential-treatment amendments (Berkshire's AAPL,
+        // CVX, OXY pattern) are filed months later and contain ONLY the
+        // previously-hidden positions, not the full portfolio. If we used
+        // them, the walk would think every other position got exited at the
+        // amendment's filing date and re-opened the next quarter.
+        if (last.form === "13F-HR/A" && f.form === "13F-HR") {
+          acc[acc.length - 1] = f;
+        }
+        // Otherwise keep what we already have (the earliest 13F-HR, or
+        // an /A if no original exists for this period).
+        return acc;
       }
+      acc.push(f);
       return acc;
     }, [])
     // Optionally cap to most recent N quarters so backtests fit serverless
