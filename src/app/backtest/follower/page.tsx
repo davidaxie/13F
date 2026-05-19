@@ -83,8 +83,16 @@ export default function FollowerBacktestPage() {
             filing&apos;s date.
           </li>
           <li>
-            No transaction costs, taxes, slippage, or dividends modeled.
-            Prices are unadjusted-close from Yahoo Finance.
+            Prices are <strong>Yahoo&apos;s adjusted close</strong> — adjusted
+            for both splits and dividends — so total return (price
+            appreciation + reinvested dividends) is captured. SPY&apos;s
+            ~2%/yr dividends are properly counted in the benchmark.
+          </li>
+          <li>
+            No transaction costs, taxes, or slippage modeled. Yahoo&apos;s
+            adjusted-close has minor quirks for very old (10+ yr) historical
+            data; per-signal returns within a typical hold window are
+            accurate but year-over-decade returns can have ±5–10% noise.
           </li>
           <li>
             Open positions are marked-to-market at the most recent close.
