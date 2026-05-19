@@ -60,12 +60,38 @@ export type ConvictionPerFund = {
   alphaPct: number;
 };
 
+/**
+ * A position the fund is STILL holding in their latest 13F, that has met
+ * the conviction-hold threshold. This is the "actionable" idea list — a
+ * follower could go open the same position today.
+ */
+export type CurrentPick = {
+  fundCik: string;
+  fundName: string;
+  cusip: string;
+  ticker: string;
+  issuer: string;
+  firstBuyDate: string;       // entry date of the current lifecycle (latest open trade)
+  currentHoldDays: number;    // today - firstBuyDate (this lifecycle only)
+  buyPrice: number;           // first lot's entry price
+  todayPrice: number;
+  returnPct: number;
+  spyReturnPct: number;
+  alphaPct: number;
+};
+
 export type ConvictionBucket = {
   minHoldQuarters: number;
   stats: ConvictionStats;
   perFund: ConvictionPerFund[];
   topGainers: ConvictionSignal[];
   topLosers: ConvictionSignal[];
+  /**
+   * Positions in the fund's most-recent 13F that have been held for at
+   * least minHoldQuarters in the current (still-open) lifecycle. Sorted
+   * by current hold duration, descending.
+   */
+  currentPicks: CurrentPick[];
 };
 
 export type ConvictionBacktest = {
@@ -84,6 +110,43 @@ function _build(): ConvictionBacktest {
     if (!snap) continue;
     for (const [tk, p] of Object.entries(snap.latestPriceByTicker ?? {})) {
       if (!(tk in todayPriceByTicker)) todayPriceByTicker[tk] = p;
+    }
+  }
+
+  // 1b. Build the universe of CURRENTLY-HELD positions per fund. A position
+  //     is "current" if the fund has at least one open trade for it; the
+  //     trade's entryDate is the start of the current lifecycle.
+  const allCurrentPicks: CurrentPick[] = [];
+  for (const fund of MARQUEE_FUNDS) {
+    const snap = getSnapshot(fund.cik);
+    if (!snap) continue;
+    for (const t of snap.trades) {
+      if (t.status !== "open" || !t.ticker || t.entrySharePrice <= 0) continue;
+      const today = todayPriceByTicker[t.ticker];
+      if (today == null || today <= 0) continue;
+      const entryUnix = isoToUnix(t.entryDate);
+      const currentHoldDays = (todayUnix - entryUnix) / 86400;
+      const returnPct = (today / t.entrySharePrice - 1) * 100;
+      const spyBuy = priceAt(SPY_BARS, entryUnix);
+      const spyToday = SPY_BARS[SPY_BARS.length - 1]?.c;
+      if (spyBuy == null || spyBuy <= 0 || spyToday == null || spyToday <= 0) {
+        continue;
+      }
+      const spyReturnPct = (spyToday / spyBuy - 1) * 100;
+      allCurrentPicks.push({
+        fundCik: fund.cik,
+        fundName: fund.displayName,
+        cusip: t.cusip,
+        ticker: t.ticker,
+        issuer: t.issuer,
+        firstBuyDate: t.entryDate,
+        currentHoldDays,
+        buyPrice: t.entrySharePrice,
+        todayPrice: today,
+        returnPct,
+        spyReturnPct,
+        alphaPct: returnPct - spyReturnPct,
+      });
     }
   }
 
@@ -219,6 +282,12 @@ function _build(): ConvictionBacktest {
         .sort((a, b) => a.alphaUsd - b.alphaUsd)
         .slice(0, 10);
 
+      // Filter currently-held picks by the same hold-quarter threshold,
+      // sorted longest-held first (= strongest conviction).
+      const currentPicks = allCurrentPicks
+        .filter((p) => p.currentHoldDays >= minDays)
+        .sort((a, b) => b.currentHoldDays - a.currentHoldDays);
+
       return {
         minHoldQuarters,
         stats: {
@@ -248,6 +317,7 @@ function _build(): ConvictionBacktest {
         perFund,
         topGainers,
         topLosers,
+        currentPicks,
       };
     },
   );

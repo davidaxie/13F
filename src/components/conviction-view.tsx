@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type {
   ConvictionBacktest,
   ConvictionBucket,
   ConvictionSignal,
+  CurrentPick,
 } from "@/lib/conviction-backtest";
 import { formatPct, formatUSD, quarterLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -175,6 +176,19 @@ export function ConvictionView({ data }: { data: ConvictionBacktest }) {
         </div>
       </section>
 
+      {/* CURRENT PICKS — actionable buy list ================================ */}
+      <section className="mt-20">
+        <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+          <h2 className="font-serif text-2xl text-foreground">
+            Currently-held picks
+          </h2>
+          <span className="text-xs uppercase tracking-widest text-muted">
+            still in fund&apos;s latest 13F · ≥ {bucket.minHoldQuarters}Q held
+          </span>
+        </div>
+        <CurrentPicksTable picks={bucket.currentPicks} />
+      </section>
+
       {/* Top winners / losers ================================================= */}
       <section className="mt-20">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
@@ -186,6 +200,145 @@ export function ConvictionView({ data }: { data: ConvictionBacktest }) {
           />
         </div>
       </section>
+    </>
+  );
+}
+
+function CurrentPicksTable({ picks }: { picks: CurrentPick[] }) {
+  const [filter, setFilter] = useState("");
+  const [showAll, setShowAll] = useState(false);
+
+  const filtered = useMemo(() => {
+    const f = filter.trim().toLowerCase();
+    if (!f) return picks;
+    return picks.filter(
+      (p) =>
+        p.ticker.toLowerCase().includes(f) ||
+        p.issuer.toLowerCase().includes(f) ||
+        p.fundName.toLowerCase().includes(f),
+    );
+  }, [picks, filter]);
+
+  const visible = showAll ? filtered : filtered.slice(0, 30);
+  const hasMore = filtered.length > 30;
+
+  return (
+    <>
+      <div className="mt-4 flex items-baseline justify-between gap-4">
+        <input
+          type="text"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          placeholder="Filter by ticker, issuer, or fund…"
+          className="w-80 max-w-full border-b border-hairline bg-transparent py-1.5 text-sm text-foreground placeholder:text-muted focus:border-foreground focus:outline-none"
+          spellCheck={false}
+        />
+        <span className="font-mono text-xs tabular text-muted">
+          {filtered.length.toLocaleString()}
+          {filtered.length !== picks.length && (
+            <span> / {picks.length.toLocaleString()}</span>
+          )}{" "}
+          picks
+        </span>
+      </div>
+
+      {filtered.length === 0 ? (
+        <p className="mt-6 text-sm text-muted">No matches.</p>
+      ) : (
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-y border-hairline text-left text-xs uppercase tracking-wider text-muted">
+                <th className="py-3 pr-3 font-normal">Ticker</th>
+                <th className="py-3 px-3 font-normal">Issuer</th>
+                <th className="py-3 px-3 font-normal">Fund</th>
+                <th className="py-3 px-3 text-right font-normal">First bought</th>
+                <th className="py-3 px-3 text-right font-normal">Held</th>
+                <th className="py-3 px-3 text-right font-normal">Cost</th>
+                <th className="py-3 px-3 text-right font-normal">Now</th>
+                <th className="py-3 px-3 text-right font-normal">Return</th>
+                <th className="py-3 pl-3 text-right font-normal">Alpha</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visible.map((p, i) => (
+                <tr
+                  key={`${p.fundCik}-${p.cusip}-${i}`}
+                  className="border-b border-hairline/60 transition-colors hover:bg-subtle/40"
+                >
+                  <td className="py-3 pr-3 font-mono text-sm text-foreground">
+                    {p.ticker}
+                  </td>
+                  <td className="py-3 px-3 font-serif text-foreground/90">
+                    <span className="line-clamp-1">{p.issuer}</span>
+                  </td>
+                  <td className="py-3 px-3">
+                    <Link
+                      href={`/fund/${p.fundCik}/performance`}
+                      className="text-xs text-muted transition-colors hover:text-accent"
+                    >
+                      {p.fundName}
+                    </Link>
+                  </td>
+                  <td className="py-3 px-3 text-right text-xs text-muted">
+                    {quarterLabel(p.firstBuyDate)}
+                  </td>
+                  <td className="py-3 px-3 text-right tabular text-muted">
+                    {(p.currentHoldDays / 90).toFixed(1)}Q
+                  </td>
+                  <td className="py-3 px-3 text-right tabular text-muted">
+                    ${p.buyPrice.toFixed(p.buyPrice < 10 ? 2 : 0)}
+                  </td>
+                  <td className="py-3 px-3 text-right tabular text-foreground">
+                    ${p.todayPrice.toFixed(p.todayPrice < 10 ? 2 : 0)}
+                  </td>
+                  <td
+                    className={cn(
+                      "py-3 px-3 text-right tabular",
+                      p.returnPct >= 0 ? "text-positive" : "text-negative",
+                    )}
+                  >
+                    {p.returnPct >= 0 ? "+" : ""}
+                    {formatPct(p.returnPct, 0)}
+                  </td>
+                  <td
+                    className={cn(
+                      "py-3 pl-3 text-right tabular text-xs",
+                      p.alphaPct >= 0 ? "text-positive" : "text-negative",
+                    )}
+                  >
+                    {p.alphaPct >= 0 ? "+" : ""}
+                    {formatPct(p.alphaPct, 0)} vs SPY
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {hasMore && (
+        <button
+          type="button"
+          onClick={() => setShowAll((v) => !v)}
+          className="mt-4 text-xs uppercase tracking-widest text-accent transition-opacity hover:opacity-70"
+        >
+          {showAll
+            ? "↑ Show top 30"
+            : `↓ Show all ${filtered.length.toLocaleString()}`}
+        </button>
+      )}
+
+      <p className="mt-6 text-xs leading-relaxed text-muted">
+        Each row is a position the fund is still holding in their latest
+        13F, that has been held for at least {""}
+        {/* dynamic message replaced by parent's slider state */}
+        the selected conviction filter. Sorted by current hold duration
+        (longest first = strongest conviction). &ldquo;Cost&rdquo; is the
+        price at the first disclosure; a follower buying today pays the
+        &ldquo;Now&rdquo; price, so their forward return won&apos;t mirror
+        the column shown here.
+      </p>
     </>
   );
 }
