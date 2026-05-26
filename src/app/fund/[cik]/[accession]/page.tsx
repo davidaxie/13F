@@ -9,6 +9,7 @@ import {
   formatUSD,
   quarterLabel,
 } from "@/lib/format";
+import { tickerForCusip } from "@/lib/stock-view";
 
 export const revalidate = 3600;
 
@@ -110,6 +111,7 @@ export default async function FilingPage({
       issuer: h.issuer,
       titleOfClass: h.titleOfClass,
       cusip: h.cusip,
+      ticker: h.putCall ? null : tickerForCusip(h.cusip),
       valueUsd,
       shares: h.shares,
       putCall: h.putCall,

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { formatInt, formatPct, formatUSD } from "@/lib/format";
@@ -9,6 +10,7 @@ export type Row = {
   issuer: string;
   titleOfClass: string;
   cusip: string;
+  ticker: string | null;
   valueUsd: number;
   shares: number;
   putCall?: string;
@@ -149,10 +151,20 @@ export function HoldingsTable({
                   {i + 1}
                 </td>
                 <td className="py-3 pr-3 text-foreground">
-                  <div className="font-serif text-base leading-tight">
-                    {r.issuer}
-                  </div>
+                  {r.ticker ? (
+                    <Link
+                      href={`/stock/${r.ticker}`}
+                      className="font-serif text-base leading-tight transition-colors hover:text-accent"
+                    >
+                      {r.issuer}
+                    </Link>
+                  ) : (
+                    <div className="font-serif text-base leading-tight">
+                      {r.issuer}
+                    </div>
+                  )}
                   <div className="mt-0.5 font-mono text-xs text-muted">
+                    {r.ticker ? `${r.ticker} · ` : ""}
                     {r.cusip}
                     {r.putCall ? ` · ${r.putCall}` : ""}
                   </div>

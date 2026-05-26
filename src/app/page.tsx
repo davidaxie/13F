@@ -10,6 +10,13 @@ const SUGGESTIONS = [
   { label: "Baupost Group", q: "baupost" },
 ];
 
+const STOCK_SUGGESTIONS = [
+  { label: "AAPL", t: "AAPL" },
+  { label: "NVDA", t: "NVDA" },
+  { label: "GOOGL", t: "GOOGL" },
+  { label: "META", t: "META" },
+];
+
 export default function Home() {
   return (
     <div className="flex flex-1 items-center justify-center px-6">
@@ -37,6 +44,21 @@ export default function Home() {
               key={s.q}
               href={`/search?q=${encodeURIComponent(s.q)}`}
               className="transition-colors hover:text-foreground"
+            >
+              {s.label}
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
+          <span className="text-xs uppercase tracking-widest text-muted/70">
+            or a stock
+          </span>
+          {STOCK_SUGGESTIONS.map((s) => (
+            <Link
+              key={s.t}
+              href={`/stock/${s.t}`}
+              className="font-mono transition-colors hover:text-foreground"
             >
               {s.label}
             </Link>
