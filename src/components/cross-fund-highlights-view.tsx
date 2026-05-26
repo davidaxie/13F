@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 
 const DEFAULT_VISIBLE = 12;
 
+type RankMode = "dollar" | "weight";
+
 type Section = {
   key: string;
   title: string;
@@ -15,6 +17,10 @@ type Section = {
   moves: Move[];
   tone: "positive" | "negative";
   valueOf: (m: Move) => number; // dollar amount to display per row
+  // Weight delta — positive magnitude, in percentage points of fund portfolio.
+  // For new: current weight. For exited: prev weight. For added/trimmed:
+  // |current − prev|.
+  valueOfPct: (m: Move) => number;
 };
 
 export function CrossFundHighlightsView({
@@ -32,6 +38,11 @@ export function CrossFundHighlightsView({
   adds: Move[];
   trims: Move[];
 }) {
+  const [mode, setMode] = useState<RankMode>("dollar");
+
+  const deltaWeight = (m: Move) =>
+    Math.abs(m.weightInPortfolio - (m.prevWeightInPortfolio ?? 0));
+
   const sections: Section[] = [
     {
       key: "newLong",
@@ -40,6 +51,7 @@ export function CrossFundHighlightsView({
       moves: newLong,
       tone: "positive",
       valueOf: (m) => m.currentValueUsd,
+      valueOfPct: (m) => m.weightInPortfolio,
     },
     {
       key: "exits",
@@ -48,6 +60,9 @@ export function CrossFundHighlightsView({
       moves: exits,
       tone: "negative",
       valueOf: (m) => m.prevValueUsd,
+      // For exits, weightInPortfolio already reflects the prev (pre-exit)
+      // weight (see dashboard.ts).
+      valueOfPct: (m) => m.weightInPortfolio,
     },
     {
       key: "shortOpens",
@@ -56,6 +71,7 @@ export function CrossFundHighlightsView({
       moves: shortOpens,
       tone: "negative",
       valueOf: (m) => m.currentValueUsd,
+      valueOfPct: (m) => m.weightInPortfolio,
     },
     {
       key: "callOpens",
@@ -64,31 +80,83 @@ export function CrossFundHighlightsView({
       moves: callOpens,
       tone: "positive",
       valueOf: (m) => m.currentValueUsd,
+      valueOfPct: (m) => m.weightInPortfolio,
     },
     {
       key: "adds",
       title: "Biggest adds",
-      subtitle: "Largest dollar additions",
+      subtitle:
+        mode === "dollar"
+          ? "Largest dollar additions"
+          : "Largest portfolio-weight additions",
       moves: adds,
       tone: "positive",
       valueOf: (m) => Math.abs(m.deltaUsd),
+      valueOfPct: deltaWeight,
     },
     {
       key: "trims",
       title: "Biggest trims",
-      subtitle: "Largest dollar reductions",
+      subtitle:
+        mode === "dollar"
+          ? "Largest dollar reductions"
+          : "Largest portfolio-weight reductions",
       moves: trims,
       tone: "negative",
       valueOf: (m) => Math.abs(m.deltaUsd),
+      valueOfPct: deltaWeight,
     },
   ];
 
   return (
-    <div className="mt-12 grid grid-cols-1 gap-12 md:grid-cols-2">
-      {sections.map((s) => {
-        const { key, ...rest } = s;
-        return <MoveSection key={key} {...rest} />;
-      })}
+    <>
+      <RankToggle mode={mode} onChange={setMode} />
+      <div className="mt-8 grid grid-cols-1 gap-12 md:grid-cols-2">
+        {sections.map((s) => {
+          const { key, ...rest } = s;
+          return <MoveSection key={key} mode={mode} {...rest} />;
+        })}
+      </div>
+    </>
+  );
+}
+
+function RankToggle({
+  mode,
+  onChange,
+}: {
+  mode: RankMode;
+  onChange: (m: RankMode) => void;
+}) {
+  return (
+    <div className="mt-12 flex items-center gap-3 text-xs uppercase tracking-widest text-muted">
+      <span>Rank by</span>
+      <div className="inline-flex overflow-hidden rounded border border-hairline">
+        <button
+          type="button"
+          onClick={() => onChange("dollar")}
+          className={cn(
+            "px-3 py-1 transition-colors",
+            mode === "dollar"
+              ? "bg-foreground text-background"
+              : "text-muted hover:text-foreground",
+          )}
+        >
+          Dollars
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange("weight")}
+          className={cn(
+            "border-l border-hairline px-3 py-1 transition-colors",
+            mode === "weight"
+              ? "bg-foreground text-background"
+              : "text-muted hover:text-foreground",
+          )}
+        >
+          % of portfolio
+        </button>
+      </div>
     </div>
   );
 }
@@ -99,20 +167,30 @@ function MoveSection({
   moves,
   tone,
   valueOf,
-}: Omit<Section, "key">) {
+  valueOfPct,
+  mode,
+}: Omit<Section, "key"> & { mode: RankMode }) {
   const [expanded, setExpanded] = useState(false);
   const [filter, setFilter] = useState("");
 
+  // Pick the comparator and the per-row magnitude based on rank mode. Re-sort
+  // moves in-place (immutably) so the order matches whichever value is shown.
+  const ranker = mode === "dollar" ? valueOf : valueOfPct;
+
+  const ranked = useMemo(() => {
+    return [...moves].sort((a, b) => ranker(b) - ranker(a));
+  }, [moves, ranker]);
+
   const filtered = useMemo(() => {
     const f = filter.trim().toLowerCase();
-    if (!f) return moves;
-    return moves.filter(
+    if (!f) return ranked;
+    return ranked.filter(
       (m) =>
         m.issuer.toLowerCase().includes(f) ||
         m.fundName.toLowerCase().includes(f) ||
         m.cusip.toLowerCase().includes(f),
     );
-  }, [moves, filter]);
+  }, [ranked, filter]);
 
   const visible = expanded ? filtered : filtered.slice(0, DEFAULT_VISIBLE);
   const hasMore = filtered.length > DEFAULT_VISIBLE;
@@ -186,7 +264,9 @@ function MoveSection({
                       )}
                     >
                       {tone === "positive" ? "+" : "−"}
-                      {formatUSD(valueOf(m), { compact: true })}
+                      {mode === "dollar"
+                        ? formatUSD(valueOf(m), { compact: true })
+                        : `${formatPct(valueOfPct(m), 2)} pts`}
                     </div>
                     <div className="mt-0.5 text-xs text-muted tabular">
                       {m.type === "new" && "NEW"}

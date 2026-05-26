@@ -42,7 +42,14 @@ export type Move = {
   prevValueUsd: number;
   deltaUsd: number;
   deltaSharesPct: number | null;
+  // Position's weight in the fund's portfolio. For new/added/trimmed this is
+  // the *current* filing's weight; for exited it's the *prev* filing's weight
+  // (the position's last-known size before the exit).
   weightInPortfolio: number;
+  // Prev filing's weight, populated only for "added" and "trimmed" so we can
+  // compute Δweight (= weightInPortfolio − prevWeightInPortfolio). For "new"
+  // it's 0 by definition; for "exited" it's identical to weightInPortfolio.
+  prevWeightInPortfolio?: number;
 };
 
 export type FundDiff = {
@@ -148,6 +155,8 @@ async function _getFundDiff(
         prevH.shares > 0
           ? ((h.shares - prevH.shares) / prevH.shares) * 100
           : null;
+      const prevWeight =
+        totalPrevUsd > 0 ? (prevValueUsd / totalPrevUsd) * 100 : 0;
       moves.push({
         fundCik: cik,
         fundName: displayName,
@@ -163,6 +172,7 @@ async function _getFundDiff(
         deltaUsd,
         deltaSharesPct,
         weightInPortfolio: weight,
+        prevWeightInPortfolio: prevWeight,
       });
     }
 
