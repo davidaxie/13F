@@ -5,6 +5,7 @@ import { WatchlistStar } from "@/components/watchlist-star";
 import { getFundInfo } from "@/lib/edgar";
 import { getTopHoldings } from "@/lib/dashboard";
 import { MARQUEE_FUNDS, FUND_STYLE_LABELS } from "@/lib/funds";
+import { getSectorByTicker } from "@/lib/refdata";
 import { getSnapshot } from "@/lib/snapshots";
 import { tickerForCusip } from "@/lib/stock-view";
 import { formatDate, formatInt, formatPct, formatUSD, quarterLabel } from "@/lib/format";
@@ -163,6 +164,7 @@ export default async function FundPage({
                 <tr className="border-y border-hairline text-left text-xs uppercase tracking-wider text-muted">
                   <th className="py-3 pr-3 font-normal">#</th>
                   <th className="py-3 px-3 font-normal">Issuer</th>
+                  <th className="py-3 px-3 hidden font-normal sm:table-cell">Sector</th>
                   <th className="py-3 px-3 text-right font-normal">Value</th>
                   <th className="py-3 px-3 text-right font-normal">% Port</th>
                   <th className="py-3 pl-3 text-right font-normal">Shares</th>
@@ -171,6 +173,7 @@ export default async function FundPage({
               <tbody>
                 {topHoldings.rows.map((r, i) => {
                   const ticker = tickerForCusip(r.cusip);
+                  const sector = getSectorByTicker(ticker);
                   return (
                     <tr
                       key={`${r.cusip}-${r.titleOfClass}-${i}`}
@@ -197,6 +200,9 @@ export default async function FundPage({
                           {r.cusip}
                           {r.putCall ? ` · ${r.putCall}` : ""}
                         </div>
+                      </td>
+                      <td className="py-3 px-3 hidden text-xs text-muted sm:table-cell">
+                        {sector ? sector.sector : "—"}
                       </td>
                       <td className="py-3 px-3 text-right tabular text-foreground">
                         {formatUSD(r.valueUsd, { compact: true })}

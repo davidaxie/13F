@@ -12,6 +12,7 @@ export type Row = {
   titleOfClass: string;
   cusip: string;
   ticker: string | null;
+  sector: string | null;
   valueUsd: number;
   shares: number;
   putCall?: string;
@@ -110,6 +111,7 @@ export function HoldingsTable({
       { label: "Rank", get: (_r) => filtered.indexOf(_r) + 1 },
       { label: "Issuer", get: (r) => r.issuer },
       { label: "Ticker", get: (r) => r.ticker ?? "" },
+      { label: "Sector", get: (r) => r.sector ?? "" },
       { label: "CUSIP", get: (r) => r.cusip },
       { label: "Class", get: (r) => r.titleOfClass },
       { label: "Put/Call", get: (r) => r.putCall ?? "" },
@@ -213,6 +215,9 @@ export function HoldingsTable({
                 onClick={toggle}
                 align="left"
               />
+              <th className="py-3 px-3 hidden font-normal lg:table-cell">
+                Sector
+              </th>
               <th className="py-3 px-3 font-normal">Class</th>
               <SortHeader
                 label="Value"
@@ -275,6 +280,9 @@ export function HoldingsTable({
                     {r.cusip}
                     {r.putCall ? ` · ${r.putCall}` : ""}
                   </div>
+                </td>
+                <td className="py-3 px-3 hidden text-xs text-muted lg:table-cell">
+                  {r.sector ?? "—"}
                 </td>
                 <td className="py-3 px-3 text-xs text-muted">
                   {r.titleOfClass}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sparkline } from "@/components/charts/sparkline";
 import { WatchlistStar } from "@/components/watchlist-star";
+import { getSectorByTicker } from "@/lib/refdata";
 import { getStockView } from "@/lib/stock-view";
 import { formatDate, formatInt, formatPct, formatUSD, quarterLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ export default async function StockPage({
 
   const hasAnyCoverage =
     view.currentHolders.length > 0 || view.pastHolders.length > 0;
+  const gics = getSectorByTicker(view.ticker);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -42,6 +44,14 @@ export default async function StockPage({
         </div>
 
         <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm text-muted">
+          {gics && (
+            <span>
+              <span className="rounded-sm border border-hairline bg-subtle/50 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted">
+                {gics.sector}
+              </span>
+              <span className="ml-2 text-muted/70">{gics.industry}</span>
+            </span>
+          )}
           {view.latestPrice != null && (
             <span>
               Latest close{" "}

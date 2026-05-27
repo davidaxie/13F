@@ -10,6 +10,7 @@ import {
   formatUSD,
   quarterLabel,
 } from "@/lib/format";
+import { getSectorByCusip } from "@/lib/refdata";
 import { tickerForCusip } from "@/lib/stock-view";
 
 export const revalidate = 3600;
@@ -123,11 +124,13 @@ export default async function FilingPage({
       changeType = h.shares > prev.shares ? "increased" : "decreased";
     }
 
+    const ticker = h.putCall ? null : tickerForCusip(h.cusip);
     return {
       issuer: h.issuer,
       titleOfClass: h.titleOfClass,
       cusip: h.cusip,
-      ticker: h.putCall ? null : tickerForCusip(h.cusip),
+      ticker,
+      sector: ticker ? getSectorByCusip(h.cusip)?.sector ?? null : null,
       valueUsd,
       shares: h.shares,
       putCall: h.putCall,
