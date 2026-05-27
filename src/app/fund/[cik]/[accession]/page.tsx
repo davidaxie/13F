@@ -38,12 +38,19 @@ function aggregate(rows: Holding[]) {
   return map;
 }
 
+type CompareMode = "qoq" | "yoy";
+
 export default async function FilingPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ cik: string; accession: string }>;
+  searchParams: Promise<{ compare?: string }>;
 }) {
   const { cik, accession } = await params;
+  const sp = await searchParams;
+  const compareMode: CompareMode = sp.compare === "yoy" ? "yoy" : "qoq";
+
   let fund: Awaited<ReturnType<typeof getFundInfo>>;
   try {
     fund = await getFundInfo(cik);
@@ -60,7 +67,17 @@ export default async function FilingPage({
   const filingIdx = fund.filings.findIndex(
     (f) => f.accessionNumber === accession,
   );
-  const prevFiling = fund.filings[filingIdx + 1];
+  // QoQ = filings[idx + 1] (immediate prior quarter).
+  // YoY = filings[idx + 4] (four quarters back). Fall back to QoQ if there
+  // aren't 4 prior filings yet — keeps the page useful for newer funds.
+  const requestedOffset = compareMode === "yoy" ? 4 : 1;
+  const effectiveOffset =
+    filingIdx + requestedOffset < fund.filings.length ? requestedOffset : 1;
+  const effectiveMode: CompareMode = effectiveOffset === 4 ? "yoy" : "qoq";
+  const prevFiling = fund.filings[filingIdx + effectiveOffset];
+  // True only when user requested YoY but we silently fell back.
+  const yoyUnavailable =
+    compareMode === "yoy" && effectiveOffset !== 4;
 
   let holdings: Holding[] = [];
   let prevHoldings: Holding[] = [];
@@ -177,6 +194,43 @@ export default async function FilingPage({
           </a>
         </div>
       </div>
+
+      {prevFiling && (
+        <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-widest text-muted">
+          <span>Compare vs</span>
+          <div className="inline-flex overflow-hidden rounded border border-hairline">
+            <Link
+              href={`/fund/${fund.cik}/${accession}?compare=qoq`}
+              className={`px-3 py-1 transition-colors ${
+                effectiveMode === "qoq"
+                  ? "bg-foreground text-background"
+                  : "text-muted hover:text-foreground"
+              }`}
+            >
+              QoQ
+            </Link>
+            <Link
+              href={`/fund/${fund.cik}/${accession}?compare=yoy`}
+              className={`border-l border-hairline px-3 py-1 transition-colors ${
+                effectiveMode === "yoy"
+                  ? "bg-foreground text-background"
+                  : "text-muted hover:text-foreground"
+              }`}
+            >
+              YoY
+            </Link>
+          </div>
+          <span className="normal-case tracking-normal text-muted/70">
+            {effectiveMode === "yoy" ? "4 quarters back" : "previous quarter"}{" "}
+            ({quarterLabel(prevFiling.reportDate)})
+          </span>
+          {yoyUnavailable && (
+            <span className="normal-case tracking-normal text-negative">
+              YoY unavailable — fewer than 4 prior filings; showing QoQ.
+            </span>
+          )}
+        </div>
+      )}
 
       {fetchError ? (
         <p className="mt-10 text-negative">{fetchError}</p>
