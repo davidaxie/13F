@@ -26,14 +26,17 @@ function buildIndexes() {
   }
 }
 
-// Accept BRK.B, BRK-B, BRKB; FB/META aliases are not handled (ticker changes
-// are infrequent and best handled by re-indexing the seed after a rename).
+// Accept BRK.B, BRK-B, BRK/B, BRKB — share-class separator varies by data
+// source (Bloomberg uses /, Yahoo uses -, S&P uses .). FB/META aliases are
+// not handled (ticker changes are infrequent and best handled by re-indexing
+// the seed after a rename).
 function tickerVariants(input: string): string[] {
   const upper = input.trim().toUpperCase();
   const variants = new Set<string>([upper]);
-  variants.add(upper.replace(/[.\-]/g, ""));
-  variants.add(upper.replace(/[.\-]/g, "."));
-  variants.add(upper.replace(/[.\-]/g, "-"));
+  variants.add(upper.replace(/[.\-/]/g, ""));
+  variants.add(upper.replace(/[.\-/]/g, "."));
+  variants.add(upper.replace(/[.\-/]/g, "-"));
+  variants.add(upper.replace(/[.\-/]/g, "/"));
   return Array.from(variants);
 }
 

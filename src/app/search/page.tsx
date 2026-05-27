@@ -3,10 +3,36 @@ import { SearchInput } from "@/components/search-input";
 import { MARQUEE_FUNDS } from "@/lib/dashboard";
 import { searchManagers } from "@/lib/edgar";
 import { formatDate } from "@/lib/format";
+import { cusipsForTicker, tickerForCusip } from "@/lib/stock-view";
 
 export const dynamic = "force-dynamic";
 
 const TRACKED_CIKS = new Set(MARQUEE_FUNDS.map((f) => f.cik));
+
+// Quick shape checks. Ticker = 1–5 ASCII letters (optionally a single
+// share-class suffix like ".B", "-B", "/B"). CUSIP = exactly 9 alphanumeric.
+const TICKER_RE = /^[A-Za-z]{1,5}(?:[.\-/][A-Za-z]{1,2})?$/;
+const CUSIP_RE = /^[A-Za-z0-9]{9}$/;
+
+type StockHint =
+  | { kind: "ticker"; ticker: string }
+  | { kind: "cusip"; cusip: string; ticker: string };
+
+function detectStockHint(query: string): StockHint | null {
+  // Tickers take precedence when they ALSO match the cusip regex (e.g.
+  // "ABCDEFGHI" 9-letter ticker — very rare, but ticker is the more useful
+  // interpretation here).
+  if (TICKER_RE.test(query) && !/^\d+$/.test(query)) {
+    const upper = query.toUpperCase();
+    const cusips = cusipsForTicker(upper);
+    if (cusips.length > 0) return { kind: "ticker", ticker: upper };
+  }
+  if (CUSIP_RE.test(query)) {
+    const tk = tickerForCusip(query.toUpperCase());
+    if (tk) return { kind: "cusip", cusip: query.toUpperCase(), ticker: tk };
+  }
+  return null;
+}
 
 export default async function SearchPage({
   searchParams,
@@ -26,6 +52,8 @@ export default async function SearchPage({
     }
   }
 
+  const stockHint = query ? detectStockHint(query) : null;
+
   return (
     <div className="mx-auto w-full max-w-4xl px-6 py-12">
       <div className="mb-12">
@@ -34,6 +62,32 @@ export default async function SearchPage({
 
       {!query && (
         <p className="text-muted">Enter a fund manager name to begin.</p>
+      )}
+
+      {stockHint && (
+        // URL-safe ticker: Next.js dynamic segments can't contain "/", so
+        // normalize share-class slashes to dots. tickerVariants in
+        // stock-view.ts treats . / - as equivalent, so the destination page
+        // resolves the same CUSIP regardless of which separator the URL uses.
+        <Link
+          href={`/stock/${stockHint.ticker.replace(/\//g, ".")}`}
+          className="mb-8 block rounded border border-accent/40 bg-accent/5 px-5 py-4 transition-colors hover:border-accent hover:bg-accent/10"
+        >
+          <div className="text-[10px] uppercase tracking-widest text-accent">
+            {stockHint.kind === "ticker"
+              ? "Looks like a ticker"
+              : `Looks like a CUSIP (${stockHint.cusip})`}
+          </div>
+          <div className="mt-1 font-serif text-lg text-foreground">
+            Open stock page for{" "}
+            <span className="font-mono text-accent">{stockHint.ticker}</span>
+            <span className="text-muted"> →</span>
+          </div>
+          <div className="mt-1 text-xs text-muted">
+            Cross-fund holders, recent activity, ownership timeline. Showing
+            fund matches below.
+          </div>
+        </Link>
       )}
 
       {query && error && (
