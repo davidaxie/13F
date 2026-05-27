@@ -15,6 +15,11 @@ import {
   rekeyEquityCurve,
   type BenchmarkKey,
 } from "@/lib/benchmarks";
+import {
+  FACTOR_META,
+  FACTOR_ORDER,
+  decomposeFactors,
+} from "@/lib/factor-decomp";
 import { computeRiskMetrics, computeRollingAlpha } from "@/lib/risk-metrics";
 import { getSnapshot } from "@/lib/snapshots";
 import { formatDate, formatPct, formatUSD, quarterLabel } from "@/lib/format";
@@ -92,6 +97,10 @@ export default async function PerformancePage({
   // regeneration needed.
   const risk = computeRiskMetrics(equityCurve);
   const rollingAlpha = computeRollingAlpha(equityCurve, 52);
+  // Style decomposition uses the original (SPY-keyed) curve regardless of
+  // the user-selected benchmark — its factors come from SPY/IWM/QQQ/EFA/AGG
+  // directly. Pass result.equityCurve, not the rekeyed `equityCurve`.
+  const decomp = decomposeFactors(result.equityCurve);
 
   // Snapshot's as-of timestamp. Threaded into BiggestTradesTable so hold
   // duration for open trades is computed against the snapshot end, not the
@@ -380,6 +389,107 @@ export default async function PerformancePage({
           </p>
         )}
       </section>
+
+      {/* ============ A.7b Style decomposition ============ */}
+      {decomp && (
+        <section className="mt-16">
+          <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+            <h2 className="font-serif text-2xl text-foreground">
+              Style decomposition
+            </h2>
+            <span className="text-xs uppercase tracking-widest text-muted">
+              R² {(decomp.r2 * 100).toFixed(0)}% · {decomp.observations} weekly obs
+            </span>
+          </div>
+          <p className="mt-3 max-w-2xl text-xs leading-relaxed text-muted">
+            Multivariate regression of weekly mirror excess return on five
+            style factors built from the benchmark ETFs: SPY (market),
+            IWM−SPY (size), QQQ−SPY (growth), EFA−SPY (international),
+            AGG−SPY (bonds). The intercept is the &ldquo;true alpha&rdquo;
+            after stripping these passive tilts. ✓ marks loadings whose
+            |t-stat| ≥ 2 (≈ 95% confidence the loading is non-zero).
+          </p>
+
+          <div className="mt-6 grid gap-3">
+            {FACTOR_ORDER.map((fk) => {
+              const l = decomp.loadings[fk];
+              const widthPct = Math.min(100, Math.abs(l.beta) * 50); // |1.0| = 50% of half-axis
+              const positive = l.beta >= 0;
+              const significant = Math.abs(l.tStat) >= 2;
+              return (
+                <div
+                  key={fk}
+                  className="grid grid-cols-[150px_minmax(0,1fr)_100px] items-center gap-3 rounded px-2 py-1.5"
+                  title={FACTOR_META[fk].description}
+                >
+                  <div className="text-xs uppercase tracking-widest text-muted">
+                    {FACTOR_META[fk].label}
+                  </div>
+                  <div className="relative h-5">
+                    <div className="absolute inset-y-0 left-1/2 w-px bg-hairline" />
+                    <div
+                      className={cn(
+                        "absolute inset-y-0 rounded-sm",
+                        positive ? "left-1/2 bg-positive/60" : "right-1/2 bg-negative/60",
+                      )}
+                      style={{ width: `${widthPct / 2}%` }}
+                    />
+                  </div>
+                  <div className="text-right text-sm tabular">
+                    <span
+                      className={cn(
+                        positive ? "text-positive" : "text-negative",
+                      )}
+                    >
+                      {positive ? "+" : ""}
+                      {l.beta.toFixed(2)}
+                    </span>
+                    {significant && (
+                      <span
+                        className="ml-1 text-[10px] text-muted"
+                        title={`t-stat ${l.tStat.toFixed(2)}`}
+                      >
+                        ✓
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-6 grid grid-cols-2 gap-x-10 gap-y-4 border-t border-hairline pt-6 sm:grid-cols-4">
+            <Stat
+              label="α (style-adjusted)"
+              value={`${decomp.alphaAnnualPct >= 0 ? "+" : ""}${decomp.alphaAnnualPct.toFixed(1)}%`}
+              tone={decomp.alphaAnnualPct >= 0 ? "up" : "down"}
+              title={`Annualized regression intercept. t-stat ${decomp.alphaTStat.toFixed(2)} (${Math.abs(decomp.alphaTStat) >= 2 ? "significant" : "not significant"} at 95%).`}
+            />
+            <Stat
+              label="R²"
+              value={`${(decomp.r2 * 100).toFixed(0)}%`}
+              title="Share of mirror's excess return variance explained by the five factors. High R² + small alpha = the fund is doing exactly what its style suggests; low R² = there's something the style model misses."
+            />
+            <Stat
+              label="α t-stat"
+              value={decomp.alphaTStat.toFixed(2)}
+              tone={
+                Math.abs(decomp.alphaTStat) >= 2
+                  ? decomp.alphaTStat > 0
+                    ? "up"
+                    : "down"
+                  : undefined
+              }
+              title="|t| ≥ 2 ≈ 95% confidence the alpha is non-zero."
+            />
+            <Stat
+              label="Observations"
+              value={decomp.observations.toLocaleString()}
+              title="Weekly samples used in the regression."
+            />
+          </div>
+        </section>
+      )}
 
       {/* ============ A.8 Rolling 1y alpha ============ */}
       {rollingAlpha.length > 0 && (
