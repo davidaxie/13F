@@ -2,13 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sparkline } from "@/components/charts/sparkline";
 import { WatchlistStar } from "@/components/watchlist-star";
-import { getFundInfo } from "@/lib/edgar";
+import { getFundInfo, getOwnershipFilings } from "@/lib/edgar";
 import { getTopHoldings } from "@/lib/dashboard";
 import { MARQUEE_FUNDS, FUND_STYLE_LABELS } from "@/lib/funds";
 import { getSectorByTicker } from "@/lib/refdata";
 import { getSnapshot } from "@/lib/snapshots";
 import { tickerForCusip } from "@/lib/stock-view";
 import { formatDate, formatInt, formatPct, formatUSD, quarterLabel } from "@/lib/format";
+import { cn } from "@/lib/utils";
 
 export const revalidate = 3600;
 
@@ -20,13 +21,15 @@ export default async function FundPage({
   const { cik } = await params;
   let fund: Awaited<ReturnType<typeof getFundInfo>>;
   let topHoldings: Awaited<ReturnType<typeof getTopHoldings>> = null;
+  let ownership: Awaited<ReturnType<typeof getOwnershipFilings>> = [];
   try {
     // getFundInfo is React-cached, so getTopHoldings calling it internally
-    // dedupes against the page-level call — net: one info fetch, then
-    // holdings fetch sequenced after it.
-    [fund, topHoldings] = await Promise.all([
+    // dedupes against the page-level call — net: one info fetch, one
+    // holdings fetch, one ownership fetch, all in parallel where possible.
+    [fund, topHoldings, ownership] = await Promise.all([
       getFundInfo(cik),
       getTopHoldings(cik, 10),
+      getOwnershipFilings(cik),
     ]);
   } catch {
     notFound();
@@ -235,6 +238,84 @@ export default async function FundPage({
               {formatUSD(topHoldings.totalValueUsd, { compact: true })}
             </span>
           </div>
+        </section>
+      )}
+
+      {ownership.length > 0 && (
+        <section className="mt-16">
+          <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+            <h2 className="font-serif text-2xl text-foreground">
+              5%+ ownership filings
+            </h2>
+            <span className="text-xs uppercase tracking-widest text-muted">
+              SC 13D / 13G · activist or passive 5%+ stakes
+            </span>
+          </div>
+          <p className="mt-3 max-w-2xl text-xs leading-relaxed text-muted">
+            Filed whenever this investor crosses 5% ownership of a public
+            company&apos;s voting equity.{" "}
+            <strong>SC 13D</strong> = active (intent to influence
+            management). <strong>SC 13G</strong> = passive. Amendments
+            (&hellip;/A) follow each subsequent material change. These often
+            precede 13F disclosure by weeks and are the canonical activism
+            signal.
+          </p>
+          <ul className="mt-4 divide-y divide-hairline border-y border-hairline">
+            {ownership.slice(0, 25).map((f) => {
+              const isActivist =
+                f.form === "SC 13D" || f.form === "SC 13D/A";
+              const isAmendment = f.form.endsWith("/A");
+              const accDashless = f.accessionNumber.replace(/-/g, "");
+              const edgarUrl = `https://www.sec.gov/Archives/edgar/data/${fund.cik}/${accDashless}/${f.primaryDocument || `${f.accessionNumber}-index.htm`}`;
+              return (
+                <li key={f.accessionNumber}>
+                  <a
+                    href={edgarUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group grid grid-cols-[140px_1fr_auto] items-center gap-4 py-3 transition-colors hover:bg-subtle/40"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={cn(
+                          "rounded-sm border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest",
+                          isActivist
+                            ? "border-accent/40 bg-accent/10 text-accent"
+                            : "border-hairline bg-subtle/50 text-muted",
+                        )}
+                      >
+                        {f.form}
+                      </span>
+                      {isAmendment && (
+                        <span className="font-mono text-[10px] uppercase tracking-widest text-muted/70">
+                          amend
+                        </span>
+                      )}
+                    </div>
+                    <div className="font-mono text-xs uppercase tracking-wider text-muted truncate">
+                      {f.accessionNumber}
+                    </div>
+                    <div className="tabular text-sm text-foreground/80">
+                      {formatDate(f.filingDate)}
+                    </div>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+          {ownership.length > 25 && (
+            <div className="mt-3 text-right text-xs text-muted">
+              Showing 25 of {ownership.length} recent ownership filings.{" "}
+              <a
+                href={`https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${fund.cik}&type=SC+13&dateb=&owner=include&count=40`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent transition-colors hover:underline"
+              >
+                Browse all on EDGAR ↗
+              </a>
+            </div>
+          )}
         </section>
       )}
 

@@ -158,6 +158,36 @@ function extract13F(recent: FilingsRecent): Filing[] {
   return out;
 }
 
+// Pulls schedule-13D / 13G ownership filings (and their amendments) out of a
+// submissions list. These are filed when an investor crosses the 5% ownership
+// threshold of a public company's voting equity:
+//   SC 13D   = active investor (intent to influence management).
+//   SC 13G   = passive (5%+ but no influence intent — index funds, big LPs).
+//   SC 13D/A = amendment to active.
+//   SC 13G/A = amendment to passive.
+function extractOwnershipFilings(recent: FilingsRecent): Filing[] {
+  const out: Filing[] = [];
+  const forms = recent.form ?? [];
+  for (let i = 0; i < forms.length; i++) {
+    const form = forms[i];
+    if (
+      form === "SC 13D" ||
+      form === "SC 13G" ||
+      form === "SC 13D/A" ||
+      form === "SC 13G/A"
+    ) {
+      out.push({
+        accessionNumber: recent.accessionNumber?.[i] ?? "",
+        filingDate: recent.filingDate?.[i] ?? "",
+        reportDate: recent.reportDate?.[i] ?? "",
+        form,
+        primaryDocument: recent.primaryDocument?.[i] ?? "",
+      });
+    }
+  }
+  return out;
+}
+
 /**
  * Fetch filer info + 13F filings.
  *
@@ -216,6 +246,39 @@ export async function getFundInfo(
     addresses: data.addresses,
     filings,
   };
+}
+
+/**
+ * Fetch a filer's recent Schedule 13D / 13G filings (and amendments) from
+ * the EDGAR submissions API. Returns at most the "recent" buffer (last
+ * 1,000 filings of all types, so up to a few years of 13D/G depending on
+ * activity).
+ *
+ * This is the "5%+ ownership disclosure" signal — when an investor crosses
+ * 5% in a public company's voting equity they file an SC 13D (if they
+ * intend to influence management) or SC 13G (passive). Activist funds
+ * file 13Ds first, then often amend with each subsequent action; index
+ * funds and big LPs file 13Gs.
+ *
+ * Each filing's deep cover-page contents (% owned, purpose-of-transaction
+ * narrative, target company CIK) aren't parsed yet — the form alone is
+ * informative as an activism signal. EDGAR links let users drill in.
+ */
+export async function getOwnershipFilings(cik: string): Promise<Filing[]> {
+  const cleanCik = cik.replace(/^0+/, "");
+  const padded = cleanCik.padStart(10, "0");
+  const url = `https://data.sec.gov/submissions/CIK${padded}.json`;
+  try {
+    const res = await edgarFetch(url);
+    const data = (await res.json()) as SubmissionsResponse;
+    const recent = data.filings?.recent ?? {};
+    const filings = extractOwnershipFilings(recent);
+    filings.sort((a, b) => b.filingDate.localeCompare(a.filingDate));
+    return filings;
+  } catch (err) {
+    console.warn(`edgar: getOwnershipFilings(${cleanCik}) failed`, err);
+    return [];
+  }
 }
 
 type FilingDirectoryItem = { name: string; type?: string; size?: string };
