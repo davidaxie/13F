@@ -63,6 +63,12 @@ export default function RootLayout({
                 Consensus
               </Link>
               <Link
+                href="/compare"
+                className="transition-colors hover:text-foreground"
+              >
+                Compare
+              </Link>
+              <Link
                 href="/leaderboard"
                 className="transition-colors hover:text-foreground"
               >
