@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getFundInfo, getHoldings, isValueInThousands } from "@/lib/edgar";
 import type { Holding } from "@/lib/parse-13f";
 import { HoldingsTable, type Row } from "@/components/holdings-table";
+import { ExitedList, type ExitedRow } from "@/components/exited-list";
 import {
   formatDate,
   formatPct,
@@ -131,19 +132,19 @@ export default async function FilingPage({
     .reduce((s, r) => s + r.pctOfPortfolio, 0);
 
   const exitedKeys = Array.from(prevMap.keys()).filter((k) => !currMap.has(k));
-  const exitedRows = exitedKeys
+  const exitedRows: ExitedRow[] = exitedKeys
     .map((k) => prevMap.get(k))
     .filter((h): h is Holding & { count: number } => Boolean(h))
     .map((h) => ({
       issuer: h.issuer,
       cusip: h.cusip,
+      ticker: tickerForCusip(h.cusip),
       prevValueUsd: toDollars(
         h.value,
         prevFiling?.filingDate ?? filing.filingDate,
       ),
     }))
-    .sort((a, b) => b.prevValueUsd - a.prevValueUsd)
-    .slice(0, 8);
+    .sort((a, b) => b.prevValueUsd - a.prevValueUsd);
 
   const accessionUrl = `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${fund.cik}&type=13F-HR&dateb=&owner=include&count=40`;
 
@@ -202,19 +203,11 @@ export default async function FilingPage({
               <h3 className="font-serif text-xl text-foreground">
                 Exited positions
                 <span className="ml-2 text-sm text-muted">
-                  vs. {quarterLabel(prevFiling.reportDate)}
+                  · {exitedRows.length.toLocaleString()} vs.{" "}
+                  {quarterLabel(prevFiling.reportDate)}
                 </span>
               </h3>
-              <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-                {exitedRows.map((r) => (
-                  <li key={r.cusip} className="text-muted">
-                    <span className="text-foreground">{r.issuer}</span>{" "}
-                    <span className="tabular text-xs">
-                      ({formatUSD(r.prevValueUsd, { compact: true })})
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <ExitedList rows={exitedRows} />
             </div>
           )}
 

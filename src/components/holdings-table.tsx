@@ -24,6 +24,7 @@ export type Row = {
 
 type SortKey = "value" | "issuer" | "shares" | "pct" | "change";
 type SortDir = "asc" | "desc";
+type ChangeFilter = "all" | "new" | "increased" | "decreased" | "unchanged";
 
 export function HoldingsTable({
   rows,
@@ -37,10 +38,29 @@ export function HoldingsTable({
   const [filter, setFilter] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("value");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [changeFilter, setChangeFilter] = useState<ChangeFilter>("all");
+
+  // Counts per change-type so the chip labels show the available subset sizes.
+  const counts = useMemo(() => {
+    const c: Record<ChangeFilter, number> = {
+      all: rows.length,
+      new: 0,
+      increased: 0,
+      decreased: 0,
+      unchanged: 0,
+    };
+    for (const r of rows) {
+      if (r.changeType === "new") c.new++;
+      else if (r.changeType === "increased") c.increased++;
+      else if (r.changeType === "decreased") c.decreased++;
+      else if (r.changeType === "unchanged") c.unchanged++;
+    }
+    return c;
+  }, [rows]);
 
   const filtered = useMemo(() => {
     const f = filter.trim().toLowerCase();
-    const base = f
+    const textFiltered = f
       ? rows.filter(
           (r) =>
             r.issuer.toLowerCase().includes(f) ||
@@ -48,8 +68,13 @@ export function HoldingsTable({
         )
       : rows;
 
+    const typeFiltered =
+      changeFilter === "all"
+        ? textFiltered
+        : textFiltered.filter((r) => r.changeType === changeFilter);
+
     const dir = sortDir === "asc" ? 1 : -1;
-    return [...base].sort((a, b) => {
+    return [...typeFiltered].sort((a, b) => {
       switch (sortKey) {
         case "issuer":
           return a.issuer.localeCompare(b.issuer) * dir;
@@ -67,7 +92,7 @@ export function HoldingsTable({
           return (a.valueUsd - b.valueUsd) * dir;
       }
     });
-  }, [rows, filter, sortKey, sortDir]);
+  }, [rows, filter, sortKey, sortDir, changeFilter]);
 
   function toggle(key: SortKey) {
     if (sortKey === key) {
@@ -107,6 +132,14 @@ export function HoldingsTable({
     downloadCSV(`${base}.csv`, csv);
   }
 
+  const chips: Array<{ key: ChangeFilter; label: string; count: number }> = [
+    { key: "all", label: "All", count: counts.all },
+    { key: "new", label: "New", count: counts.new },
+    { key: "increased", label: "Increased", count: counts.increased },
+    { key: "decreased", label: "Decreased", count: counts.decreased },
+    { key: "unchanged", label: "Unchanged", count: counts.unchanged },
+  ];
+
   return (
     <div className="mt-10">
       <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
@@ -128,7 +161,7 @@ export function HoldingsTable({
             disabled={filtered.length === 0}
             className="inline-flex items-center gap-1.5 border-b border-hairline pb-1 text-xs uppercase tracking-widest text-muted transition-colors hover:border-foreground hover:text-foreground disabled:opacity-40 disabled:hover:border-hairline disabled:hover:text-muted"
             title={
-              filter.trim()
+              filter.trim() || changeFilter !== "all"
                 ? `Export ${filtered.length} filtered rows`
                 : `Export all ${rows.length} rows`
             }
@@ -137,6 +170,29 @@ export function HoldingsTable({
             CSV
           </button>
         </div>
+      </div>
+
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        {chips.map((c) => (
+          <button
+            key={c.key}
+            type="button"
+            onClick={() => setChangeFilter(c.key)}
+            disabled={c.count === 0 && c.key !== "all"}
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs uppercase tracking-widest transition-colors",
+              changeFilter === c.key
+                ? "border-foreground bg-foreground text-background"
+                : "border-hairline text-muted hover:border-foreground hover:text-foreground",
+              c.count === 0 && c.key !== "all" && "opacity-40 hover:border-hairline hover:text-muted",
+            )}
+          >
+            <span>{c.label}</span>
+            <span className="font-mono tabular text-[10px] opacity-70">
+              {c.count.toLocaleString()}
+            </span>
+          </button>
+        ))}
       </div>
 
       <div className="overflow-x-auto">
