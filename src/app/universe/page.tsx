@@ -33,7 +33,7 @@ export default function UniversePage() {
           The {MARQUEE_FUNDS.length} institutional managers whose 13F
           filings power the dashboard, leaderboard, and backtest pages.
           Expanding this universe to 30+ funds is on the roadmap
-          (Phase 4 of <Link href="/IMPROVEMENT_PLAN.md" className="underline">the plan</Link>).
+          (Phase 4 of the improvement plan).
         </p>
       </div>
 
