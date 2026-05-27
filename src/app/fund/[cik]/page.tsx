@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFundInfo } from "@/lib/edgar";
-import { formatDate, quarterLabel } from "@/lib/format";
+import { getTopHoldings } from "@/lib/dashboard";
+import { tickerForCusip } from "@/lib/stock-view";
+import { formatDate, formatInt, formatPct, formatUSD, quarterLabel } from "@/lib/format";
 
 export const revalidate = 3600;
 
@@ -12,8 +14,15 @@ export default async function FundPage({
 }) {
   const { cik } = await params;
   let fund: Awaited<ReturnType<typeof getFundInfo>>;
+  let topHoldings: Awaited<ReturnType<typeof getTopHoldings>> = null;
   try {
-    fund = await getFundInfo(cik);
+    // getFundInfo is React-cached, so getTopHoldings calling it internally
+    // dedupes against the page-level call — net: one info fetch, then
+    // holdings fetch sequenced after it.
+    [fund, topHoldings] = await Promise.all([
+      getFundInfo(cik),
+      getTopHoldings(cik, 10),
+    ]);
   } catch {
     notFound();
   }
@@ -54,6 +63,97 @@ export default async function FundPage({
           </Link>
         </div>
       </div>
+
+      {topHoldings && topHoldings.rows.length > 0 && (
+        <section className="mt-12">
+          <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+            <h2 className="font-serif text-2xl text-foreground">
+              Top current holdings{" "}
+              <span className="text-sm text-muted">
+                · {quarterLabel(topHoldings.reportDate)}
+              </span>
+            </h2>
+            <Link
+              href={`/fund/${fund.cik}/${topHoldings.accessionNumber}`}
+              className="text-xs uppercase tracking-widest text-accent transition-opacity hover:opacity-70"
+            >
+              All {topHoldings.positionCount.toLocaleString()} positions →
+            </Link>
+          </div>
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-y border-hairline text-left text-xs uppercase tracking-wider text-muted">
+                  <th className="py-3 pr-3 font-normal">#</th>
+                  <th className="py-3 px-3 font-normal">Issuer</th>
+                  <th className="py-3 px-3 text-right font-normal">Value</th>
+                  <th className="py-3 px-3 text-right font-normal">% Port</th>
+                  <th className="py-3 pl-3 text-right font-normal">Shares</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topHoldings.rows.map((r, i) => {
+                  const ticker = tickerForCusip(r.cusip);
+                  return (
+                    <tr
+                      key={`${r.cusip}-${r.titleOfClass}-${i}`}
+                      className="border-b border-hairline/60 transition-colors hover:bg-subtle/40"
+                    >
+                      <td className="py-3 pr-3 text-xs text-muted tabular">
+                        {i + 1}
+                      </td>
+                      <td className="py-3 px-3 text-foreground">
+                        {ticker ? (
+                          <Link
+                            href={`/stock/${ticker}`}
+                            className="font-serif text-base leading-tight transition-colors hover:text-accent"
+                          >
+                            {r.issuer}
+                          </Link>
+                        ) : (
+                          <div className="font-serif text-base leading-tight">
+                            {r.issuer}
+                          </div>
+                        )}
+                        <div className="mt-0.5 font-mono text-xs text-muted">
+                          {ticker ? `${ticker} · ` : ""}
+                          {r.cusip}
+                          {r.putCall ? ` · ${r.putCall}` : ""}
+                        </div>
+                      </td>
+                      <td className="py-3 px-3 text-right tabular text-foreground">
+                        {formatUSD(r.valueUsd, { compact: true })}
+                      </td>
+                      <td className="py-3 px-3 text-right tabular text-muted">
+                        {formatPct(r.weightInPortfolio, 2)}
+                      </td>
+                      <td className="py-3 pl-3 text-right tabular text-muted">
+                        {formatInt(r.shares)}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-3 text-right text-xs text-muted">
+            Top 10 are{" "}
+            <span className="tabular text-foreground">
+              {formatPct(
+                topHoldings.rows.reduce(
+                  (s, r) => s + r.weightInPortfolio,
+                  0,
+                ),
+                1,
+              )}
+            </span>{" "}
+            of the portfolio · filing total{" "}
+            <span className="tabular text-foreground">
+              {formatUSD(topHoldings.totalValueUsd, { compact: true })}
+            </span>
+          </div>
+        </section>
+      )}
 
       {fund.filings.length === 0 ? (
         <p className="mt-12 text-muted">

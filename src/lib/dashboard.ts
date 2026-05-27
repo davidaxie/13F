@@ -223,3 +223,70 @@ export async function getAllFundDiffs(): Promise<FundDiff[]> {
   );
   return results.filter((r): r is FundDiff => r !== null);
 }
+
+export type TopHolding = {
+  issuer: string;
+  cusip: string;
+  titleOfClass: string;
+  putCall?: string;
+  valueUsd: number;
+  shares: number;
+  weightInPortfolio: number;
+};
+
+export type TopHoldingsResult = {
+  reportDate: string;
+  filingDate: string;
+  accessionNumber: string;
+  totalValueUsd: number;
+  positionCount: number;
+  rows: TopHolding[];
+};
+
+async function _getTopHoldings(
+  cik: string,
+  limit = 10,
+): Promise<TopHoldingsResult | null> {
+  try {
+    const info = await getFundInfo(cik);
+    if (info.filings.length === 0) return null;
+    const latest = info.filings[0];
+    const holdings = await getHoldings(cik, latest.accessionNumber).catch(
+      () => null,
+    );
+    if (!holdings) return null;
+
+    const map = aggregateByCusip(holdings);
+    const totalRaw = Array.from(map.values()).reduce((s, h) => s + h.value, 0);
+    const totalUsd = toDollars(totalRaw, latest.filingDate);
+
+    const rows: TopHolding[] = Array.from(map.values())
+      .map((h) => {
+        const valueUsd = toDollars(h.value, latest.filingDate);
+        return {
+          issuer: h.issuer,
+          cusip: h.cusip,
+          titleOfClass: h.titleOfClass,
+          putCall: h.putCall,
+          valueUsd,
+          shares: h.shares,
+          weightInPortfolio: totalRaw > 0 ? (h.value / totalRaw) * 100 : 0,
+        };
+      })
+      .sort((a, b) => b.valueUsd - a.valueUsd)
+      .slice(0, limit);
+
+    return {
+      reportDate: latest.reportDate,
+      filingDate: latest.filingDate,
+      accessionNumber: latest.accessionNumber,
+      totalValueUsd: totalUsd,
+      positionCount: map.size,
+      rows,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export const getTopHoldings = cache(_getTopHoldings);
