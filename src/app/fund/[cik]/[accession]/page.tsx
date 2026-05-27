@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getFundInfo, getHoldings, isValueInThousands } from "@/lib/edgar";
+import { getFundInfo, getHoldings } from "@/lib/edgar";
 import type { Holding } from "@/lib/parse-13f";
 import { HoldingsTable, type Row } from "@/components/holdings-table";
 import { ExitedList, type ExitedRow } from "@/components/exited-list";
@@ -13,10 +13,6 @@ import {
 import { tickerForCusip } from "@/lib/stock-view";
 
 export const revalidate = 3600;
-
-function toDollars(rawValue: number, filingDate: string): number {
-  return isValueInThousands(filingDate) ? rawValue * 1000 : rawValue;
-}
 
 function key(h: Holding): string {
   return `${h.cusip}|${h.titleOfClass}|${h.putCall ?? ""}`;
@@ -85,9 +81,13 @@ export default async function FilingPage({
 
   try {
     const [curr, prev] = await Promise.all([
-      getHoldings(fund.cik, accession),
+      getHoldings(fund.cik, accession, filing.filingDate),
       prevFiling
-        ? getHoldings(fund.cik, prevFiling.accessionNumber).catch(() => [])
+        ? getHoldings(
+            fund.cik,
+            prevFiling.accessionNumber,
+            prevFiling.filingDate,
+          ).catch(() => [])
         : Promise.resolve([] as Holding[]),
     ]);
     holdings = curr;
@@ -99,18 +99,16 @@ export default async function FilingPage({
   const currMap = aggregate(holdings);
   const prevMap = aggregate(prevHoldings);
 
-  const totalValueRaw = Array.from(currMap.values()).reduce(
+  // getHoldings returns whole dollars; no further conversion needed.
+  const totalValueUsd = Array.from(currMap.values()).reduce(
     (s, h) => s + h.value,
     0,
   );
-  const totalValueUsd = toDollars(totalValueRaw, filing.filingDate);
 
   const rows: Row[] = Array.from(currMap.entries()).map(([k, h]) => {
     const prev = prevMap.get(k);
-    const valueUsd = toDollars(h.value, filing.filingDate);
-    const prevValueUsd = prev
-      ? toDollars(prev.value, prevFiling?.filingDate ?? filing.filingDate)
-      : null;
+    const valueUsd = h.value;
+    const prevValueUsd = prev ? prev.value : null;
     const prevShares = prev ? prev.shares : null;
 
     let changeType: Row["changeType"];
@@ -133,7 +131,7 @@ export default async function FilingPage({
       valueUsd,
       shares: h.shares,
       putCall: h.putCall,
-      pctOfPortfolio: totalValueRaw > 0 ? (h.value / totalValueRaw) * 100 : 0,
+      pctOfPortfolio: totalValueUsd > 0 ? (h.value / totalValueUsd) * 100 : 0,
       prevValueUsd,
       prevShares,
       changeType,
@@ -156,10 +154,7 @@ export default async function FilingPage({
       issuer: h.issuer,
       cusip: h.cusip,
       ticker: tickerForCusip(h.cusip),
-      prevValueUsd: toDollars(
-        h.value,
-        prevFiling?.filingDate ?? filing.filingDate,
-      ),
+      prevValueUsd: h.value,
     }))
     .sort((a, b) => b.prevValueUsd - a.prevValueUsd);
 

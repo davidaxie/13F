@@ -1,10 +1,5 @@
 import { cache } from "react";
-import {
-  getFundInfo,
-  getHoldings,
-  isValueInThousands,
-  type Filing,
-} from "./edgar";
+import { getFundInfo, getHoldings, type Filing } from "./edgar";
 import type { Holding } from "./parse-13f";
 import { lookupCusips, type CusipMapping } from "./openfigi";
 import { getPriceHistory, priceAt, isoToUnix, type Bar } from "./prices";
@@ -99,10 +94,6 @@ export type FundBacktest = {
     worstTrade: BacktestTrade | null;
   };
 };
-
-function toDollars(value: number, filingDate: string): number {
-  return isValueInThousands(filingDate) ? value * 1000 : value;
-}
 
 type AggPos = {
   cusip: string;
@@ -203,7 +194,7 @@ async function _runBacktest(
   const holdingsByAccession = await pMap(
     allFilings,
     (f) =>
-      getHoldings(cleanCik, f.accessionNumber).catch((err) => {
+      getHoldings(cleanCik, f.accessionNumber, f.filingDate).catch((err) => {
         console.warn(
           `backtest: holdings fetch failed for ${cleanCik}/${f.accessionNumber}: ${err instanceof Error ? err.message : err}`,
         );
@@ -299,7 +290,7 @@ async function _runBacktest(
     for (const [cusip, pos] of present) {
       if (openByCusip.has(cusip)) continue;
       const tk = tickerOf(cusip);
-      const valueUsd = toDollars(pos.value, fp.filing.filingDate);
+      const valueUsd = pos.value;
       const entryPrice = tk
         ? priceAt(pricesByTicker.get(tk) ?? [], filingUnix)
         : null;

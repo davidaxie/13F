@@ -2,7 +2,6 @@ import { cache } from "react";
 import {
   getFundInfo,
   getHoldings,
-  isValueInThousands,
   type Filing,
   type FundInfo,
 } from "./edgar";
@@ -59,10 +58,6 @@ export type FundDiff = {
   moves: Move[];
 };
 
-function toDollars(value: number, filingDate: string): number {
-  return isValueInThousands(filingDate) ? value * 1000 : value;
-}
-
 function aggregateByCusip(rows: Holding[]): Map<string, Holding> {
   const map = new Map<string, Holding>();
   for (const r of rows) {
@@ -89,9 +84,9 @@ async function _getFundDiff(
     const prev = info.filings[1] ?? null;
 
     const [latestHoldings, prevHoldings] = await Promise.all([
-      getHoldings(cik, latest.accessionNumber).catch(() => null),
+      getHoldings(cik, latest.accessionNumber, latest.filingDate).catch(() => null),
       prev
-        ? getHoldings(cik, prev.accessionNumber).catch(() => null)
+        ? getHoldings(cik, prev.accessionNumber, prev.filingDate).catch(() => null)
         : Promise.resolve(null),
     ]);
 
@@ -102,22 +97,21 @@ async function _getFundDiff(
       ? aggregateByCusip(prevHoldings)
       : new Map<string, Holding>();
 
+    // getHoldings now returns values in whole dollars; no conversion needed
+    // at call sites.
     const totalCurrentUsd = Array.from(currMap.values()).reduce(
-      (s, h) => s + toDollars(h.value, latest.filingDate),
+      (s, h) => s + h.value,
       0,
     );
     const totalPrevUsd = prev
-      ? Array.from(prevMap.values()).reduce(
-          (s, h) => s + toDollars(h.value, prev.filingDate),
-          0,
-        )
+      ? Array.from(prevMap.values()).reduce((s, h) => s + h.value, 0)
       : 0;
 
     const moves: Move[] = [];
     const qLabel = quarterLabel(latest.reportDate);
 
     for (const [k, h] of currMap) {
-      const currentValueUsd = toDollars(h.value, latest.filingDate);
+      const currentValueUsd = h.value;
       const prevH = prevMap.get(k);
       const weight =
         totalCurrentUsd > 0 ? (currentValueUsd / totalCurrentUsd) * 100 : 0;
@@ -146,7 +140,7 @@ async function _getFundDiff(
 
       if (prevH.shares === h.shares) continue;
 
-      const prevValueUsd = toDollars(prevH.value, prev.filingDate);
+      const prevValueUsd = prevH.value;
       const deltaUsd = currentValueUsd - prevValueUsd;
       const deltaSharesPct =
         prevH.shares > 0
@@ -176,7 +170,7 @@ async function _getFundDiff(
     if (prev) {
       for (const [k, h] of prevMap) {
         if (currMap.has(k)) continue;
-        const prevValueUsd = toDollars(h.value, prev.filingDate);
+        const prevValueUsd = h.value;
         const weight =
           totalPrevUsd > 0 ? (prevValueUsd / totalPrevUsd) * 100 : 0;
         moves.push({
@@ -248,28 +242,27 @@ async function _getTopHoldings(
     const info = await getFundInfo(cik);
     if (info.filings.length === 0) return null;
     const latest = info.filings[0];
-    const holdings = await getHoldings(cik, latest.accessionNumber).catch(
-      () => null,
-    );
+    const holdings = await getHoldings(
+      cik,
+      latest.accessionNumber,
+      latest.filingDate,
+    ).catch(() => null);
     if (!holdings) return null;
 
     const map = aggregateByCusip(holdings);
-    const totalRaw = Array.from(map.values()).reduce((s, h) => s + h.value, 0);
-    const totalUsd = toDollars(totalRaw, latest.filingDate);
+    // getHoldings now returns dollars directly; no further conversion needed.
+    const totalUsd = Array.from(map.values()).reduce((s, h) => s + h.value, 0);
 
     const rows: TopHolding[] = Array.from(map.values())
-      .map((h) => {
-        const valueUsd = toDollars(h.value, latest.filingDate);
-        return {
-          issuer: h.issuer,
-          cusip: h.cusip,
-          titleOfClass: h.titleOfClass,
-          putCall: h.putCall,
-          valueUsd,
-          shares: h.shares,
-          weightInPortfolio: totalRaw > 0 ? (h.value / totalRaw) * 100 : 0,
-        };
-      })
+      .map((h) => ({
+        issuer: h.issuer,
+        cusip: h.cusip,
+        titleOfClass: h.titleOfClass,
+        putCall: h.putCall,
+        valueUsd: h.value,
+        shares: h.shares,
+        weightInPortfolio: totalUsd > 0 ? (h.value / totalUsd) * 100 : 0,
+      }))
       .sort((a, b) => b.valueUsd - a.valueUsd)
       .slice(0, limit);
 

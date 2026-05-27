@@ -268,17 +268,34 @@ function holdingsCacheKey(cik: string, accession: string): string {
   return `holdings/${cik}/${safe}.json`;
 }
 
+/**
+ * Fetch a filing's information-table holdings.
+ *
+ * Values are returned in **whole US dollars**, regardless of vintage. SEC
+ * 13F modernization (effective for filings due on or after 2023-05-25)
+ * switched the units from $1000s to $1s; that conversion is now applied
+ * here at the data boundary so every caller can treat `Holding.value` as
+ * dollars and not worry about the date.
+ *
+ * The on-disk cache stores raw (un-converted) values from the XML parser
+ * so the cached file is forward-compatible — the conversion is applied
+ * AFTER the cache read.
+ *
+ * `filingDate` is the date the 13F was filed (not the report-period
+ * end). Required so we can pick the right unit convention.
+ */
 export async function getHoldings(
   cik: string,
   accessionNumber: string,
+  filingDate: string,
 ): Promise<Holding[]> {
   const cleanCik = cik.replace(/^0+/, "");
   const memKey = `${cleanCik}|${accessionNumber}`;
   const mem = holdingsMem.get(memKey);
-  if (mem) return mem;
+  if (mem) return applyUnits(mem, filingDate);
 
   const existing = holdingsInflight.get(memKey);
-  if (existing) return existing;
+  if (existing) return applyUnits(await existing, filingDate);
 
   const promise = (async () => {
     const diskKey = holdingsCacheKey(cleanCik, accessionNumber);
@@ -302,16 +319,29 @@ export async function getHoldings(
   })();
   holdingsInflight.set(memKey, promise);
   try {
-    return await promise;
+    const raw = await promise;
+    return applyUnits(raw, filingDate);
   } finally {
     holdingsInflight.delete(memKey);
   }
 }
 
-export function isValueInThousands(filingDateIso: string): boolean {
-  // SEC 13F modernization: filings required on or before 2023-05-25 reported in $1000s,
-  // filings after that report in whole dollars.
+/**
+ * SEC 13F modernization: filings due on or before 2023-05-25 reported
+ * `value` in $1000s; filings after that report in whole dollars. Used
+ * internally by getHoldings — call sites should consume the converted
+ * Holding[] directly and never need to know the vintage.
+ */
+function isValueInThousands(filingDateIso: string): boolean {
   return filingDateIso <= "2023-05-25";
+}
+
+function applyUnits(holdings: Holding[], filingDate: string): Holding[] {
+  if (!isValueInThousands(filingDate)) return holdings;
+  // Convert $1000s → whole dollars. Return a NEW array so we don't mutate
+  // the in-memory / disk cache (which stores raw values for forward
+  // compatibility).
+  return holdings.map((h) => ({ ...h, value: h.value * 1000 }));
 }
 
 export type { Holding };
