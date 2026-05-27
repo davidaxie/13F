@@ -251,16 +251,21 @@ export function ConvictionView({ data }: { data: ConvictionBacktest }) {
         </div>
       </section>
 
-      {/* CURRENT PICKS — actionable buy list ================================ */}
+      {/* CURRENT POSITIONS ================================================== */}
       <section className="mt-20">
         <div className="flex items-baseline justify-between border-b border-hairline pb-3">
           <h2 className="font-serif text-2xl text-foreground">
-            Currently-held picks
+            Currently-held positions
           </h2>
           <span className="text-xs uppercase tracking-widest text-muted">
             still in fund&apos;s latest 13F · ≥ {bucket.minHoldQuarters}Q held
           </span>
         </div>
+        <p className="mt-2 text-xs text-muted/80">
+          Research starting points, not recommendations. 13F disclosures lag
+          actual trades by up to 45 days, and a fund&apos;s reason for owning
+          a name often doesn&apos;t survive the move from their book to yours.
+        </p>
         <CurrentPicksTable picks={bucket.currentPicks} />
       </section>
 

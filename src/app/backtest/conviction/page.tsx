@@ -45,18 +45,29 @@ export default function ConvictionPage() {
         </div>
         <ul className="ml-4 list-disc space-y-1">
           <li>
+            <strong>Survivorship bias.</strong> These nine marquee funds were
+            chosen because they&apos;re well-known and still operating —
+            i.e. survivors. The aggregate alpha is biased upward versus a
+            sample that would include funds that blew up (Archegos, Melvin,
+            Bill Hwang, etc.). Treat absolute headline numbers as upper
+            bounds; comparisons between funds within the sample are still
+            informative.
+          </li>
+          <li>
             Conviction = (last appearance − first appearance) in the
             fund&apos;s 13Fs, in quarters. A fund that opened a position in
-            Q1 2020 and exited Q1 2022 counts as 8 quarters of hold.
+            Q1 2020 and exited Q1 2022 counts as 8 quarters of hold. This
+            measures duration, not position weight — a 100-share
+            placeholder held for 20 quarters scores the same as a 5%-of-
+            portfolio core holding. Weight-aware ranking is on the roadmap
+            (depends on reference-data layer).
           </li>
           <li>
             All buys priced at filing date (45-day disclosure lag baked in).
-            All exits priced at today&apos;s adjusted close from Yahoo.
-          </li>
-          <li>
-            Open positions and closed positions are both marked-to-market
-            at today. The fund&apos;s actual exit price is ignored — you
-            chose to hold longer.
+            Exit pricing depends on the mode selected above: &ldquo;Hold to
+            today&rdquo; (default) marks every signal at the latest close;
+            &ldquo;Sell when fund sold&rdquo; uses the fund&apos;s actual
+            exit price (or today, for still-open positions).
           </li>
           <li>
             Heavy funds (Renaissance, Citadel, Two Sigma, Soros) use
@@ -69,6 +80,11 @@ export default function ConvictionPage() {
             Each &ldquo;buy signal&rdquo; is a separate $10k lot —
             so a position the fund added to 8 times generates 8 lots,
             each with its own entry price.
+          </li>
+          <li>
+            No transaction costs, slippage, taxes, borrow, or short-rebate
+            modeled. Tax drag in particular destroys high-turnover
+            strategies; treat the headline returns as gross.
           </li>
         </ul>
       </section>

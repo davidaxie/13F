@@ -74,6 +74,18 @@ export default function FollowerBacktestPage() {
         </div>
         <ul className="ml-4 list-disc space-y-1">
           <li>
+            <strong>Survivorship bias.</strong> The nine marquee funds are
+            well-known and still operating; this sample excludes funds that
+            blew up. Aggregate alpha is biased upward versus a non-curated
+            universe; comparisons within the sample are still informative.
+          </li>
+          <li>
+            Filing-date pricing is the theoretical earliest moment a follower
+            could have acted. Real-world execution is T+1 to T+5; the
+            disclosure-day alpha decays fast. (T+N sensitivity table is on
+            the roadmap.)
+          </li>
+          <li>
             Heavy funds (Renaissance, Bridgewater, Citadel, Two Sigma) use
             8-quarter snapshots; the rest use full history. The aggregate
             return reflects this uneven sampling.
