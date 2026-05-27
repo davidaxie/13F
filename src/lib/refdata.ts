@@ -7,7 +7,7 @@
 // script to refresh.
 
 import gicsData from "../data/gics.json";
-import { tickerForCusip } from "./stock-view";
+import { tickerForCusip } from "./cusip-lookup";
 
 export type GicsRow = { sector: string; industry: string };
 

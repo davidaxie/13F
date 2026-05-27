@@ -9,6 +9,7 @@ import {
   MARQUEE_FUNDS,
   type FundStyle,
 } from "@/lib/funds";
+import { GICS_SECTORS, getSectorByCusip } from "@/lib/refdata";
 import { downloadCSV, slugify, toCSV, type CsvColumn } from "@/lib/csv";
 import { formatPct, formatUSD } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -68,6 +69,9 @@ export function CrossFundHighlightsView({
   const [selectedCohorts, setSelectedCohorts] = useState<Set<FundStyle>>(
     () => new Set(ALL_STYLES),
   );
+  const [selectedSectors, setSelectedSectors] = useState<Set<string>>(
+    () => new Set(GICS_SECTORS),
+  );
 
   function toggleCohort(s: FundStyle) {
     setSelectedCohorts((prev) => {
@@ -83,16 +87,37 @@ export function CrossFundHighlightsView({
   function selectAllCohorts() {
     setSelectedCohorts(new Set(ALL_STYLES));
   }
+  function toggleSector(s: string) {
+    setSelectedSectors((prev) => {
+      const next = new Set(prev);
+      if (next.has(s)) next.delete(s);
+      else next.add(s);
+      if (next.size === 0) return new Set(GICS_SECTORS);
+      return next;
+    });
+  }
+  function selectAllSectors() {
+    setSelectedSectors(new Set(GICS_SECTORS));
+  }
 
-  // Apply cohort filter once across all six sections so they share a coherent
-  // subset. Collapsed into a single useMemo so the dep array is exact.
+  // Apply cohort + sector filters once across all six sections so they share a
+  // coherent subset. Collapsed into a single useMemo so the dep array is exact.
   const { newLongF, exitsF, addsF, trimsF, shortOpensF, callOpensF } = useMemo(
     () => {
-      const allSelected = selectedCohorts.size === ALL_STYLES.length;
+      const allCohortsSelected = selectedCohorts.size === ALL_STYLES.length;
+      const allSectorsSelected = selectedSectors.size === GICS_SECTORS.length;
       const ok = (m: Move): boolean => {
-        if (allSelected) return true;
-        const s = STYLE_BY_CIK.get(m.fundCik);
-        return s ? selectedCohorts.has(s) : false;
+        if (!allCohortsSelected) {
+          const s = STYLE_BY_CIK.get(m.fundCik);
+          if (!s || !selectedCohorts.has(s)) return false;
+        }
+        if (!allSectorsSelected) {
+          const sec = getSectorByCusip(m.cusip)?.sector;
+          // Untagged names (small-caps, ADRs) are kept only when ALL sectors
+          // are selected — once the user filters, untagged means "exclude."
+          if (!sec || !selectedSectors.has(sec)) return false;
+        }
+        return true;
       };
       return {
         newLongF: newLong.filter(ok),
@@ -103,7 +128,16 @@ export function CrossFundHighlightsView({
         callOpensF: callOpens.filter(ok),
       };
     },
-    [newLong, exits, adds, trims, shortOpens, callOpens, selectedCohorts],
+    [
+      newLong,
+      exits,
+      adds,
+      trims,
+      shortOpens,
+      callOpens,
+      selectedCohorts,
+      selectedSectors,
+    ],
   );
 
   const deltaWeight = (m: Move) =>
@@ -187,6 +221,11 @@ export function CrossFundHighlightsView({
         onToggle={toggleCohort}
         onSelectAll={selectAllCohorts}
       />
+      <SectorFilter
+        selected={selectedSectors}
+        onToggle={toggleSector}
+        onSelectAll={selectAllSectors}
+      />
       <RankToggle mode={mode} onChange={setMode} />
       <div className="mt-8 grid grid-cols-1 gap-12 md:grid-cols-2">
         {sections.map((s) => {
@@ -195,6 +234,63 @@ export function CrossFundHighlightsView({
         })}
       </div>
     </>
+  );
+}
+
+function SectorFilter({
+  selected,
+  onToggle,
+  onSelectAll,
+}: {
+  selected: Set<string>;
+  onToggle: (s: string) => void;
+  onSelectAll: () => void;
+}) {
+  const all = selected.size === GICS_SECTORS.length;
+  // Short labels for the chip strip — GICS sector names are long. Map only
+  // those that would otherwise wrap or overflow.
+  const SHORT: Record<string, string> = {
+    "Communication Services": "Comm Svcs",
+    "Consumer Discretionary": "Cons Disc",
+    "Consumer Staples": "Cons Stpl",
+    "Information Technology": "Info Tech",
+    "Health Care": "Healthcare",
+  };
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs uppercase tracking-widest text-muted">
+      <span>Sector</span>
+      <button
+        type="button"
+        onClick={onSelectAll}
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 transition-colors",
+          all
+            ? "border-foreground bg-foreground text-background"
+            : "border-hairline text-muted hover:border-foreground hover:text-foreground",
+        )}
+      >
+        All
+      </button>
+      {GICS_SECTORS.map((s) => {
+        const active = !all && selected.has(s);
+        return (
+          <button
+            key={s}
+            type="button"
+            onClick={() => onToggle(s)}
+            title={s}
+            className={cn(
+              "inline-flex items-center rounded-full border px-3 py-1 transition-colors",
+              active
+                ? "border-foreground bg-foreground text-background"
+                : "border-hairline text-muted hover:border-foreground hover:text-foreground",
+            )}
+          >
+            {SHORT[s] ?? s}
+          </button>
+        );
+      })}
+    </div>
   );
 }
 

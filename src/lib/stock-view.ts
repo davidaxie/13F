@@ -1,58 +1,14 @@
 import { cache } from "react";
-import seedData from "./cusip-seed.json";
 import { MARQUEE_FUNDS, type MarqueeFund } from "./dashboard";
 import { getSnapshot } from "./snapshots";
 import type { BacktestTrade } from "./backtest";
 
-type SeedRow = { ticker: string | null; name: string; exchCode: string | null };
-
-// Reverse-index the bundled CUSIP→ticker seed so we can resolve a ticker
-// to its CUSIPs in O(1). Lazy at first call.
-let tickerToCusips: Map<string, string[]> | null = null;
-let cusipToTicker: Map<string, string> | null = null;
-
-function buildIndexes() {
-  if (tickerToCusips) return;
-  tickerToCusips = new Map();
-  cusipToTicker = new Map();
-  const seed = seedData as Record<string, SeedRow>;
-  for (const [cusip, row] of Object.entries(seed)) {
-    if (!row.ticker) continue;
-    const tk = row.ticker.toUpperCase();
-    cusipToTicker.set(cusip, tk);
-    const arr = tickerToCusips.get(tk) ?? [];
-    arr.push(cusip);
-    tickerToCusips.set(tk, arr);
-  }
-}
-
-// Accept BRK.B, BRK-B, BRK/B, BRKB — share-class separator varies by data
-// source (Bloomberg uses /, Yahoo uses -, S&P uses .). FB/META aliases are
-// not handled (ticker changes are infrequent and best handled by re-indexing
-// the seed after a rename).
-function tickerVariants(input: string): string[] {
-  const upper = input.trim().toUpperCase();
-  const variants = new Set<string>([upper]);
-  variants.add(upper.replace(/[.\-/]/g, ""));
-  variants.add(upper.replace(/[.\-/]/g, "."));
-  variants.add(upper.replace(/[.\-/]/g, "-"));
-  variants.add(upper.replace(/[.\-/]/g, "/"));
-  return Array.from(variants);
-}
-
-export function cusipsForTicker(input: string): string[] {
-  buildIndexes();
-  for (const v of tickerVariants(input)) {
-    const hit = tickerToCusips!.get(v);
-    if (hit && hit.length > 0) return hit;
-  }
-  return [];
-}
-
-export function tickerForCusip(cusip: string): string | null {
-  buildIndexes();
-  return cusipToTicker!.get(cusip) ?? null;
-}
+// Re-export the pure-data CUSIP lookups so existing import paths still work.
+// New code (especially client components) should import from cusip-lookup
+// directly to avoid pulling this file's server-only transitive deps
+// (snapshots, edgar, disk-cache) into the browser bundle.
+export { cusipsForTicker, tickerForCusip } from "./cusip-lookup";
+import { cusipsForTicker } from "./cusip-lookup";
 
 export type CurrentStake = {
   fund: MarqueeFund;
