@@ -63,3 +63,77 @@ body {
   font-family: var(--font-serif);
   font-feature-settings: "ss01", "ss02";
 }
+
+/* ============================================================================
+   Print stylesheet — strip chrome, flatten to high-contrast B/W, keep tables
+   together. Allocators tend to print holdings reports and backtest pages for
+   their files / archives.
+   ============================================================================ */
+@media print {
+  /* Force a light theme regardless of OS preference so the print output is
+     never dark-on-dark. */
+  :root {
+    --background: #ffffff !important;
+    --foreground: #000000 !important;
+    --muted: #555555 !important;
+    --subtle: #f4f4f4 !important;
+    --hairline: #cccccc !important;
+    --accent: #1f4d3a !important;
+    --positive: #1f6b48 !important;
+    --negative: #8b2e2e !important;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Strip site chrome: top nav, footer, "back" breadcrumbs aren't useful on
+     paper. */
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  /* Strip interactive-only affordances: CSV export buttons, "Show all"
+     toggles, fund/cohort pickers, slippage and exit-mode chips. Anything
+     that's a <button> as opposed to a real link or content element. */
+  button {
+    display: none !important;
+  }
+
+  /* …but keep buttons-rendered-as-Link (Next.js Link emits <a>) intact —
+     those are anchors, not buttons, so the rule above doesn't touch them. */
+
+  a {
+    color: #000000 !important;
+    text-decoration: none !important;
+  }
+
+  /* Keep table rows together so a single position doesn't split across
+     pages, and avoid breaking right at a section heading. */
+  tr,
+  li {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+    break-after: avoid-page;
+  }
+
+  /* Tighter line-height and smaller body to fit more on a page. */
+  body {
+    font-size: 10pt;
+    line-height: 1.35;
+  }
+
+  /* Hide hover-only chrome — subtle backgrounds become noise on paper. */
+  .hover\:bg-subtle\/40:hover {
+    background: transparent !important;
+  }
+}
