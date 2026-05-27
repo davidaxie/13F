@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Sparkline } from "@/components/charts/sparkline";
+import { WatchlistStar } from "@/components/watchlist-star";
 import { getFundInfo } from "@/lib/edgar";
 import { getTopHoldings } from "@/lib/dashboard";
+import { MARQUEE_FUNDS, FUND_STYLE_LABELS } from "@/lib/funds";
+import { getSnapshot } from "@/lib/snapshots";
 import { tickerForCusip } from "@/lib/stock-view";
 import { formatDate, formatInt, formatPct, formatUSD, quarterLabel } from "@/lib/format";
 
@@ -30,6 +34,9 @@ export default async function FundPage({
   if (!fund.name) notFound();
 
   const latest = fund.filings[0];
+  const cleanCik = fund.cik.replace(/^0+/, "");
+  const meta = MARQUEE_FUNDS.find((f) => f.cik === cleanCik);
+  const snapshot = getSnapshot(cleanCik);
 
   return (
     <div className="mx-auto w-full max-w-5xl px-6 py-12">
@@ -41,9 +48,17 @@ export default async function FundPage({
       </Link>
 
       <div className="mt-4 border-b border-hairline pb-10">
-        <h1 className="font-serif text-5xl leading-tight tracking-tight text-foreground">
-          {fund.name}
-        </h1>
+        <div className="flex items-baseline gap-3">
+          <h1 className="font-serif text-5xl leading-tight tracking-tight text-foreground">
+            {fund.name}
+          </h1>
+          {meta && (
+            <span className="rounded-sm border border-hairline bg-subtle/50 px-2 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted">
+              {FUND_STYLE_LABELS[meta.style]}
+            </span>
+          )}
+          <WatchlistStar kind="fund" id={fund.cik} />
+        </div>
         <div className="mt-4 flex flex-wrap gap-x-8 gap-y-1 text-sm text-muted">
           <span className="font-mono uppercase tracking-wider">
             CIK {fund.cik}
@@ -53,7 +68,69 @@ export default async function FundPage({
             {fund.filings.length} 13F{" "}
             {fund.filings.length === 1 ? "filing" : "filings"} on record
           </span>
+          {meta?.headquarters && <span>{meta.headquarters}</span>}
+          {meta?.aumApprox && <span>{meta.aumApprox}</span>}
         </div>
+
+        {meta && (
+          <div className="mt-6 max-w-3xl">
+            <p className="text-base leading-relaxed text-foreground/85">
+              {meta.tagline}
+            </p>
+            <div className="mt-3 grid grid-cols-1 gap-x-8 gap-y-1 text-xs text-muted sm:grid-cols-2">
+              {meta.manager && (
+                <span>
+                  <span className="uppercase tracking-widest text-muted/70">
+                    Principal
+                  </span>{" "}
+                  · {meta.manager}
+                </span>
+              )}
+              {meta.founded && (
+                <span>
+                  <span className="uppercase tracking-widest text-muted/70">
+                    Founded
+                  </span>{" "}
+                  · {meta.founded}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {snapshot && snapshot.equityCurve.length > 1 && (
+          <div className="mt-6 flex items-baseline gap-4">
+            <div className="min-w-0 flex-1">
+              <div className="text-xs uppercase tracking-widest text-muted">
+                $10k mirror, since {snapshot.startDate.slice(0, 4)}
+              </div>
+              <div className="mt-1">
+                <Sparkline
+                  data={snapshot.equityCurve.map((p) => ({ v: p.mirror }))}
+                  width={520}
+                  height={40}
+                  stroke="var(--foreground)"
+                />
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-xs uppercase tracking-widest text-muted">
+                Mirror return
+              </div>
+              <div
+                className={`mt-1 font-serif text-2xl tabular ${
+                  snapshot.stats.mirrorReturnPct >= 0
+                    ? "text-positive"
+                    : "text-negative"
+                }`}
+              >
+                {snapshot.stats.mirrorReturnPct >= 0 ? "+" : ""}
+                {formatPct(snapshot.stats.mirrorReturnPct, 0)}
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="mt-6">
           <Link
             href={`/fund/${fund.cik}/performance`}
@@ -177,39 +254,52 @@ export default async function FundPage({
           </div>
 
           <ul className="divide-y divide-hairline border-y border-hairline">
-            {fund.filings.map((f) => (
-              <li key={f.accessionNumber}>
-                <Link
-                  href={`/fund/${fund.cik}/${f.accessionNumber}`}
-                  className="group grid grid-cols-[1fr_auto_auto] items-center gap-8 py-5 transition-colors hover:bg-subtle/40"
-                >
-                  <div>
-                    <div className="font-serif text-2xl text-foreground transition-colors group-hover:text-accent">
-                      {quarterLabel(f.reportDate)}
+            {fund.filings.map((f) => {
+              const isAmendment = f.form.endsWith("/A");
+              return (
+                <li key={f.accessionNumber}>
+                  <Link
+                    href={`/fund/${fund.cik}/${f.accessionNumber}`}
+                    className="group grid grid-cols-[1fr_auto_auto] items-center gap-8 py-5 transition-colors hover:bg-subtle/40"
+                  >
+                    <div>
+                      <div className="flex items-baseline gap-2">
+                        <div className="font-serif text-2xl text-foreground transition-colors group-hover:text-accent">
+                          {quarterLabel(f.reportDate)}
+                        </div>
+                        {isAmendment && (
+                          <span
+                            className="rounded-sm border border-accent/40 bg-accent/10 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-accent"
+                            title="13F-HR/A amendment — often a confidential-treatment release (e.g. Berkshire's AAPL pattern)"
+                          >
+                            Amendment
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
+                        {f.form} · {f.accessionNumber}
+                      </div>
                     </div>
-                    <div className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
-                      {f.form} · {f.accessionNumber}
+                    <div className="text-right text-sm text-muted">
+                      <div className="uppercase tracking-widest text-xs">
+                        Period
+                      </div>
+                      <div className="tabular mt-1 text-foreground/80">
+                        {formatDate(f.reportDate)}
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right text-sm text-muted">
-                    <div className="uppercase tracking-widest text-xs">
-                      Period
+                    <div className="text-right text-sm text-muted">
+                      <div className="uppercase tracking-widest text-xs">
+                        Filed
+                      </div>
+                      <div className="tabular mt-1 text-foreground/80">
+                        {formatDate(f.filingDate)}
+                      </div>
                     </div>
-                    <div className="tabular mt-1 text-foreground/80">
-                      {formatDate(f.reportDate)}
-                    </div>
-                  </div>
-                  <div className="text-right text-sm text-muted">
-                    <div className="uppercase tracking-widest text-xs">
-                      Filed
-                    </div>
-                    <div className="tabular mt-1 text-foreground/80">
-                      {formatDate(f.filingDate)}
-                    </div>
-                  </div>
-                </Link>
-              </li>
-            ))}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}

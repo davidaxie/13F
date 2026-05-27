@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sparkline } from "@/components/charts/sparkline";
+import { WatchlistStar } from "@/components/watchlist-star";
 import { getStockView } from "@/lib/stock-view";
 import { formatDate, formatInt, formatPct, formatUSD, quarterLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -37,6 +38,7 @@ export default async function StockPage({
             {view.ticker}
           </h1>
           <span className="font-serif text-2xl text-muted">{view.issuer}</span>
+          <WatchlistStar kind="stock" id={view.ticker} size={20} />
         </div>
 
         <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 text-sm text-muted">
@@ -362,6 +364,117 @@ export default async function StockPage({
               </div>
             </section>
           )}
+
+          {/* ============= TRADE LINEAGE ============= */}
+          {(() => {
+            // Flatten all trades across all stakes into one chronological
+            // timeline. Each row = one open→close (or open→present) lifecycle
+            // for a single fund.
+            type LineageRow = {
+              fundCik: string;
+              fundName: string;
+              entryDate: string;
+              exitDate: string | null;
+              entryPrice: number;
+              exitPrice: number | null;
+              returnPct: number;
+              status: "open" | "closed";
+            };
+            const lineage: LineageRow[] = [];
+            for (const s of view.stakes) {
+              if (s.status === "never") continue;
+              for (const t of s.trades) {
+                lineage.push({
+                  fundCik: s.fund.cik,
+                  fundName: s.fund.displayName,
+                  entryDate: t.entryDate,
+                  exitDate: t.exitDate,
+                  entryPrice: t.entrySharePrice,
+                  exitPrice: t.exitSharePrice,
+                  returnPct: t.returnPct,
+                  status: t.status,
+                });
+              }
+            }
+            if (lineage.length === 0) return null;
+            // Sort newest entry first — most recent action is what an
+            // allocator scans for.
+            lineage.sort((a, b) => b.entryDate.localeCompare(a.entryDate));
+            return (
+              <section className="mt-16">
+                <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+                  <h2 className="font-serif text-2xl text-foreground">
+                    Trade history
+                  </h2>
+                  <span className="text-xs uppercase tracking-widest text-muted">
+                    Every open→close lifecycle across tracked funds
+                  </span>
+                </div>
+                <div className="mt-4 overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-y border-hairline text-left text-xs uppercase tracking-wider text-muted">
+                        <th className="py-3 pr-3 font-normal">Fund</th>
+                        <th className="py-3 px-3 font-normal">Entered</th>
+                        <th className="py-3 px-3 font-normal">Exited</th>
+                        <th className="py-3 px-3 text-right font-normal">Entry</th>
+                        <th className="py-3 px-3 text-right font-normal">Exit</th>
+                        <th className="py-3 pl-3 text-right font-normal">Return</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {lineage.map((r, i) => (
+                        <tr
+                          key={`${r.fundCik}-${r.entryDate}-${i}`}
+                          className="border-b border-hairline/60 transition-colors hover:bg-subtle/40"
+                        >
+                          <td className="py-3 pr-3">
+                            <Link
+                              href={`/fund/${r.fundCik}/performance`}
+                              className="font-serif text-base text-foreground hover:text-accent"
+                            >
+                              {r.fundName}
+                            </Link>
+                          </td>
+                          <td className="py-3 px-3 text-xs text-muted">
+                            {quarterLabel(r.entryDate)}
+                          </td>
+                          <td className="py-3 px-3 text-xs text-muted">
+                            {r.status === "open" ? (
+                              <span className="font-mono uppercase text-accent">
+                                open
+                              </span>
+                            ) : (
+                              quarterLabel(r.exitDate ?? "")
+                            )}
+                          </td>
+                          <td className="py-3 px-3 text-right tabular text-muted">
+                            ${r.entryPrice.toFixed(r.entryPrice < 10 ? 2 : 0)}
+                          </td>
+                          <td className="py-3 px-3 text-right tabular text-muted">
+                            {r.exitPrice != null
+                              ? `$${r.exitPrice.toFixed(r.exitPrice < 10 ? 2 : 0)}`
+                              : "—"}
+                          </td>
+                          <td
+                            className={cn(
+                              "py-3 pl-3 text-right tabular",
+                              r.returnPct >= 0
+                                ? "text-positive"
+                                : "text-negative",
+                            )}
+                          >
+                            {r.returnPct >= 0 ? "+" : ""}
+                            {formatPct(r.returnPct, 0)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            );
+          })()}
 
           {/* ============= CAVEATS ============= */}
           <section className="mt-20 rounded border-l-2 border-accent/40 bg-subtle/30 px-6 py-5 text-xs leading-relaxed text-muted">

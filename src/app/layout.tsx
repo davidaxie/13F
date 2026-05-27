@@ -69,6 +69,12 @@ export default function RootLayout({
                 Dashboard
               </Link>
               <Link
+                href="/universe"
+                className="transition-colors hover:text-foreground"
+              >
+                Universe
+              </Link>
+              <Link
                 href="/consensus"
                 className="transition-colors hover:text-foreground"
               >
@@ -97,6 +103,13 @@ export default function RootLayout({
                 className="transition-colors hover:text-foreground"
               >
                 Conviction
+              </Link>
+              <Link
+                href="/watchlist"
+                className="transition-colors hover:text-foreground"
+                aria-label="My watchlist"
+              >
+                Following
               </Link>
               <a
                 href="https://www.sec.gov/divisions/investment/13ffaq"
