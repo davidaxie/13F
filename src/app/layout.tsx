@@ -35,15 +35,27 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* Skip-to-content link for keyboard / screen-reader users — visible
+            only on focus, jumps past the site nav. */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:border focus:border-foreground focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:text-foreground"
+        >
+          Skip to content
+        </a>
         <header className="border-b border-hairline">
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
             <Link
               href="/"
               className="font-serif text-2xl tracking-tight text-foreground"
+              aria-label="13F home"
             >
               13F<span className="text-accent">.</span>
             </Link>
-            <nav className="flex items-center gap-6 text-sm text-muted">
+            <nav
+              className="flex items-center gap-6 text-sm text-muted"
+              aria-label="Primary"
+            >
               <Link
                 href="/"
                 className="transition-colors hover:text-foreground"
@@ -97,7 +109,9 @@ export default function RootLayout({
             </nav>
           </div>
         </header>
-        <main className="flex flex-1 flex-col">{children}</main>
+        <main id="main" className="flex flex-1 flex-col">
+          {children}
+        </main>
         <footer className="border-t border-hairline">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 text-xs text-muted">
             <span>Data sourced directly from SEC EDGAR.</span>

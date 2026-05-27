@@ -259,12 +259,17 @@ function RankToggle({
   onChange: (m: RankMode) => void;
 }) {
   return (
-    <div className="mt-12 flex items-center gap-3 text-xs uppercase tracking-widest text-muted">
+    <div
+      className="mt-12 flex items-center gap-3 text-xs uppercase tracking-widest text-muted"
+      role="group"
+      aria-label="Rank moves by dollar value or by percent of portfolio"
+    >
       <span>Rank by</span>
       <div className="inline-flex overflow-hidden rounded border border-hairline">
         <button
           type="button"
           onClick={() => onChange("dollar")}
+          aria-pressed={mode === "dollar"}
           className={cn(
             "px-3 py-1 transition-colors",
             mode === "dollar"
@@ -277,6 +282,7 @@ function RankToggle({
         <button
           type="button"
           onClick={() => onChange("weight")}
+          aria-pressed={mode === "weight"}
           className={cn(
             "border-l border-hairline px-3 py-1 transition-colors",
             mode === "weight"

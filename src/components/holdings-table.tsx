@@ -165,8 +165,13 @@ export function HoldingsTable({
                 ? `Export ${filtered.length} filtered rows`
                 : `Export all ${rows.length} rows`
             }
+            aria-label={
+              filter.trim() || changeFilter !== "all"
+                ? `Export ${filtered.length} filtered holdings as CSV`
+                : `Export all ${rows.length} holdings as CSV`
+            }
           >
-            <Download size={12} strokeWidth={1.5} />
+            <Download size={12} strokeWidth={1.5} aria-hidden="true" />
             CSV
           </button>
         </div>

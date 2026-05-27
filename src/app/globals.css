@@ -64,6 +64,38 @@ body {
   font-feature-settings: "ss01", "ss02";
 }
 
+/* A11y — visible focus ring for keyboard users on every interactive element,
+   without showing one on mouse-clicks (matches :focus-visible). */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Tailwind sr-only is screen-reader-only by default; this helper class is
+   used by the layout's skip-to-content link. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
 /* ============================================================================
    Print stylesheet — strip chrome, flatten to high-contrast B/W, keep tables
    together. Allocators tend to print holdings reports and backtest pages for
