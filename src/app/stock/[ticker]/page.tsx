@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sparkline } from "@/components/charts/sparkline";
 import { WatchlistStar } from "@/components/watchlist-star";
-import { getSectorByTicker } from "@/lib/refdata";
+import { getInsiderFilings } from "@/lib/edgar";
+import { cikForTicker, getSectorByTicker } from "@/lib/refdata";
 import { getStockView } from "@/lib/stock-view";
 import { formatDate, formatInt, formatPct, formatUSD, quarterLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -21,6 +22,27 @@ export default async function StockPage({
   const hasAnyCoverage =
     view.currentHolders.length > 0 || view.pastHolders.length > 0;
   const gics = getSectorByTicker(view.ticker);
+
+  // Insider transactions are filed against the issuer's CIK, not by 13F
+  // filers. Resolve the issuer CIK from the ticker and fetch in parallel.
+  const issuer = cikForTicker(view.ticker);
+  const insiderFilings = issuer
+    ? await getInsiderFilings(issuer.cik)
+    : [];
+
+  // Form 4s in the last 30 / 90 days — the canonical insider-activity
+  // headline numbers. Compared against the latest filing date (not wall
+  // clock) so render is pure.
+  const latestInsiderDate = insiderFilings[0]?.filingDate ?? "";
+  const dateMinusDays = (n: number): string => {
+    if (!latestInsiderDate) return "";
+    const ms = new Date(latestInsiderDate + "T00:00:00Z").getTime();
+    return new Date(ms - n * 86400_000).toISOString().slice(0, 10);
+  };
+  const cutoff30 = dateMinusDays(30);
+  const cutoff90 = dateMinusDays(90);
+  const insider30 = insiderFilings.filter((f) => f.filingDate >= cutoff30).length;
+  const insider90 = insiderFilings.filter((f) => f.filingDate >= cutoff90).length;
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -372,6 +394,103 @@ export default async function StockPage({
                   </tbody>
                 </table>
               </div>
+            </section>
+          )}
+
+          {/* ============= INSIDER ACTIVITY (Form 4) ============= */}
+          {issuer && insiderFilings.length > 0 && (
+            <section className="mt-16">
+              <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+                <h2 className="font-serif text-2xl text-foreground">
+                  Insider activity
+                </h2>
+                <span className="text-xs uppercase tracking-widest text-muted">
+                  Form 4 — officers, directors, 10%+ owners
+                </span>
+              </div>
+              <p className="mt-3 max-w-2xl text-xs leading-relaxed text-muted">
+                Filed within two business days of each transaction by
+                anyone with material insider status at {issuer.name}.
+                Pair with the holders table above as a sanity check:
+                heavy insider buying alongside marquee-fund accumulation
+                is the strongest accumulation signal; heavy insider
+                selling alongside fund exits is the strongest distribution
+                signal.
+              </p>
+
+              <div className="mt-6 grid grid-cols-2 gap-x-10 gap-y-4 sm:grid-cols-4">
+                <Stat
+                  label="Filings · last 30d"
+                  value={insider30.toLocaleString()}
+                />
+                <Stat
+                  label="Filings · last 90d"
+                  value={insider90.toLocaleString()}
+                />
+                <Stat
+                  label="Total on file"
+                  value={insiderFilings.length.toLocaleString()}
+                  sub="Recent SEC buffer"
+                />
+                <Stat
+                  label="Most recent"
+                  value={
+                    insiderFilings[0]
+                      ? formatDate(insiderFilings[0].filingDate)
+                      : "—"
+                  }
+                />
+              </div>
+
+              <ul className="mt-6 divide-y divide-hairline border-y border-hairline">
+                {insiderFilings.slice(0, 15).map((f) => {
+                  const accDashless = f.accessionNumber.replace(/-/g, "");
+                  const edgarUrl = `https://www.sec.gov/Archives/edgar/data/${issuer.cik}/${accDashless}/${f.primaryDocument || `${f.accessionNumber}-index.htm`}`;
+                  const isAmendment = f.form === "4/A";
+                  return (
+                    <li key={f.accessionNumber}>
+                      <a
+                        href={edgarUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group grid grid-cols-[100px_1fr_auto] items-center gap-4 py-3 transition-colors hover:bg-subtle/40"
+                      >
+                        <div>
+                          <span className="rounded-sm border border-hairline bg-subtle/50 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-muted">
+                            Form {f.form}
+                          </span>
+                          {isAmendment && (
+                            <span className="ml-1.5 font-mono text-[10px] uppercase tracking-widest text-muted/70">
+                              amend
+                            </span>
+                          )}
+                        </div>
+                        <div className="font-mono text-xs uppercase tracking-wider text-muted truncate">
+                          {f.accessionNumber}
+                        </div>
+                        <div className="tabular text-sm text-foreground/80">
+                          {formatDate(f.filingDate)}
+                        </div>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+
+              {insiderFilings.length > 15 && (
+                <div className="mt-3 text-right text-xs text-muted">
+                  Showing 15 of {insiderFilings.length} recent Form 4
+                  filings.{" "}
+                  <a
+                    href={`https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${issuer.cik}&type=4&dateb=&owner=include&count=40`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent transition-colors hover:underline"
+                  >
+                    Browse all on EDGAR ↗
+                  </a>
+                </div>
+              )}
             </section>
           )}
 

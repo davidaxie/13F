@@ -7,11 +7,13 @@
 // script to refresh.
 
 import gicsData from "../data/gics.json";
+import companyTickerData from "../data/company-tickers.json";
 import { tickerForCusip } from "./cusip-lookup";
 
 export type GicsRow = { sector: string; industry: string };
 
 const GICS = gicsData as Record<string, GicsRow>;
+const COMPANY_TICKERS = companyTickerData as Record<string, { cik: string; name: string }>;
 
 /**
  * Look up GICS sector + industry by ticker. Returns null if the ticker
@@ -45,6 +47,21 @@ export function getGicsCoverage(): {
     counts[v.sector] = (counts[v.sector] ?? 0) + 1;
   }
   return { totalTickers: Object.keys(GICS).length, sectorCounts: counts };
+}
+
+/**
+ * Look up a company's SEC CIK by its ticker symbol. Used to fetch
+ * issuer-keyed EDGAR filings (Form 4 insider transactions, 13D/G filed
+ * against the company, etc.).
+ *
+ * Source: SEC's company_tickers.json (~10K public US issuers, refreshed
+ * via scripts/build-company-tickers.ts).
+ */
+export function cikForTicker(
+  ticker: string | null | undefined,
+): { cik: string; name: string } | null {
+  if (!ticker) return null;
+  return COMPANY_TICKERS[ticker.toUpperCase()] ?? null;
 }
 
 /**

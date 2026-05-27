@@ -248,6 +248,58 @@ export async function getFundInfo(
   };
 }
 
+// Extract Form 4 insider-transaction filings from a submissions buffer.
+// Form 4 is filed by company INSIDERS (officers, directors, 10%+ owners),
+// not by 13F filers. To use this on a stock page, look up the issuer's
+// CIK via refdata.cikForTicker and call getInsiderFilings(issuerCik).
+function extractForm4(recent: FilingsRecent): Filing[] {
+  const out: Filing[] = [];
+  const forms = recent.form ?? [];
+  for (let i = 0; i < forms.length; i++) {
+    if (forms[i] === "4" || forms[i] === "4/A") {
+      out.push({
+        accessionNumber: recent.accessionNumber?.[i] ?? "",
+        filingDate: recent.filingDate?.[i] ?? "",
+        reportDate: recent.reportDate?.[i] ?? "",
+        form: forms[i],
+        primaryDocument: recent.primaryDocument?.[i] ?? "",
+      });
+    }
+  }
+  return out;
+}
+
+/**
+ * Fetch recent Form 4 filings filed against a public issuer (by its
+ * insiders — officers, directors, 10%+ owners). The submissions API
+ * returns up to 1,000 most-recent filings of all types; we filter to
+ * Form 4 and 4/A and sort newest-first. Each filing's accession is a
+ * link to EDGAR for the full transaction detail.
+ *
+ * No deep XML parsing in v1 — surfacing the filing count and a list with
+ * EDGAR links is the headline signal. The transaction codes (P/S/A/F/etc.)
+ * and per-transaction $ amounts are inside each XML — a follow-up will
+ * parse these for net insider buying/selling figures.
+ */
+export async function getInsiderFilings(
+  issuerCik: string,
+): Promise<Filing[]> {
+  const cleanCik = issuerCik.replace(/^0+/, "");
+  const padded = cleanCik.padStart(10, "0");
+  const url = `https://data.sec.gov/submissions/CIK${padded}.json`;
+  try {
+    const res = await edgarFetch(url);
+    const data = (await res.json()) as SubmissionsResponse;
+    const recent = data.filings?.recent ?? {};
+    const filings = extractForm4(recent);
+    filings.sort((a, b) => b.filingDate.localeCompare(a.filingDate));
+    return filings;
+  } catch (err) {
+    console.warn(`edgar: getInsiderFilings(${cleanCik}) failed`, err);
+    return [];
+  }
+}
+
 /**
  * Fetch a filer's recent Schedule 13D / 13G filings (and amendments) from
  * the EDGAR submissions API. Returns at most the "recent" buffer (last
