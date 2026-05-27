@@ -3,10 +3,11 @@ import { notFound } from "next/navigation";
 import { DrawdownChart } from "@/components/charts/drawdown";
 import { EquityCurveChart } from "@/components/charts/equity-curve";
 import { PnlStairstepChart } from "@/components/charts/pnl-stairstep";
+import { RollingAlphaChart } from "@/components/charts/rolling-alpha";
 import { TradeScatterChart } from "@/components/charts/trade-scatter";
 import { getFundInfo } from "@/lib/edgar";
 import { runBacktest, type BacktestTrade } from "@/lib/backtest";
-import { computeRiskMetrics } from "@/lib/risk-metrics";
+import { computeRiskMetrics, computeRollingAlpha } from "@/lib/risk-metrics";
 import { getSnapshot } from "@/lib/snapshots";
 import { formatDate, formatPct, formatUSD, quarterLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -56,6 +57,7 @@ export default async function PerformancePage({
   // Risk metrics derived from the existing weekly equity curve — no snapshot
   // regeneration needed.
   const risk = computeRiskMetrics(equityCurve);
+  const rollingAlpha = computeRollingAlpha(equityCurve, 52);
 
   // Snapshot's as-of timestamp. Threaded into BiggestTradesTable so hold
   // duration for open trades is computed against the snapshot end, not the
@@ -299,6 +301,30 @@ export default async function PerformancePage({
           </p>
         )}
       </section>
+
+      {/* ============ A.8 Rolling 1y alpha ============ */}
+      {rollingAlpha.length > 0 && (
+        <section className="mt-16">
+          <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+            <h2 className="font-serif text-2xl text-foreground">
+              Rolling 1y alpha
+            </h2>
+            <span className="text-xs uppercase tracking-widest text-muted">
+              Trailing 52w mirror return − SPY return
+            </span>
+          </div>
+          <div className="mt-6">
+            <RollingAlphaChart data={rollingAlpha} />
+          </div>
+          <p className="mt-3 text-xs leading-relaxed text-muted">
+            Whether the headline alpha was earned recently or decades ago. Bands
+            above the zero line are quarters where the mirror beat SPY on a
+            trailing-year basis; bands below are quarters where it lost ground.
+            A flat positive line = steady outperformance; a curve that crosses
+            often = regime-dependent strategy.
+          </p>
+        </section>
+      )}
 
       {/* ============ B. P&L stair-step ============ */}
       <section className="mt-20">

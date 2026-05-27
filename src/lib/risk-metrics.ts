@@ -185,6 +185,43 @@ export function computeRiskMetrics(
   };
 }
 
+export type RollingAlphaPoint = {
+  date: string;
+  mirror1yPct: number; // trailing 1y mirror return %
+  spy1yPct: number;    // trailing 1y SPY return %
+  alphaPct: number;    // mirror1yPct − spy1yPct
+};
+
+/**
+ * Compute a rolling 1-year alpha series from a weekly equity curve.
+ * For each sample i with at least `lookback` prior samples, return the
+ * (mirror_return_1y − spy_return_1y) at that date.
+ *
+ * Default lookback = 52 weeks ≈ 1 calendar year (matches the curve sampling
+ * in backtest.ts where SAMPLE_DAYS = 7).
+ */
+export function computeRollingAlpha(
+  curve: EquityCurvePoint[],
+  lookback = 52,
+): RollingAlphaPoint[] {
+  if (curve.length <= lookback) return [];
+  const out: RollingAlphaPoint[] = [];
+  for (let i = lookback; i < curve.length; i++) {
+    const cur = curve[i];
+    const ago = curve[i - lookback];
+    if (ago.mirror <= 0 || ago.spy <= 0) continue;
+    const mirror1y = (cur.mirror / ago.mirror - 1) * 100;
+    const spy1y = (cur.spy / ago.spy - 1) * 100;
+    out.push({
+      date: cur.date,
+      mirror1yPct: mirror1y,
+      spy1yPct: spy1y,
+      alphaPct: mirror1y - spy1y,
+    });
+  }
+  return out;
+}
+
 function mean(xs: number[]): number {
   let s = 0;
   for (const x of xs) s += x;
