@@ -57,6 +57,12 @@ export default function RootLayout({
                 Dashboard
               </Link>
               <Link
+                href="/consensus"
+                className="transition-colors hover:text-foreground"
+              >
+                Consensus
+              </Link>
+              <Link
                 href="/leaderboard"
                 className="transition-colors hover:text-foreground"
               >
