@@ -133,7 +133,11 @@ export function CrossFundHighlightsView({
     {
       key: "shortOpens",
       title: "Short bets opened",
-      subtitle: "New put positions · bearish",
+      // 13F reports puts as notional ($ underlying), NOT delta-adjusted
+      // exposure — a $100M put position isn't $100M of directional risk if
+      // it's deep OTM or hedging an existing long. Treat as a directional
+      // hint, not a position size.
+      subtitle: "New put positions · notional, may be hedges",
       moves: shortOpensF,
       tone: "negative",
       valueOf: (m) => m.currentValueUsd,
@@ -142,7 +146,9 @@ export function CrossFundHighlightsView({
     {
       key: "callOpens",
       title: "Call options opened",
-      subtitle: "New call positions · bullish",
+      // Same notional caveat. Calls can be cash-secured income trades, not
+      // pure directional bullish bets.
+      subtitle: "New call positions · notional, may be income trades",
       moves: callOpensF,
       tone: "positive",
       valueOf: (m) => m.currentValueUsd,
