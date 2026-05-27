@@ -29,6 +29,13 @@ export type ConvictionSignal = {
   spyFinalValueUsd: number;
   alphaUsd: number;
   alphaPct: number;
+  // Fund-exit-mode fields: sell price = fund's own exit price (or today if
+  // still open). SPY benchmark matched to the same window.
+  fundExitPrice: number;            // sell price under fund-exit mode
+  fundExitFinalValueUsd: number;    // sharesBought × fundExitPrice
+  fundExitReturnPct: number;
+  spyFundExitFinalValueUsd: number; // SPY held over fund's buy→exit window
+  fundExitAlphaUsd: number;
 };
 
 export type ConvictionStats = {
@@ -45,6 +52,29 @@ export type ConvictionStats = {
   avgReturnPct: number;
   medianReturnPct: number;
   avgHoldQuarters: number;
+};
+
+/**
+ * Alternative "exit at the fund's actual sell" stats, computed alongside the
+ * default "hold to today" view. For closed signals the sell price is the
+ * fund's own exit price (from snapshot); for still-open signals the sell
+ * price is today (no choice). The benchmark is matched: SPY is sold on the
+ * same fund-exit date for closed signals, today for open ones.
+ *
+ * Comparing the two modes isolates "did the fund know when to sell?" — if
+ * fund-exit alpha > hold-to-today alpha, the fund's exit timing added value;
+ * if the reverse, the fund sold too early and the follower would've done
+ * better holding longer.
+ */
+export type FundExitStats = {
+  followerFinalUsd: number;
+  followerReturnPct: number;
+  spyFinalUsd: number;
+  alphaUsd: number;
+  alphaPct: number;
+  winRate: number;
+  avgReturnPct: number;
+  medianReturnPct: number;
 };
 
 export type ConvictionPerFund = {
@@ -83,6 +113,8 @@ export type CurrentPick = {
 export type ConvictionBucket = {
   minHoldQuarters: number;
   stats: ConvictionStats;
+  /** "Hold to fund's actual exit" variant of the headline stats. */
+  fundExitStats: FundExitStats;
   perFund: ConvictionPerFund[];
   topGainers: ConvictionSignal[];
   topLosers: ConvictionSignal[];
@@ -205,6 +237,19 @@ function _build(): ConvictionBacktest {
       const spyFinalValueUsd = POSITION_SIZE_USD * (spyToday / spyBuy);
       const alphaUsd = finalValueUsd - spyFinalValueUsd;
 
+      // Fund-exit-mode pricing: if the signal closed, use the snapshot's
+      // sellPrice + sellDate; if still open, fall back to today.
+      const fundExitPrice = s.sellPrice ?? today;
+      const fundExitFinalValueUsd = sharesBought * fundExitPrice;
+      const fundExitReturnPct = (fundExitPrice / s.buyPrice - 1) * 100;
+      const fundExitSpyToday = s.sellDate
+        ? (priceAt(SPY_BARS, isoToUnix(s.sellDate)) ?? spyToday)
+        : spyToday;
+      const spyFundExitFinalValueUsd =
+        POSITION_SIZE_USD * (fundExitSpyToday / spyBuy);
+      const fundExitAlphaUsd =
+        fundExitFinalValueUsd - spyFundExitFinalValueUsd;
+
       enriched.push({
         fundCik: fund.cik,
         fundName: fund.displayName,
@@ -224,6 +269,11 @@ function _build(): ConvictionBacktest {
         spyFinalValueUsd,
         alphaUsd,
         alphaPct: returnPct - spyReturnPct,
+        fundExitPrice,
+        fundExitFinalValueUsd,
+        fundExitReturnPct,
+        spyFundExitFinalValueUsd,
+        fundExitAlphaUsd,
       });
     }
   }
@@ -253,6 +303,44 @@ function _build(): ConvictionBacktest {
       const sortedRet = filtered.map((e) => e.returnPct).sort((a, b) => a - b);
       const medianReturnPct =
         sortedRet.length > 0 ? sortedRet[Math.floor(sortedRet.length / 2)] : 0;
+
+      // Fund-exit-mode aggregates (alt sell convention — see FundExitStats).
+      const feFollowerFinal = filtered.reduce(
+        (acc, e) => acc + e.fundExitFinalValueUsd,
+        0,
+      );
+      const feSpyFinal = filtered.reduce(
+        (acc, e) => acc + e.spyFundExitFinalValueUsd,
+        0,
+      );
+      const feWinners = filtered.filter((e) => e.fundExitAlphaUsd > 0).length;
+      const feSumRet = filtered.reduce(
+        (acc, e) => acc + e.fundExitReturnPct,
+        0,
+      );
+      const feSortedRet = filtered
+        .map((e) => e.fundExitReturnPct)
+        .sort((a, b) => a - b);
+      const feMedianRet =
+        feSortedRet.length > 0
+          ? feSortedRet[Math.floor(feSortedRet.length / 2)]
+          : 0;
+      const fundExitStats: FundExitStats = {
+        followerFinalUsd: feFollowerFinal,
+        followerReturnPct:
+          totalInvested > 0
+            ? ((feFollowerFinal - totalInvested) / totalInvested) * 100
+            : 0,
+        spyFinalUsd: feSpyFinal,
+        alphaUsd: feFollowerFinal - feSpyFinal,
+        alphaPct:
+          totalInvested > 0
+            ? ((feFollowerFinal - feSpyFinal) / totalInvested) * 100
+            : 0,
+        winRate: N > 0 ? feWinners / N : 0,
+        avgReturnPct: N > 0 ? feSumRet / N : 0,
+        medianReturnPct: feMedianRet,
+      };
 
       const perFund: ConvictionPerFund[] = MARQUEE_FUNDS.map((fund) => {
         const fs = filtered.filter((e) => e.fundCik === fund.cik);
@@ -290,6 +378,7 @@ function _build(): ConvictionBacktest {
 
       return {
         minHoldQuarters,
+        fundExitStats,
         stats: {
           minHoldQuarters,
           totalSignals: N,

@@ -11,6 +11,8 @@ import type {
 import { formatPct, formatUSD, quarterLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
+type ExitMode = "today" | "fund-exit";
+
 export function ConvictionView({ data }: { data: ConvictionBacktest }) {
   // Default to ≥4 quarters (a full year of conviction).
   const defaultIdx = Math.max(
@@ -18,7 +20,27 @@ export function ConvictionView({ data }: { data: ConvictionBacktest }) {
     data.buckets.findIndex((b) => b.minHoldQuarters === 4),
   );
   const [idx, setIdx] = useState(defaultIdx);
+  const [exitMode, setExitMode] = useState<ExitMode>("today");
   const bucket = data.buckets[idx];
+
+  // Pick the appropriate headline stats based on exit mode. "today" uses the
+  // existing hold-to-today logic; "fund-exit" uses the fund's actual exit
+  // price (or today for still-open positions). Per-fund table, top-gainers/
+  // losers, and current picks stay on the "today" basis since the comparison
+  // signal lives in the headline.
+  const hStats = exitMode === "today" ? bucket.stats : null;
+  const feStats = exitMode === "fund-exit" ? bucket.fundExitStats : null;
+  const followerFinalUsd =
+    hStats?.followerFinalUsd ?? feStats?.followerFinalUsd ?? 0;
+  const followerReturnPct =
+    hStats?.followerReturnPct ?? feStats?.followerReturnPct ?? 0;
+  const spyFinalUsd = hStats?.spyFinalUsd ?? feStats?.spyFinalUsd ?? 0;
+  const alphaUsd = hStats?.alphaUsd ?? feStats?.alphaUsd ?? 0;
+  const alphaPct = hStats?.alphaPct ?? feStats?.alphaPct ?? 0;
+  const winRate = hStats?.winRate ?? feStats?.winRate ?? 0;
+  const avgReturnPct = hStats?.avgReturnPct ?? feStats?.avgReturnPct ?? 0;
+  const medianReturnPct =
+    hStats?.medianReturnPct ?? feStats?.medianReturnPct ?? 0;
 
   return (
     <>
@@ -27,6 +49,8 @@ export function ConvictionView({ data }: { data: ConvictionBacktest }) {
         idx={idx}
         onChange={setIdx}
       />
+
+      <ExitModeToggle mode={exitMode} onChange={setExitMode} />
 
       {/* Headline ============================================================= */}
       <section className="mt-12">
@@ -40,45 +64,96 @@ export function ConvictionView({ data }: { data: ConvictionBacktest }) {
             sub={`${bucket.stats.totalSignals.toLocaleString()} signals × $${(data.positionSizeUsd / 1000).toFixed(0)}k`}
           />
           <Stat
-            label="Held to today"
-            value={formatUSD(bucket.stats.followerFinalUsd, { compact: true })}
-            tone={bucket.stats.followerReturnPct >= 0 ? "up" : "down"}
-            sub={`${bucket.stats.followerReturnPct >= 0 ? "+" : ""}${formatPct(bucket.stats.followerReturnPct, 1)} on capital`}
+            label={exitMode === "today" ? "Held to today" : "Sold at fund exit"}
+            value={formatUSD(followerFinalUsd, { compact: true })}
+            tone={followerReturnPct >= 0 ? "up" : "down"}
+            sub={`${followerReturnPct >= 0 ? "+" : ""}${formatPct(followerReturnPct, 1)} on capital`}
           />
           <Stat
             label="SPY ending value"
-            value={formatUSD(bucket.stats.spyFinalUsd, { compact: true })}
-            sub={`${bucket.stats.spyReturnPct >= 0 ? "+" : ""}${formatPct(bucket.stats.spyReturnPct, 1)} on same dollars`}
+            value={formatUSD(spyFinalUsd, { compact: true })}
+            sub={
+              exitMode === "today"
+                ? `${bucket.stats.spyReturnPct >= 0 ? "+" : ""}${formatPct(bucket.stats.spyReturnPct, 1)} on same dollars`
+                : "Held over each signal's buy → fund-exit window"
+            }
           />
           <Stat
             label="Alpha vs SPY"
-            value={`${bucket.stats.alphaUsd >= 0 ? "+" : "−"}${formatUSD(Math.abs(bucket.stats.alphaUsd), { compact: true })}`}
-            tone={bucket.stats.alphaUsd >= 0 ? "up" : "down"}
-            sub={`${bucket.stats.alphaPct >= 0 ? "+" : ""}${formatPct(bucket.stats.alphaPct, 1)} of invested capital`}
+            value={`${alphaUsd >= 0 ? "+" : "−"}${formatUSD(Math.abs(alphaUsd), { compact: true })}`}
+            tone={alphaUsd >= 0 ? "up" : "down"}
+            sub={`${alphaPct >= 0 ? "+" : ""}${formatPct(alphaPct, 1)} of invested capital`}
           />
         </div>
 
         <div className="mt-10 grid grid-cols-2 gap-x-10 gap-y-8 border-t border-hairline pt-8 sm:grid-cols-4">
           <Stat
             label="Beat SPY (win rate)"
-            value={`${(bucket.stats.winRate * 100).toFixed(0)}%`}
+            value={`${(winRate * 100).toFixed(0)}%`}
             sub="signals with positive alpha"
           />
           <Stat
             label="Avg signal return"
-            value={`${bucket.stats.avgReturnPct >= 0 ? "+" : ""}${formatPct(bucket.stats.avgReturnPct, 1)}`}
-            tone={bucket.stats.avgReturnPct >= 0 ? "up" : "down"}
+            value={`${avgReturnPct >= 0 ? "+" : ""}${formatPct(avgReturnPct, 1)}`}
+            tone={avgReturnPct >= 0 ? "up" : "down"}
           />
           <Stat
             label="Median signal return"
-            value={`${bucket.stats.medianReturnPct >= 0 ? "+" : ""}${formatPct(bucket.stats.medianReturnPct, 1)}`}
-            tone={bucket.stats.medianReturnPct >= 0 ? "up" : "down"}
+            value={`${medianReturnPct >= 0 ? "+" : ""}${formatPct(medianReturnPct, 1)}`}
+            tone={medianReturnPct >= 0 ? "up" : "down"}
           />
           <Stat
             label="Avg fund hold"
             value={`${bucket.stats.avgHoldQuarters.toFixed(1)}Q`}
             sub={`${Math.round(bucket.stats.avgHoldQuarters * 90)} days`}
           />
+        </div>
+
+        {/* Inline delta callout: how much the exit-mode swap costs/gains */}
+        <div className="mt-6 text-xs leading-relaxed text-muted">
+          {exitMode === "today" ? (
+            <>
+              Compare:{" "}
+              <button
+                type="button"
+                onClick={() => setExitMode("fund-exit")}
+                className="text-accent underline-offset-2 transition-colors hover:underline"
+              >
+                If you&apos;d sold when the fund did
+              </button>{" "}
+              the follower would have ended at{" "}
+              <span className="tabular text-foreground">
+                {formatUSD(bucket.fundExitStats.followerFinalUsd, {
+                  compact: true,
+                })}
+              </span>{" "}
+              ({bucket.fundExitStats.followerReturnPct >= 0 ? "+" : ""}
+              {formatPct(bucket.fundExitStats.followerReturnPct, 1)}). Holding
+              longer than the fund {bucket.stats.followerFinalUsd >= bucket.fundExitStats.followerFinalUsd ? "improved" : "hurt"}{" "}
+              the result by{" "}
+              <span className="tabular text-foreground">
+                {formatUSD(Math.abs(bucket.stats.followerFinalUsd - bucket.fundExitStats.followerFinalUsd), { compact: true })}
+              </span>
+              .
+            </>
+          ) : (
+            <>
+              Compare:{" "}
+              <button
+                type="button"
+                onClick={() => setExitMode("today")}
+                className="text-accent underline-offset-2 transition-colors hover:underline"
+              >
+                If you&apos;d held to today
+              </button>{" "}
+              the follower would have ended at{" "}
+              <span className="tabular text-foreground">
+                {formatUSD(bucket.stats.followerFinalUsd, { compact: true })}
+              </span>{" "}
+              ({bucket.stats.followerReturnPct >= 0 ? "+" : ""}
+              {formatPct(bucket.stats.followerReturnPct, 1)}).
+            </>
+          )}
         </div>
       </section>
 
@@ -340,6 +415,51 @@ function CurrentPicksTable({ picks }: { picks: CurrentPick[] }) {
         the column shown here.
       </p>
     </>
+  );
+}
+
+function ExitModeToggle({
+  mode,
+  onChange,
+}: {
+  mode: ExitMode;
+  onChange: (m: ExitMode) => void;
+}) {
+  return (
+    <div className="mt-6 flex flex-wrap items-baseline gap-3 text-xs uppercase tracking-widest text-muted">
+      <span>Exit when</span>
+      <div className="inline-flex overflow-hidden rounded border border-hairline">
+        <button
+          type="button"
+          onClick={() => onChange("today")}
+          className={cn(
+            "px-3 py-1 transition-colors",
+            mode === "today"
+              ? "bg-foreground text-background"
+              : "text-muted hover:text-foreground",
+          )}
+        >
+          Hold to today
+        </button>
+        <button
+          type="button"
+          onClick={() => onChange("fund-exit")}
+          className={cn(
+            "border-l border-hairline px-3 py-1 transition-colors",
+            mode === "fund-exit"
+              ? "bg-foreground text-background"
+              : "text-muted hover:text-foreground",
+          )}
+        >
+          Sell when fund sold
+        </button>
+      </div>
+      <span className="normal-case tracking-normal text-muted/70">
+        {mode === "today"
+          ? "Ignore fund's exit; mark to current price."
+          : "Match fund's sell date (or today if still held)."}
+      </span>
+    </div>
   );
 }
 
