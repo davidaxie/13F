@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { computeConvictionBacktest } from "@/lib/conviction-backtest";
+import { CaveatCallout } from "@/components/caveat-callout";
 import { ConvictionView } from "@/components/conviction-view";
 
 export default function ConvictionPage() {
@@ -37,9 +38,29 @@ export default function ConvictionPage() {
         </p>
       </div>
 
+      <CaveatCallout
+        items={[
+          {
+            title: "Survivor-biased universe",
+            body: "Nine famous-name funds still operating; aggregate alpha is biased upward vs a sample including blown-up funds.",
+          },
+          {
+            title: "Conviction = duration, not weight",
+            body: "Holding period alone — a 100-share placeholder held 20Q scores the same as a 5%-weight core position.",
+          },
+          {
+            title: "Heavy-fund window asymmetry",
+            body: "Renaissance / Citadel / Two Sigma / Soros only have 8 quarters of history; a ≥8Q filter mostly excludes them.",
+          },
+        ]}
+      />
+
       <ConvictionView data={data} />
 
-      <section className="mt-20 rounded border-l-2 border-accent/40 bg-subtle/30 px-6 py-5 text-xs leading-relaxed text-muted">
+      <section
+        id="caveats"
+        className="mt-20 rounded border-l-2 border-accent/40 bg-subtle/30 px-6 py-5 text-xs leading-relaxed text-muted"
+      >
         <div className="mb-2 text-[10px] uppercase tracking-widest text-foreground/70">
           Caveats
         </div>

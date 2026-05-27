@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CaveatCallout } from "@/components/caveat-callout";
 import { DrawdownChart } from "@/components/charts/drawdown";
 import { EquityCurveChart } from "@/components/charts/equity-curve";
 import { PnlStairstepChart } from "@/components/charts/pnl-stairstep";
@@ -96,6 +97,24 @@ export default async function PerformancePage({
           <span>{openTrades.length} still open</span>
         </div>
       </div>
+
+      <CaveatCallout
+        anchor={null}
+        items={[
+          {
+            title: "13F-mirror, not the full fund",
+            body: "Reflects only US long equity positions. Omits insurance float, hedges, derivatives, international/private holdings, and operating-company economics — for Berkshire, Buffett-the-investor not Berkshire-the-company.",
+          },
+          {
+            title: "Filing-date pricing, no costs",
+            body: "Mirror rebalances at each disclosure (45-day lag from period-end). No transaction costs, slippage, taxes, or borrow modeled.",
+          },
+          {
+            title: "Mapped CUSIPs only",
+            body: `${unmappedCusipCount} of ${mappedCusipCount + unmappedCusipCount} CUSIPs in this fund's history weren't resolvable to a ticker and are excluded from the mirror.`,
+          },
+        ]}
+      />
 
       {/* ============ A. Equity curve ============ */}
       <section className="mt-16">

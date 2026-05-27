@@ -4,6 +4,7 @@ import {
   type EnrichedSignal,
   type FollowerBacktest,
 } from "@/lib/follower-backtest";
+import { CaveatCallout } from "@/components/caveat-callout";
 import { FollowerView } from "@/components/follower-view";
 
 // Static — backtest is computed once at build time. The slider mutates only
@@ -66,9 +67,29 @@ export default function FollowerBacktestPage() {
         </p>
       </div>
 
+      <CaveatCallout
+        items={[
+          {
+            title: "Survivor-biased universe",
+            body: "Nine famous-name funds still operating; aggregate alpha is biased upward vs a sample including blown-up funds.",
+          },
+          {
+            title: "Gross by default",
+            body: "Headline assumes frictionless execution at the filing-date close. Toggle the slippage chip below to see net of 5/10/25 bps.",
+          },
+          {
+            title: "Uneven sampling window",
+            body: "Renaissance, Bridgewater, Citadel, Two Sigma use only the last 8 quarters; the rest use full history.",
+          },
+        ]}
+      />
+
       <FollowerView base={base} topGainers={topGainers} topLosers={topLosers} />
 
-      <section className="mt-20 rounded border-l-2 border-accent/40 bg-subtle/30 px-6 py-5 text-xs leading-relaxed text-muted">
+      <section
+        id="caveats"
+        className="mt-20 rounded border-l-2 border-accent/40 bg-subtle/30 px-6 py-5 text-xs leading-relaxed text-muted"
+      >
         <div className="mb-2 text-[10px] uppercase tracking-widest text-foreground/70">
           Caveats
         </div>
