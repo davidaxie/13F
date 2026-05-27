@@ -7,7 +7,7 @@ const SUGGESTIONS = [
   { label: "Renaissance Technologies", q: "renaissance technologies" },
   { label: "Tiger Global", q: "tiger global" },
   { label: "Pershing Square", q: "pershing square" },
-  { label: "Baupost Group", q: "baupost" },
+  { label: "Appaloosa", q: "appaloosa" },
 ];
 
 const STOCK_SUGGESTIONS = [
