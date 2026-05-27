@@ -53,9 +53,21 @@ export type RealizedPoint = {
   cumulativeSpyPnlUsd: number;
 };
 
+export type CostVariant = {
+  bpsPerSide: number; // 0, 5, 10, 25
+  followerFinalUsd: number;
+  followerReturnPct: number;
+  alphaUsd: number;
+  alphaPct: number;
+  winRate: number;
+  avgReturnPct: number;
+  medianReturnPct: number;
+};
+
 export type FollowerBacktest = {
   positionSizeUsd: number;
   signals: EnrichedSignal[];
+  costVariants: CostVariant[];
   stats: {
     totalSignals: number;
     closedSignals: number;
@@ -231,9 +243,14 @@ function _compute(): FollowerBacktest {
     }
   }
 
+  const costVariants = computeCostVariants(enriched, POSITION_SIZE_USD, [
+    0, 5, 10, 25,
+  ]);
+
   return {
     positionSizeUsd: POSITION_SIZE_USD,
     signals: enriched,
+    costVariants,
     stats: {
       totalSignals: N,
       closedSignals,
@@ -269,3 +286,67 @@ function _compute(): FollowerBacktest {
 }
 
 export const computeFollowerBacktest = cache(_compute);
+
+/**
+ * Apply a per-side slippage assumption to every signal and return aggregate
+ * cost-adjusted stats per requested basis-point level. Round-trip cost = 2×
+ * bpsPerSide (paid on the buy AND sell side). SPY benchmark is assumed
+ * cost-free — the comparison answers "what did the follower realize vs an
+ * idealized buy-and-hold SPY of the same dollars?"
+ *
+ * Per-fund and the realized series stay as gross-only (re-doing those is
+ * unnecessary for the current UX and would bloat the payload).
+ */
+export function computeCostVariants(
+  signals: EnrichedSignal[],
+  positionSizeUsd: number,
+  bpsLevels: number[],
+): CostVariant[] {
+  return bpsLevels.map((bps) => {
+    const slip = bps / 10000; // e.g. 5 bps = 0.0005
+    let followerFinal = 0;
+    let spyFinal = 0;
+    let wins = 0;
+    let sumReturn = 0;
+    const returns: number[] = [];
+
+    for (const s of signals) {
+      // Pay slip on the buy side (price effectively higher), receive slip
+      // less on the sell side (price effectively lower).
+      const buyEff = s.buyPrice * (1 + slip);
+      const sellEff = s.sellPrice * (1 - slip);
+      const sharesEff = positionSizeUsd / buyEff;
+      const finalValueEff = sharesEff * sellEff;
+      const retEff = (finalValueEff / positionSizeUsd - 1) * 100;
+      const alphaUsdEff = finalValueEff - s.spyFinalValueUsd;
+
+      followerFinal += finalValueEff;
+      spyFinal += s.spyFinalValueUsd;
+      if (alphaUsdEff > 0) wins++;
+      sumReturn += retEff;
+      returns.push(retEff);
+    }
+
+    const N = signals.length;
+    const totalInvested = N * positionSizeUsd;
+    returns.sort((a, b) => a - b);
+
+    return {
+      bpsPerSide: bps,
+      followerFinalUsd: followerFinal,
+      followerReturnPct:
+        totalInvested > 0
+          ? ((followerFinal - totalInvested) / totalInvested) * 100
+          : 0,
+      alphaUsd: followerFinal - spyFinal,
+      alphaPct:
+        totalInvested > 0
+          ? ((followerFinal - spyFinal) / totalInvested) * 100
+          : 0,
+      winRate: N > 0 ? wins / N : 0,
+      avgReturnPct: N > 0 ? sumReturn / N : 0,
+      medianReturnPct:
+        returns.length > 0 ? returns[Math.floor(returns.length / 2)] : 0,
+    };
+  });
+}

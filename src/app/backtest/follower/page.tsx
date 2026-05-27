@@ -20,6 +20,7 @@ export default function FollowerBacktestPage() {
   const base: FollowerBacktest = {
     positionSizeUsd: result.positionSizeUsd,
     signals: [], // intentionally empty for the client; not needed
+    costVariants: result.costVariants,
     stats: result.stats,
     perFund: result.perFund,
     realizedSeries: result.realizedSeries,

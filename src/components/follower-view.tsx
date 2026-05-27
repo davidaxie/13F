@@ -25,16 +25,32 @@ const PRESETS = [
 
 export function FollowerView({ base, topGainers, topLosers }: Props) {
   const [size, setSize] = useState<number>(base.positionSizeUsd);
-  const k = size / base.positionSizeUsd; // multiplier
+  const [slipBps, setSlipBps] = useState<number>(0); // 0 = gross
+  const k = size / base.positionSizeUsd; // size multiplier
+
+  // Pick the precomputed cost variant matching the selected slippage.
+  // Falls back to the 0bps variant if for some reason the requested level
+  // isn't in costVariants (shouldn't happen — defaults are [0,5,10,25]).
+  const costVariant =
+    base.costVariants.find((v) => v.bpsPerSide === slipBps) ??
+    base.costVariants[0];
 
   // Rescale every dollar amount by k. Percentages, dates, counts unchanged.
+  // When slipBps > 0, override the headline-affecting fields with the
+  // cost-adjusted variant (per-fund table and realized chart stay gross
+  // since the cost is only applied at the per-signal level for now).
   const view = useMemo(() => {
     const stats = {
       ...base.stats,
       totalInvestedUsd: base.stats.totalInvestedUsd * k,
-      followerFinalUsd: base.stats.followerFinalUsd * k,
+      followerFinalUsd: costVariant.followerFinalUsd * k,
       spyFinalUsd: base.stats.spyFinalUsd * k,
-      alphaUsd: base.stats.alphaUsd * k,
+      alphaUsd: costVariant.alphaUsd * k,
+      followerReturnPct: costVariant.followerReturnPct,
+      alphaPct: costVariant.alphaPct,
+      winRate: costVariant.winRate,
+      avgReturnPct: costVariant.avgReturnPct,
+      medianReturnPct: costVariant.medianReturnPct,
     };
     const perFund: PerFundSummary[] = base.perFund.map((f) => ({
       ...f,
@@ -50,12 +66,19 @@ export function FollowerView({ base, topGainers, topLosers }: Props) {
       cumulativeAlphaUsd: p.cumulativeAlphaUsd * k,
     }));
     return { stats, perFund, realizedSeries };
-  }, [base, k]);
+  }, [base, k, costVariant]);
 
   return (
     <>
       {/* SLIDER ============================================================= */}
       <SliderControl size={size} onChange={setSize} />
+
+      {/* SLIPPAGE TOGGLE ==================================================== */}
+      <SlippageControl
+        bps={slipBps}
+        onChange={setSlipBps}
+        availableBps={base.costVariants.map((v) => v.bpsPerSide)}
+      />
 
       {/* Headline =========================================================== */}
       <section className="mt-12">
@@ -241,6 +264,52 @@ export function FollowerView({ base, topGainers, topLosers }: Props) {
         </div>
       </section>
     </>
+  );
+}
+
+function SlippageControl({
+  bps,
+  onChange,
+  availableBps,
+}: {
+  bps: number;
+  onChange: (v: number) => void;
+  availableBps: number[];
+}) {
+  const label = bps === 0 ? "Gross (no slippage)" : `Net of ${bps} bps per side`;
+  const subtext =
+    bps === 0
+      ? "Headline figures assume frictionless execution at the filing-date price."
+      : `Buy paid ${bps} bps above the print, sell received ${bps} bps below. Round-trip cost ≈ ${bps * 2} bps per signal. Per-fund and the realized chart still show gross.`;
+  return (
+    <div className="mt-6 rounded border border-hairline px-6 py-5">
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <div className="text-xs uppercase tracking-widest text-muted">
+          Slippage assumption
+        </div>
+        <div className="font-serif text-lg tabular text-foreground">
+          {label}
+        </div>
+      </div>
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        {availableBps.map((b) => (
+          <button
+            key={b}
+            type="button"
+            onClick={() => onChange(b)}
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs uppercase tracking-widest transition-colors",
+              bps === b
+                ? "border-foreground bg-foreground text-background"
+                : "border-hairline text-muted hover:border-foreground hover:text-foreground",
+            )}
+          >
+            {b === 0 ? "Gross" : `${b} bps`}
+          </button>
+        ))}
+      </div>
+      <p className="mt-3 text-xs leading-relaxed text-muted">{subtext}</p>
+    </div>
   );
 }
 
