@@ -8,6 +8,13 @@ import { RollingAlphaChart } from "@/components/charts/rolling-alpha";
 import { TradeScatterChart } from "@/components/charts/trade-scatter";
 import { getFundInfo } from "@/lib/edgar";
 import { runBacktest, type BacktestTrade } from "@/lib/backtest";
+import {
+  BENCHMARKS,
+  BENCHMARK_KEYS,
+  isBenchmark,
+  rekeyEquityCurve,
+  type BenchmarkKey,
+} from "@/lib/benchmarks";
 import { computeRiskMetrics, computeRollingAlpha } from "@/lib/risk-metrics";
 import { getSnapshot } from "@/lib/snapshots";
 import { formatDate, formatPct, formatUSD, quarterLabel } from "@/lib/format";
@@ -18,10 +25,16 @@ export const maxDuration = 60;
 
 export default async function PerformancePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ cik: string }>;
+  searchParams: Promise<{ bench?: string }>;
 }) {
   const { cik } = await params;
+  const { bench: rawBench } = await searchParams;
+  const selectedBench: BenchmarkKey = isBenchmark(rawBench)
+    ? rawBench
+    : "SPY";
 
   // Prefer the bundled snapshot — instant + always works on Vercel.
   // Fall back to a live backtest for non-marquee funds (or for cases
@@ -41,9 +54,7 @@ export default async function PerformancePage({
 
   const {
     trades,
-    equityCurve,
     pnlSeries,
-    stats,
     filingCount,
     mappedCusipCount,
     unmappedCusipCount,
@@ -51,6 +62,28 @@ export default async function PerformancePage({
     endDate,
     startingCash,
   } = result;
+
+  // Re-key the curve to the user-selected benchmark. Default SPY is the
+  // existing pre-baked series (no-op). All downstream math (chart, risk
+  // metrics, rolling alpha, headline stats) reads the rekeyed curve so
+  // alpha/beta/IR re-derive correctly per benchmark.
+  const equityCurve = rekeyEquityCurve(
+    result.equityCurve,
+    selectedBench,
+    startingCash,
+  );
+  // Recompute headline stats against the chosen benchmark.
+  const finalPoint = equityCurve[equityCurve.length - 1] ?? {
+    mirror: startingCash,
+    spy: startingCash,
+  };
+  const stats = {
+    ...result.stats,
+    spyFinal: finalPoint.spy,
+    spyReturnPct: ((finalPoint.spy - startingCash) / startingCash) * 100,
+    alphaPct:
+      ((finalPoint.mirror - finalPoint.spy) / startingCash) * 100,
+  };
 
   const closedTrades = trades.filter((t) => t.status === "closed");
   const openTrades = trades.filter((t) => t.status === "open");
@@ -96,6 +129,33 @@ export default async function PerformancePage({
           <span>{closedTrades.length} closed trades</span>
           <span>{openTrades.length} still open</span>
         </div>
+
+        <div className="mt-6 flex flex-wrap items-baseline gap-3 text-xs uppercase tracking-widest text-muted">
+          <span>Benchmark</span>
+          <div className="inline-flex overflow-hidden rounded border border-hairline">
+            {BENCHMARK_KEYS.map((key, i) => (
+              <Link
+                key={key}
+                href={`/fund/${info.cik}/performance?bench=${key}`}
+                replace
+                scroll={false}
+                className={cn(
+                  "px-3 py-1 transition-colors",
+                  i > 0 && "border-l border-hairline",
+                  selectedBench === key
+                    ? "bg-foreground text-background"
+                    : "text-muted hover:text-foreground",
+                )}
+                title={BENCHMARKS[key].description}
+              >
+                {key}
+              </Link>
+            ))}
+          </div>
+          <span className="normal-case tracking-normal text-muted/70">
+            {BENCHMARKS[selectedBench].label} — {BENCHMARKS[selectedBench].description}
+          </span>
+        </div>
       </div>
 
       <CaveatCallout
@@ -123,7 +183,7 @@ export default async function PerformancePage({
             Equity curve
           </h2>
           <span className="text-xs uppercase tracking-widest text-muted">
-            ${startingCash.toLocaleString()} mirrored · vs SPY
+            ${startingCash.toLocaleString()} mirrored · vs {selectedBench}
           </span>
         </div>
 
@@ -139,7 +199,7 @@ export default async function PerformancePage({
             }
           />
           <Legend
-            label="$10k in SPY"
+            label={`$10k in ${selectedBench}`}
             swatch={
               <span
                 className="inline-block h-[2px] w-6 align-middle"
@@ -160,7 +220,7 @@ export default async function PerformancePage({
             tone={stats.mirrorReturnPct >= 0 ? "up" : "down"}
           />
           <Stat
-            label="SPY — final"
+            label={`${selectedBench} — final`}
             value={formatUSD(stats.spyFinal, { compact: true })}
           />
           <Stat
@@ -169,7 +229,7 @@ export default async function PerformancePage({
             tone={stats.mirrorReturnPct >= 0 ? "up" : "down"}
           />
           <Stat
-            label="Alpha vs SPY"
+            label={`Alpha vs ${selectedBench}`}
             value={`${stats.alphaPct >= 0 ? "+" : ""}${formatPct(stats.alphaPct, 1)}`}
             tone={stats.alphaPct >= 0 ? "up" : "down"}
           />
@@ -184,7 +244,7 @@ export default async function PerformancePage({
               Risk profile
             </h2>
             <span className="text-xs uppercase tracking-widest text-muted">
-              Weekly mirror returns vs SPY · rf ≈ 4%
+              Weekly mirror returns vs {selectedBench} · rf ≈ 4%
             </span>
           </div>
 
@@ -208,9 +268,9 @@ export default async function PerformancePage({
               }
             />
             <Stat
-              label="Beta vs SPY"
+              label={`Beta vs ${selectedBench}`}
               value={risk.betaVsSpy.toFixed(2)}
-              title="cov(mirror, SPY) / var(SPY). 1.0 = moves like SPY; >1 = amplified; <1 = damped."
+              title={`cov(mirror, ${selectedBench}) / var(${selectedBench}). 1.0 = moves like ${selectedBench}; >1 = amplified; <1 = damped.`}
             />
             <Stat
               label="Information ratio"
@@ -222,7 +282,7 @@ export default async function PerformancePage({
                     ? "down"
                     : undefined
               }
-              title="(CAGR − SPY CAGR) / tracking error. Skill per unit of active risk taken vs SPY."
+              title={`(CAGR − ${selectedBench} CAGR) / tracking error. Skill per unit of active risk taken vs ${selectedBench}.`}
             />
           </div>
 
@@ -231,12 +291,12 @@ export default async function PerformancePage({
               label="CAGR"
               value={`${risk.cagrPct >= 0 ? "+" : ""}${risk.cagrPct.toFixed(1)}%`}
               tone={risk.cagrPct >= risk.spyCagrPct ? "up" : "down"}
-              title={`Annualized over ${risk.yearsElapsed.toFixed(1)} years · SPY ${risk.spyCagrPct >= 0 ? "+" : ""}${risk.spyCagrPct.toFixed(1)}%`}
+              title={`Annualized over ${risk.yearsElapsed.toFixed(1)} years · ${selectedBench} ${risk.spyCagrPct >= 0 ? "+" : ""}${risk.spyCagrPct.toFixed(1)}%`}
             />
             <Stat
               label="Volatility (ann.)"
               value={`${risk.volAnnualPct.toFixed(1)}%`}
-              title={`Annualized stddev of weekly returns · SPY ${risk.spyVolAnnualPct.toFixed(1)}%`}
+              title={`Annualized stddev of weekly returns · ${selectedBench} ${risk.spyVolAnnualPct.toFixed(1)}%`}
             />
             <Stat
               label="Sortino"
@@ -248,7 +308,7 @@ export default async function PerformancePage({
               label="α (Jensen, ann.)"
               value={`${risk.alphaAnnualPct >= 0 ? "+" : ""}${risk.alphaAnnualPct.toFixed(1)}%`}
               tone={risk.alphaAnnualPct >= 0 ? "up" : "down"}
-              title="CAPM alpha — CAGR − [rf + β·(SPY CAGR − rf)]. Excess return after controlling for beta."
+              title={`CAPM alpha — CAGR − [rf + β·(${selectedBench} CAGR − rf)]. Excess return after controlling for beta.`}
             />
           </div>
 
@@ -256,19 +316,19 @@ export default async function PerformancePage({
             <Stat
               label="Tracking error"
               value={`${risk.trackingErrorPct.toFixed(1)}%`}
-              title="Annualized stddev of (mirror return − SPY return). How tightly the mirror hugs SPY."
+              title={`Annualized stddev of (mirror return − ${selectedBench} return). How tightly the mirror hugs ${selectedBench}.`}
             />
             <Stat
               label="Upside capture"
               value={`${(risk.upsideCapture * 100).toFixed(0)}%`}
               tone={risk.upsideCapture >= 1 ? "up" : undefined}
-              title="Mirror's cumulative return on weeks SPY > 0, ÷ SPY's cumulative on those weeks. >100% = beats SPY when it rises."
+              title={`Mirror's cumulative return on weeks ${selectedBench} > 0, ÷ ${selectedBench}'s cumulative on those weeks. >100% = beats ${selectedBench} when it rises.`}
             />
             <Stat
               label="Downside capture"
               value={`${(risk.downsideCapture * 100).toFixed(0)}%`}
               tone={risk.downsideCapture <= 1 ? "up" : "down"}
-              title="Mirror's cumulative return on weeks SPY < 0, ÷ SPY's. <100% = falls less than SPY in down weeks."
+              title={`Mirror's cumulative return on weeks ${selectedBench} < 0, ÷ ${selectedBench}'s. <100% = falls less than ${selectedBench} in down weeks.`}
             />
             <Stat
               label="Window"
@@ -329,7 +389,7 @@ export default async function PerformancePage({
               Rolling 1y alpha
             </h2>
             <span className="text-xs uppercase tracking-widest text-muted">
-              Trailing 52w mirror return − SPY return
+              Trailing 52w mirror return − {selectedBench} return
             </span>
           </div>
           <div className="mt-6">
@@ -337,7 +397,7 @@ export default async function PerformancePage({
           </div>
           <p className="mt-3 text-xs leading-relaxed text-muted">
             Whether the headline alpha was earned recently or decades ago. Bands
-            above the zero line are quarters where the mirror beat SPY on a
+            above the zero line are quarters where the mirror beat {selectedBench} on a
             trailing-year basis; bands below are quarters where it lost ground.
             A flat positive line = steady outperformance; a curve that crosses
             often = regime-dependent strategy.
