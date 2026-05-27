@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { DrawdownChart } from "@/components/charts/drawdown";
 import { EquityCurveChart } from "@/components/charts/equity-curve";
 import { PnlStairstepChart } from "@/components/charts/pnl-stairstep";
 import { TradeScatterChart } from "@/components/charts/trade-scatter";
@@ -256,6 +257,48 @@ export default async function PerformancePage({
           </div>
         </section>
       )}
+
+      {/* ============ A.7 Drawdown ============ */}
+      <section className="mt-16">
+        <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+          <h2 className="font-serif text-2xl text-foreground">
+            Drawdown
+          </h2>
+          <span className="text-xs uppercase tracking-widest text-muted">
+            Underwater curve — distance below running peak
+          </span>
+        </div>
+        <div className="mt-6">
+          <DrawdownChart data={equityCurve} />
+        </div>
+        {risk && risk.maxDrawdownStart && risk.maxDrawdownTrough && (
+          <p className="mt-3 text-xs text-muted">
+            Largest drawdown:{" "}
+            <span className="tabular text-negative">
+              {risk.maxDrawdownPct.toFixed(1)}%
+            </span>{" "}
+            from{" "}
+            <span className="tabular text-foreground">
+              {risk.maxDrawdownStart}
+            </span>{" "}
+            to{" "}
+            <span className="tabular text-foreground">
+              {risk.maxDrawdownTrough}
+            </span>{" "}
+            {risk.maxDrawdownRecovered ? (
+              <>
+                · recovered{" "}
+                <span className="tabular text-foreground">
+                  {risk.maxDrawdownRecovered}
+                </span>
+              </>
+            ) : (
+              <span className="text-negative">· not yet recovered</span>
+            )}
+            .
+          </p>
+        )}
+      </section>
 
       {/* ============ B. P&L stair-step ============ */}
       <section className="mt-20">
