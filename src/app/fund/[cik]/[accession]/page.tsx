@@ -218,7 +218,14 @@ export default async function FilingPage({
             </div>
           )}
 
-          <HoldingsTable rows={rows} totalValueUsd={totalValueUsd} />
+          <HoldingsTable
+            rows={rows}
+            totalValueUsd={totalValueUsd}
+            exportContext={{
+              fundName: fund.name,
+              quarter: quarterLabel(filing.reportDate),
+            }}
+          />
         </>
       )}
     </div>

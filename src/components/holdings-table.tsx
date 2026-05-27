@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Download } from "lucide-react";
 import { formatInt, formatPct, formatUSD } from "@/lib/format";
+import { downloadCSV, slugify, toCSV, type CsvColumn } from "@/lib/csv";
 import { cn } from "@/lib/utils";
 
 export type Row = {
@@ -27,9 +28,11 @@ type SortDir = "asc" | "desc";
 export function HoldingsTable({
   rows,
   totalValueUsd,
+  exportContext,
 }: {
   rows: Row[];
   totalValueUsd: number;
+  exportContext?: { fundName: string; quarter: string };
 }) {
   const [filter, setFilter] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("value");
@@ -77,20 +80,63 @@ export function HoldingsTable({
 
   const matches = filtered.length;
 
+  function handleExport() {
+    const cols: CsvColumn<Row>[] = [
+      { label: "Rank", get: (_r) => filtered.indexOf(_r) + 1 },
+      { label: "Issuer", get: (r) => r.issuer },
+      { label: "Ticker", get: (r) => r.ticker ?? "" },
+      { label: "CUSIP", get: (r) => r.cusip },
+      { label: "Class", get: (r) => r.titleOfClass },
+      { label: "Put/Call", get: (r) => r.putCall ?? "" },
+      { label: "Value USD", get: (r) => r.valueUsd.toFixed(0) },
+      { label: "% Portfolio", get: (r) => r.pctOfPortfolio.toFixed(4) },
+      { label: "Shares", get: (r) => r.shares },
+      { label: "Prev Value USD", get: (r) => r.prevValueUsd ?? "" },
+      { label: "Prev Shares", get: (r) => r.prevShares ?? "" },
+      { label: "Change", get: (r) => r.changeType },
+      {
+        label: "Share Change %",
+        get: (r) =>
+          r.shareChangePct != null ? r.shareChangePct.toFixed(4) : "",
+      },
+    ];
+    const csv = toCSV(filtered, cols);
+    const base = exportContext
+      ? `13f-${slugify(exportContext.fundName)}-${slugify(exportContext.quarter)}`
+      : `13f-holdings-${new Date().toISOString().slice(0, 10)}`;
+    downloadCSV(`${base}.csv`, csv);
+  }
+
   return (
     <div className="mt-10">
       <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
         <h2 className="font-serif text-2xl text-foreground">
           Holdings <span className="text-muted">· {rows.length}</span>
         </h2>
-        <input
-          type="text"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder="Filter by issuer or CUSIP…"
-          className="w-64 max-w-full border-b border-hairline bg-transparent py-2 text-sm text-foreground placeholder:text-muted focus:border-foreground focus:outline-none"
-          spellCheck={false}
-        />
+        <div className="flex items-center gap-3">
+          <input
+            type="text"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="Filter by issuer or CUSIP…"
+            className="w-64 max-w-full border-b border-hairline bg-transparent py-2 text-sm text-foreground placeholder:text-muted focus:border-foreground focus:outline-none"
+            spellCheck={false}
+          />
+          <button
+            type="button"
+            onClick={handleExport}
+            disabled={filtered.length === 0}
+            className="inline-flex items-center gap-1.5 border-b border-hairline pb-1 text-xs uppercase tracking-widest text-muted transition-colors hover:border-foreground hover:text-foreground disabled:opacity-40 disabled:hover:border-hairline disabled:hover:text-muted"
+            title={
+              filter.trim()
+                ? `Export ${filtered.length} filtered rows`
+                : `Export all ${rows.length} rows`
+            }
+          >
+            <Download size={12} strokeWidth={1.5} />
+            CSV
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto">

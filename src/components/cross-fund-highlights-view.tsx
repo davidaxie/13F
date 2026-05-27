@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { Download } from "lucide-react";
 import type { Move } from "@/lib/dashboard";
+import { downloadCSV, slugify, toCSV, type CsvColumn } from "@/lib/csv";
 import { formatPct, formatUSD } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -195,6 +197,42 @@ function MoveSection({
   const visible = expanded ? filtered : filtered.slice(0, DEFAULT_VISIBLE);
   const hasMore = filtered.length > DEFAULT_VISIBLE;
 
+  function handleExport() {
+    const cols: CsvColumn<Move>[] = [
+      { label: "Fund", get: (m) => m.fundName },
+      { label: "Fund CIK", get: (m) => m.fundCik },
+      { label: "Quarter", get: (m) => m.quarter },
+      { label: "Filing Accession", get: (m) => m.filingAccession },
+      { label: "Issuer", get: (m) => m.issuer },
+      { label: "CUSIP", get: (m) => m.cusip },
+      { label: "Title of Class", get: (m) => m.titleOfClass },
+      { label: "Put/Call", get: (m) => m.putCall ?? "" },
+      { label: "Move Type", get: (m) => m.type },
+      { label: "Current Value USD", get: (m) => m.currentValueUsd.toFixed(0) },
+      { label: "Prev Value USD", get: (m) => m.prevValueUsd.toFixed(0) },
+      { label: "Δ Value USD", get: (m) => m.deltaUsd.toFixed(0) },
+      {
+        label: "Δ Shares %",
+        get: (m) =>
+          m.deltaSharesPct != null ? m.deltaSharesPct.toFixed(4) : "",
+      },
+      {
+        label: "Weight % (current or pre-exit)",
+        get: (m) => m.weightInPortfolio.toFixed(4),
+      },
+      {
+        label: "Prev Weight %",
+        get: (m) =>
+          m.prevWeightInPortfolio != null
+            ? m.prevWeightInPortfolio.toFixed(4)
+            : "",
+      },
+    ];
+    const csv = toCSV(filtered, cols);
+    const stamp = new Date().toISOString().slice(0, 10);
+    downloadCSV(`13f-moves-${slugify(title)}-${stamp}.csv`, csv);
+  }
+
   return (
     <section>
       <div className="flex items-baseline justify-between border-b border-hairline pb-3">
@@ -204,15 +242,34 @@ function MoveSection({
             {subtitle}
           </div>
         </div>
-        <div className="text-right">
-          <div className="text-xs uppercase tracking-widest text-muted">
-            count
-          </div>
-          <div className="font-mono text-sm tabular text-foreground">
-            {filtered.length.toLocaleString()}
-            {filtered.length !== moves.length ? (
-              <span className="text-muted"> / {moves.length.toLocaleString()}</span>
-            ) : null}
+        <div className="flex items-center gap-4 text-right">
+          <button
+            type="button"
+            onClick={handleExport}
+            disabled={filtered.length === 0}
+            className="inline-flex items-center gap-1.5 border-b border-hairline pb-1 text-[10px] uppercase tracking-widest text-muted transition-colors hover:border-foreground hover:text-foreground disabled:opacity-40 disabled:hover:border-hairline disabled:hover:text-muted"
+            title={
+              filter.trim()
+                ? `Export ${filtered.length} filtered rows`
+                : `Export all ${moves.length} rows`
+            }
+          >
+            <Download size={11} strokeWidth={1.5} />
+            CSV
+          </button>
+          <div>
+            <div className="text-xs uppercase tracking-widest text-muted">
+              count
+            </div>
+            <div className="font-mono text-sm tabular text-foreground">
+              {filtered.length.toLocaleString()}
+              {filtered.length !== moves.length ? (
+                <span className="text-muted">
+                  {" "}
+                  / {moves.length.toLocaleString()}
+                </span>
+              ) : null}
+            </div>
           </div>
         </div>
       </div>
