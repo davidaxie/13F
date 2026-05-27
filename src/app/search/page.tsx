@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { SearchInput } from "@/components/search-input";
+import { MARQUEE_FUNDS } from "@/lib/dashboard";
 import { searchManagers } from "@/lib/edgar";
 import { formatDate } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
+
+const TRACKED_CIKS = new Set(MARQUEE_FUNDS.map((f) => f.cik));
 
 export default async function SearchPage({
   searchParams,
@@ -56,33 +59,53 @@ export default async function SearchPage({
             </span>
           </div>
           <ul className="divide-y divide-hairline border-y border-hairline">
-            {results.map((r) => (
-              <li key={r.cik}>
-                <Link
-                  href={`/fund/${r.cik}`}
-                  className="group flex items-center justify-between py-5 transition-colors hover:bg-subtle/40"
-                >
-                  <div>
-                    <div className="font-serif text-xl text-foreground transition-colors group-hover:text-accent">
-                      {r.name || "Unknown"}
+            {results.map((r) => {
+              const tracked = TRACKED_CIKS.has(r.cik.replace(/^0+/, ""));
+              // Tracked funds bypass the holdings-list page and jump straight
+              // to the richer performance view (backtest, charts, stats).
+              const href = tracked
+                ? `/fund/${r.cik}/performance`
+                : `/fund/${r.cik}`;
+              return (
+                <li key={r.cik}>
+                  <Link
+                    href={href}
+                    className="group flex items-center justify-between py-5 transition-colors hover:bg-subtle/40"
+                  >
+                    <div>
+                      <div className="flex items-baseline gap-2">
+                        <div className="font-serif text-xl text-foreground transition-colors group-hover:text-accent">
+                          {r.name || "Unknown"}
+                        </div>
+                        {tracked && (
+                          <span className="font-mono text-[10px] uppercase tracking-widest text-accent">
+                            ★ Tracked
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
+                        CIK {r.cik}
+                        {tracked && (
+                          <span className="ml-2 normal-case tracking-normal text-muted/70">
+                            — backtest, leaderboard, dashboard card available
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="mt-1 font-mono text-xs uppercase tracking-wider text-muted">
-                      CIK {r.cik}
+                    <div className="text-right text-sm text-muted">
+                      <div className="uppercase tracking-widest text-xs">
+                        Last 13F
+                      </div>
+                      <div className="tabular mt-1 text-foreground/70">
+                        {r.latestFilingDate
+                          ? formatDate(r.latestFilingDate)
+                          : "—"}
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right text-sm text-muted">
-                    <div className="uppercase tracking-widest text-xs">
-                      Last 13F
-                    </div>
-                    <div className="tabular mt-1 text-foreground/70">
-                      {r.latestFilingDate
-                        ? formatDate(r.latestFilingDate)
-                        : "—"}
-                    </div>
-                  </div>
-                </Link>
-              </li>
-            ))}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </>
       )}
