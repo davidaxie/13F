@@ -5,6 +5,7 @@ import { PnlStairstepChart } from "@/components/charts/pnl-stairstep";
 import { TradeScatterChart } from "@/components/charts/trade-scatter";
 import { getFundInfo } from "@/lib/edgar";
 import { runBacktest, type BacktestTrade } from "@/lib/backtest";
+import { computeRiskMetrics } from "@/lib/risk-metrics";
 import { getSnapshot } from "@/lib/snapshots";
 import { formatDate, formatPct, formatUSD, quarterLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -50,6 +51,15 @@ export default async function PerformancePage({
 
   const closedTrades = trades.filter((t) => t.status === "closed");
   const openTrades = trades.filter((t) => t.status === "open");
+
+  // Risk metrics derived from the existing weekly equity curve — no snapshot
+  // regeneration needed.
+  const risk = computeRiskMetrics(equityCurve);
+
+  // Snapshot's as-of timestamp. Threaded into BiggestTradesTable so hold
+  // duration for open trades is computed against the snapshot end, not the
+  // wall clock (keeps render pure).
+  const asOfMs = new Date(endDate + "T00:00:00Z").getTime();
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -144,6 +154,109 @@ export default async function PerformancePage({
         </div>
       </section>
 
+      {/* ============ A.5 Risk profile ============ */}
+      {risk && (
+        <section className="mt-20">
+          <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+            <h2 className="font-serif text-2xl text-foreground">
+              Risk profile
+            </h2>
+            <span className="text-xs uppercase tracking-widest text-muted">
+              Weekly mirror returns vs SPY · rf ≈ 4%
+            </span>
+          </div>
+
+          <div className="mt-8 grid grid-cols-2 gap-x-10 gap-y-8 sm:grid-cols-4">
+            <Stat
+              label="Sharpe"
+              value={risk.sharpe.toFixed(2)}
+              tone={
+                risk.sharpe >= 1 ? "up" : risk.sharpe < 0 ? "down" : undefined
+              }
+              title="(CAGR − rf) / annualized stddev of weekly returns. >1 is good, >2 is rare."
+            />
+            <Stat
+              label="Max drawdown"
+              value={`${risk.maxDrawdownPct.toFixed(1)}%`}
+              tone="down"
+              title={
+                risk.maxDrawdownStart && risk.maxDrawdownTrough
+                  ? `${risk.maxDrawdownStart} → ${risk.maxDrawdownTrough}${risk.maxDrawdownRecovered ? ` (recovered ${risk.maxDrawdownRecovered})` : " (not recovered)"}`
+                  : "No meaningful drawdown observed"
+              }
+            />
+            <Stat
+              label="Beta vs SPY"
+              value={risk.betaVsSpy.toFixed(2)}
+              title="cov(mirror, SPY) / var(SPY). 1.0 = moves like SPY; >1 = amplified; <1 = damped."
+            />
+            <Stat
+              label="Information ratio"
+              value={risk.informationRatio.toFixed(2)}
+              tone={
+                risk.informationRatio >= 0.5
+                  ? "up"
+                  : risk.informationRatio < 0
+                    ? "down"
+                    : undefined
+              }
+              title="(CAGR − SPY CAGR) / tracking error. Skill per unit of active risk taken vs SPY."
+            />
+          </div>
+
+          <div className="mt-10 grid grid-cols-2 gap-x-10 gap-y-8 border-t border-hairline pt-8 sm:grid-cols-4">
+            <Stat
+              label="CAGR"
+              value={`${risk.cagrPct >= 0 ? "+" : ""}${risk.cagrPct.toFixed(1)}%`}
+              tone={risk.cagrPct >= risk.spyCagrPct ? "up" : "down"}
+              title={`Annualized over ${risk.yearsElapsed.toFixed(1)} years · SPY ${risk.spyCagrPct >= 0 ? "+" : ""}${risk.spyCagrPct.toFixed(1)}%`}
+            />
+            <Stat
+              label="Volatility (ann.)"
+              value={`${risk.volAnnualPct.toFixed(1)}%`}
+              title={`Annualized stddev of weekly returns · SPY ${risk.spyVolAnnualPct.toFixed(1)}%`}
+            />
+            <Stat
+              label="Sortino"
+              value={risk.sortino.toFixed(2)}
+              tone={risk.sortino >= 1 ? "up" : risk.sortino < 0 ? "down" : undefined}
+              title="(CAGR − rf) / downside-only annualized vol. Penalizes only losses, not upside swings."
+            />
+            <Stat
+              label="α (Jensen, ann.)"
+              value={`${risk.alphaAnnualPct >= 0 ? "+" : ""}${risk.alphaAnnualPct.toFixed(1)}%`}
+              tone={risk.alphaAnnualPct >= 0 ? "up" : "down"}
+              title="CAPM alpha — CAGR − [rf + β·(SPY CAGR − rf)]. Excess return after controlling for beta."
+            />
+          </div>
+
+          <div className="mt-10 grid grid-cols-2 gap-x-10 gap-y-8 border-t border-hairline pt-8 sm:grid-cols-4">
+            <Stat
+              label="Tracking error"
+              value={`${risk.trackingErrorPct.toFixed(1)}%`}
+              title="Annualized stddev of (mirror return − SPY return). How tightly the mirror hugs SPY."
+            />
+            <Stat
+              label="Upside capture"
+              value={`${(risk.upsideCapture * 100).toFixed(0)}%`}
+              tone={risk.upsideCapture >= 1 ? "up" : undefined}
+              title="Mirror's cumulative return on weeks SPY > 0, ÷ SPY's cumulative on those weeks. >100% = beats SPY when it rises."
+            />
+            <Stat
+              label="Downside capture"
+              value={`${(risk.downsideCapture * 100).toFixed(0)}%`}
+              tone={risk.downsideCapture <= 1 ? "up" : "down"}
+              title="Mirror's cumulative return on weeks SPY < 0, ÷ SPY's. <100% = falls less than SPY in down weeks."
+            />
+            <Stat
+              label="Window"
+              value={`${risk.yearsElapsed.toFixed(1)}y`}
+              title={`${equityCurve.length} weekly samples`}
+            />
+          </div>
+        </section>
+      )}
+
       {/* ============ B. P&L stair-step ============ */}
       <section className="mt-20">
         <div className="flex items-baseline justify-between border-b border-hairline pb-3">
@@ -182,7 +295,7 @@ export default async function PerformancePage({
             <h3 className="font-serif text-lg text-foreground">
               Biggest closed trades
             </h3>
-            <BiggestTradesTable trades={closedTrades} />
+            <BiggestTradesTable trades={closedTrades} asOfMs={asOfMs} />
           </div>
         )}
       </section>
@@ -263,13 +376,15 @@ function Stat({
   label,
   value,
   tone,
+  title,
 }: {
   label: string;
   value: string;
   tone?: "up" | "down";
+  title?: string;
 }) {
   return (
-    <div>
+    <div title={title}>
       <div className="text-xs uppercase tracking-widest text-muted">{label}</div>
       <div
         className={cn(
@@ -299,7 +414,16 @@ function Legend({
   );
 }
 
-function BiggestTradesTable({ trades }: { trades: BacktestTrade[] }) {
+function BiggestTradesTable({
+  trades,
+  asOfMs,
+}: {
+  trades: BacktestTrade[];
+  // Snapshot's "as of" timestamp (endDate) — used to compute hold duration
+  // for open trades. Passed in from the parent so render stays pure
+  // (no Date.now() at render time).
+  asOfMs: number;
+}) {
   const top = [...trades]
     .sort((a, b) => Math.abs(b.pnlUsd) - Math.abs(a.pnlUsd))
     .slice(0, 10);
@@ -322,7 +446,9 @@ function BiggestTradesTable({ trades }: { trades: BacktestTrade[] }) {
         <tbody>
           {top.map((t, i) => {
             const entryT = new Date(t.entryDate).getTime();
-            const exitT = t.exitDate ? new Date(t.exitDate).getTime() : Date.now();
+            const exitT = t.exitDate
+              ? new Date(t.exitDate).getTime()
+              : asOfMs;
             const heldQuarters = Math.max(
               1,
               Math.round((exitT - entryT) / (90 * 86400000)),
