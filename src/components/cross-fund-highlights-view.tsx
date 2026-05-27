@@ -4,9 +4,33 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Download } from "lucide-react";
 import type { Move } from "@/lib/dashboard";
+import {
+  FUND_STYLE_LABELS,
+  MARQUEE_FUNDS,
+  type FundStyle,
+} from "@/lib/funds";
 import { downloadCSV, slugify, toCSV, type CsvColumn } from "@/lib/csv";
 import { formatPct, formatUSD } from "@/lib/format";
 import { cn } from "@/lib/utils";
+
+// CIK → style lookup (computed once at module load).
+const STYLE_BY_CIK = new Map<string, FundStyle>(
+  MARQUEE_FUNDS.map((f) => [f.cik, f.style]),
+);
+const ALL_STYLES: FundStyle[] = ["value", "activist", "tigerCub", "quant", "macro"];
+
+// Fund counts per style (for chip labels and disabled state).
+const STYLE_FUND_COUNTS: Record<FundStyle, number> = (() => {
+  const counts: Record<FundStyle, number> = {
+    value: 0,
+    activist: 0,
+    tigerCub: 0,
+    quant: 0,
+    macro: 0,
+  };
+  for (const f of MARQUEE_FUNDS) counts[f.style]++;
+  return counts;
+})();
 
 const DEFAULT_VISIBLE = 12;
 
@@ -41,6 +65,46 @@ export function CrossFundHighlightsView({
   trims: Move[];
 }) {
   const [mode, setMode] = useState<RankMode>("dollar");
+  const [selectedCohorts, setSelectedCohorts] = useState<Set<FundStyle>>(
+    () => new Set(ALL_STYLES),
+  );
+
+  function toggleCohort(s: FundStyle) {
+    setSelectedCohorts((prev) => {
+      const next = new Set(prev);
+      if (next.has(s)) next.delete(s);
+      else next.add(s);
+      // Never end up with an empty set — treat empty as "all selected" so the
+      // dashboard never appears mysteriously blank.
+      if (next.size === 0) return new Set(ALL_STYLES);
+      return next;
+    });
+  }
+  function selectAllCohorts() {
+    setSelectedCohorts(new Set(ALL_STYLES));
+  }
+
+  // Apply cohort filter once across all six sections so they share a coherent
+  // subset. Collapsed into a single useMemo so the dep array is exact.
+  const { newLongF, exitsF, addsF, trimsF, shortOpensF, callOpensF } = useMemo(
+    () => {
+      const allSelected = selectedCohorts.size === ALL_STYLES.length;
+      const ok = (m: Move): boolean => {
+        if (allSelected) return true;
+        const s = STYLE_BY_CIK.get(m.fundCik);
+        return s ? selectedCohorts.has(s) : false;
+      };
+      return {
+        newLongF: newLong.filter(ok),
+        exitsF: exits.filter(ok),
+        addsF: adds.filter(ok),
+        trimsF: trims.filter(ok),
+        shortOpensF: shortOpens.filter(ok),
+        callOpensF: callOpens.filter(ok),
+      };
+    },
+    [newLong, exits, adds, trims, shortOpens, callOpens, selectedCohorts],
+  );
 
   const deltaWeight = (m: Move) =>
     Math.abs(m.weightInPortfolio - (m.prevWeightInPortfolio ?? 0));
@@ -50,7 +114,7 @@ export function CrossFundHighlightsView({
       key: "newLong",
       title: "New long positions",
       subtitle: "Opened this quarter · common stock",
-      moves: newLong,
+      moves: newLongF,
       tone: "positive",
       valueOf: (m) => m.currentValueUsd,
       valueOfPct: (m) => m.weightInPortfolio,
@@ -59,7 +123,7 @@ export function CrossFundHighlightsView({
       key: "exits",
       title: "Exits",
       subtitle: "Fully sold out · common stock",
-      moves: exits,
+      moves: exitsF,
       tone: "negative",
       valueOf: (m) => m.prevValueUsd,
       // For exits, weightInPortfolio already reflects the prev (pre-exit)
@@ -70,7 +134,7 @@ export function CrossFundHighlightsView({
       key: "shortOpens",
       title: "Short bets opened",
       subtitle: "New put positions · bearish",
-      moves: shortOpens,
+      moves: shortOpensF,
       tone: "negative",
       valueOf: (m) => m.currentValueUsd,
       valueOfPct: (m) => m.weightInPortfolio,
@@ -79,7 +143,7 @@ export function CrossFundHighlightsView({
       key: "callOpens",
       title: "Call options opened",
       subtitle: "New call positions · bullish",
-      moves: callOpens,
+      moves: callOpensF,
       tone: "positive",
       valueOf: (m) => m.currentValueUsd,
       valueOfPct: (m) => m.weightInPortfolio,
@@ -91,7 +155,7 @@ export function CrossFundHighlightsView({
         mode === "dollar"
           ? "Largest dollar additions"
           : "Largest portfolio-weight additions",
-      moves: adds,
+      moves: addsF,
       tone: "positive",
       valueOf: (m) => Math.abs(m.deltaUsd),
       valueOfPct: deltaWeight,
@@ -103,7 +167,7 @@ export function CrossFundHighlightsView({
         mode === "dollar"
           ? "Largest dollar reductions"
           : "Largest portfolio-weight reductions",
-      moves: trims,
+      moves: trimsF,
       tone: "negative",
       valueOf: (m) => Math.abs(m.deltaUsd),
       valueOfPct: deltaWeight,
@@ -112,6 +176,11 @@ export function CrossFundHighlightsView({
 
   return (
     <>
+      <CohortFilter
+        selected={selectedCohorts}
+        onToggle={toggleCohort}
+        onSelectAll={selectAllCohorts}
+      />
       <RankToggle mode={mode} onChange={setMode} />
       <div className="mt-8 grid grid-cols-1 gap-12 md:grid-cols-2">
         {sections.map((s) => {
@@ -120,6 +189,59 @@ export function CrossFundHighlightsView({
         })}
       </div>
     </>
+  );
+}
+
+function CohortFilter({
+  selected,
+  onToggle,
+  onSelectAll,
+}: {
+  selected: Set<FundStyle>;
+  onToggle: (s: FundStyle) => void;
+  onSelectAll: () => void;
+}) {
+  const all = selected.size === ALL_STYLES.length;
+  return (
+    <div className="mt-12 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs uppercase tracking-widest text-muted">
+      <span>Cohort</span>
+      <button
+        type="button"
+        onClick={onSelectAll}
+        className={cn(
+          "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 transition-colors",
+          all
+            ? "border-foreground bg-foreground text-background"
+            : "border-hairline text-muted hover:border-foreground hover:text-foreground",
+        )}
+      >
+        All
+        <span className="font-mono tabular text-[10px] opacity-70">
+          {MARQUEE_FUNDS.length}
+        </span>
+      </button>
+      {ALL_STYLES.map((s) => {
+        const active = !all && selected.has(s);
+        return (
+          <button
+            key={s}
+            type="button"
+            onClick={() => onToggle(s)}
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 transition-colors",
+              active
+                ? "border-foreground bg-foreground text-background"
+                : "border-hairline text-muted hover:border-foreground hover:text-foreground",
+            )}
+          >
+            {FUND_STYLE_LABELS[s]}
+            <span className="font-mono tabular text-[10px] opacity-70">
+              {STYLE_FUND_COUNTS[s]}
+            </span>
+          </button>
+        );
+      })}
+    </div>
   );
 }
 

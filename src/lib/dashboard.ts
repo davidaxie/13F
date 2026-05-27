@@ -9,22 +9,19 @@ import {
 import type { Holding } from "./parse-13f";
 import { quarterLabel } from "./format";
 
-export type MarqueeFund = {
-  cik: string;
-  displayName: string;
-};
+// Marquee fund list lives in ./funds (a pure-data module safe to import
+// from client components). Re-exported here so existing callers continue
+// to work; new client-side code should prefer importing from ./funds
+// directly to avoid pulling this module's server-only transitive deps
+// (disk-cache, edgar fetch) into the browser bundle.
+export {
+  FUND_STYLE_LABELS,
+  MARQUEE_FUNDS,
+  type FundStyle,
+  type MarqueeFund,
+} from "./funds";
 
-export const MARQUEE_FUNDS: MarqueeFund[] = [
-  { cik: "1067983", displayName: "Berkshire Hathaway" },
-  { cik: "1336528", displayName: "Pershing Square" },
-  { cik: "1167483", displayName: "Tiger Global" },
-  { cik: "1037389", displayName: "Renaissance Technologies" },
-  { cik: "1350694", displayName: "Bridgewater Associates" },
-  { cik: "1423053", displayName: "Citadel Advisors" },
-  { cik: "1029160", displayName: "Soros Fund Management" },
-  { cik: "1656456", displayName: "Appaloosa" },
-  { cik: "1179392", displayName: "Two Sigma Investments" },
-];
+import { MARQUEE_FUNDS } from "./funds";
 
 export type MoveType = "new" | "exited" | "added" | "trimmed";
 
