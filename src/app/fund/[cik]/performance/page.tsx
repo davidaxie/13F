@@ -7,7 +7,8 @@ import { PnlStairstepChart } from "@/components/charts/pnl-stairstep";
 import { RollingAlphaChart } from "@/components/charts/rolling-alpha";
 import { TradeScatterChart } from "@/components/charts/trade-scatter";
 import { getFundInfo } from "@/lib/edgar";
-import { runBacktest, type BacktestTrade } from "@/lib/backtest";
+import { type BacktestTrade } from "@/lib/backtest";
+import { MARQUEE_FUNDS } from "@/lib/funds";
 import {
   BENCHMARKS,
   BENCHMARK_KEYS,
@@ -41,9 +42,13 @@ export default async function PerformancePage({
     ? rawBench
     : "SPY";
 
-  // Prefer the bundled snapshot — instant + always works on Vercel.
-  // Fall back to a live backtest for non-marquee funds (or for cases
-  // where the snapshot didn't ship for some reason).
+  // The performance backtest is served ONLY from a pre-computed snapshot.
+  // We deliberately do NOT run a live backtest here: for heavy multi-strat
+  // books (D.E. Shaw, Millennium, …) a full SEC+Yahoo replay can't finish
+  // inside Vercel's 60s function limit and the page 504s. Funds without a
+  // snapshot get a graceful "pending" state instead — the weekly cron fills
+  // snapshots in, and the fund's overview/holdings/ownership/insider pages
+  // (which ARE live) still work.
   const snapshot = getSnapshot(cik);
 
   let info;
@@ -54,8 +59,13 @@ export default async function PerformancePage({
   }
   if (!info.name) notFound();
 
-  const result =
-    snapshot ?? (await runBacktest(info.cik, info.name, 10000, "all"));
+  if (!snapshot) {
+    const cleanCik = info.cik.replace(/^0+/, "");
+    const isTracked = MARQUEE_FUNDS.some((f) => f.cik === cleanCik);
+    return <PendingBacktest cik={info.cik} name={info.name} isTracked={isTracked} />;
+  }
+
+  const result = snapshot;
 
   const {
     trades,
@@ -757,6 +767,73 @@ function BiggestTradesTable({
           })}
         </tbody>
       </table>
+    </div>
+  );
+}
+
+// Graceful state when a fund has no pre-computed snapshot. Rendered instead
+// of a live backtest (which would 504 on Vercel for heavy funds). Honest
+// about why, and routes the user to the live data that DOES work.
+function PendingBacktest({
+  cik,
+  name,
+  isTracked,
+}: {
+  cik: string;
+  name: string;
+  isTracked: boolean;
+}) {
+  return (
+    <div className="mx-auto w-full max-w-6xl px-6 py-12">
+      <Link
+        href={`/fund/${cik}`}
+        className="text-xs uppercase tracking-widest text-muted transition-colors hover:text-foreground"
+      >
+        ← {name}
+      </Link>
+
+      <div className="mt-4 border-b border-hairline pb-10">
+        <div className="text-xs uppercase tracking-widest text-muted">
+          Backtest
+        </div>
+        <h1 className="mt-2 font-serif text-5xl leading-tight tracking-tight text-foreground">
+          {name}
+        </h1>
+      </div>
+
+      <section className="mt-12 rounded border-l-2 border-accent/40 bg-subtle/30 px-6 py-8">
+        <h2 className="font-serif text-2xl text-foreground">
+          Performance backtest pending
+        </h2>
+        {isTracked ? (
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
+            {name} is a tracked fund, but its $10k-mirror backtest snapshot
+            hasn&apos;t been generated yet. Snapshots are produced by a
+            weekly job; this one will appear after the next run. We render
+            backtests from pre-computed snapshots rather than live — a
+            full SEC + price replay for a large book can&apos;t finish
+            inside the serverless time limit.
+          </p>
+        ) : (
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
+            Backtests are pre-computed for the tracked marquee funds only.
+            {name} isn&apos;t in that set, so there&apos;s no performance
+            snapshot for it.
+          </p>
+        )}
+
+        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
+          Everything else for this fund is live and available now:
+        </p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link
+            href={`/fund/${cik}`}
+            className="inline-flex items-center gap-2 border-b border-accent/30 pb-0.5 text-sm text-accent transition-colors hover:border-accent"
+          >
+            Holdings, ownership &amp; insider activity →
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
