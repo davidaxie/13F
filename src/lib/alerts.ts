@@ -1,9 +1,9 @@
-import type { FundBacktest, BacktestTrade } from "./backtest";
+import type { FundBacktest } from "./backtest";
 
 export type MaterialMove = {
   ticker: string;
   issuer: string;
-  changeType: "new" | "exit" | "add" | "trim";
+  changeType: "new" | "exit" | "add";
   valueUsd: number;
   changePercent?: number;
   fundName: string;
@@ -12,149 +12,129 @@ export type MaterialMove = {
 };
 
 /**
- * Compare the two most recent filings for a fund and return material moves.
+ * Detect the material moves in a fund's most-recent 13F filing.
  *
- * Strategy: use entryDate on BacktestTrade as the filing date each position
- * was first reported. The two most recent distinct entryDates are Q(n) and
- * Q(n-1).
+ * IMPORTANT — what the snapshot data model can and can't express:
+ *   • `trades` track a position's full open→close lifecycle with a SINGLE
+ *     `entryValueUsd` (value at open). They do NOT carry per-quarter share
+ *     counts, so you cannot diff a continuing position quarter-over-quarter
+ *     from `trades` alone (comparing a trade to itself is always 0%).
+ *   • `buySignals` capture every quarter a fund OPENED or ADDED to a
+ *     position (sharesAdded > 0). They do NOT capture share decreases.
  *
- * - "new"  : ticker has entryDate == Q(n), meaning it opened in the latest filing
- * - "exit" : ticker closed (exitDate == Q(n)) — it was in Q(n-1) but gone in Q(n)
- * - "add"  : ticker is open in both quarters but Q(n).entryValueUsd > Q(n-1) * (1+pct)
- *            (we approximate the Q(n-1) value by finding any trade that was active
- *             in Q(n-1) for the same ticker)
- * - "trim" : same but value decreased by >= pct
+ * So this function derives:
+ *   • "new"  — a position whose first-ever appearance is the latest filing
+ *              (from `trades`).
+ *   • "exit" — a trade whose exitDate is the latest filing (from `trades`).
+ *   • "add"  — a buy signal dated the latest filing for a position that
+ *              already existed (from `buySignals`).
+ *   • "trim" — NOT detectable from the snapshot (no per-quarter share
+ *              decreases are stored). Intentionally omitted rather than
+ *              faked. If trims matter, the snapshot needs per-filing share
+ *              counts (a future data-model change).
+ *
+ * The "latest filing date" is the max of every entry/exit/buy/sell date in
+ * the snapshot, so a filing that only exited or added still registers.
  *
  * Only returns moves where valueUsd >= minValueUsd.
  */
 export function detectMaterialMoves(
   backtest: FundBacktest,
   minValueUsd = 50_000_000,
-  minChangePct = 0.3,
 ): MaterialMove[] {
-  const { trades, cik, fundName } = backtest;
+  const { trades, buySignals, cik, fundName } = backtest;
 
-  // 1. Find the two most recent distinct filing dates (via entryDate).
-  const allDates = Array.from(new Set(trades.map((t) => t.entryDate))).sort();
-  if (allDates.length < 2) return [];
-
-  const latestDate = allDates[allDates.length - 1];
-  const prevDate = allDates[allDates.length - 2];
-
-  // 2. Build a map of ticker → trade for each quarter.
-  //    For Q(n): all trades that ENTERED on latestDate (new positions in latest filing)
-  //    For Q(n-1): all trades that were ACTIVE during prevDate
-  //      = entered on or before prevDate AND (not yet exited, OR exited after prevDate)
-
-  const latestByTicker = new Map<string, BacktestTrade>();
-  const prevByTicker = new Map<string, BacktestTrade>();
-
-  for (const trade of trades) {
-    const ticker = trade.ticker ?? trade.issuer;
-    if (!ticker) continue;
-
-    // A trade is "in latest filing" if it entered at latestDate (new open)
-    if (trade.entryDate === latestDate) {
-      latestByTicker.set(ticker, trade);
-    }
-
-    // A trade was "in prev filing" if it entered on or before prevDate
-    // and had not yet exited before prevDate
-    if (
-      trade.entryDate <= prevDate &&
-      (trade.exitDate === null || trade.exitDate > prevDate)
-    ) {
-      prevByTicker.set(ticker, trade);
-    }
+  // 1. The latest filing date = the most recent date ANYTHING happened
+  //    (open, exit, add, or sell), not just the most recent open.
+  const dateSet = new Set<string>();
+  for (const t of trades) {
+    dateSet.add(t.entryDate);
+    if (t.exitDate) dateSet.add(t.exitDate);
   }
+  for (const s of buySignals) {
+    dateSet.add(s.buyDate);
+    if (s.sellDate) dateSet.add(s.sellDate);
+  }
+  const sorted = Array.from(dateSet).sort();
+  if (sorted.length < 2) return [];
+  const latestDate = sorted[sorted.length - 1];
 
-  // Also include trades that entered before latestDate and are still open
-  // (or exited at/after latestDate) — these represent continued positions in Q(n)
-  const stillOpenInLatest = new Map<string, BacktestTrade>();
-  for (const trade of trades) {
-    const ticker = trade.ticker ?? trade.issuer;
-    if (!ticker) continue;
-    if (
-      trade.entryDate < latestDate &&
-      (trade.exitDate === null || trade.exitDate >= latestDate)
-    ) {
-      stillOpenInLatest.set(ticker, trade);
-    }
+  // 2. First-ever entry date per CUSIP — distinguishes a brand-new position
+  //    from a re-entry / add of an existing one.
+  const firstEntryByCusip = new Map<string, string>();
+  for (const t of trades) {
+    const cur = firstEntryByCusip.get(t.cusip);
+    if (!cur || t.entryDate < cur) firstEntryByCusip.set(t.cusip, t.entryDate);
   }
 
   const moves: MaterialMove[] = [];
+  const seen = new Set<string>(); // dedup by `${changeType}:${cusip}`
 
-  // 3. NEW positions: in latestDate but not in prev quarter at all
-  for (const [ticker, trade] of latestByTicker) {
-    if (prevByTicker.has(ticker)) continue; // not new
-    const valueUsd = trade.entryValueUsd;
-    if (valueUsd < minValueUsd) continue;
-    moves.push({
-      ticker,
-      issuer: trade.issuer,
-      changeType: "new",
-      valueUsd,
-      fundName,
-      cik,
-      filingDate: latestDate,
-    });
+  function push(m: MaterialMove, cusip: string) {
+    const key = `${m.changeType}:${cusip}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    moves.push(m);
   }
 
-  // 4. EXIT positions: were in Q(n-1) but neither in latestByTicker nor stillOpenInLatest
-  for (const [ticker, trade] of prevByTicker) {
-    if (latestByTicker.has(ticker) || stillOpenInLatest.has(ticker)) continue;
-    const valueUsd = trade.entryValueUsd;
-    if (valueUsd < minValueUsd) continue;
-    moves.push({
-      ticker,
-      issuer: trade.issuer,
-      changeType: "exit",
-      valueUsd,
-      fundName,
-      cik,
-      filingDate: latestDate,
-    });
+  // 3. NEW: a trade entering at the latest filing whose CUSIP has no earlier
+  //    appearance (truly first-ever, not a re-entry).
+  for (const t of trades) {
+    if (t.entryDate !== latestDate) continue;
+    if (firstEntryByCusip.get(t.cusip) !== latestDate) continue;
+    if (t.entryValueUsd < minValueUsd) continue;
+    push(
+      {
+        ticker: t.ticker ?? t.issuer,
+        issuer: t.issuer,
+        changeType: "new",
+        valueUsd: t.entryValueUsd,
+        fundName,
+        cik,
+        filingDate: latestDate,
+      },
+      t.cusip,
+    );
   }
 
-  // 5. ADD / TRIM: ticker exists in both Q(n-1) (via prevByTicker or stillOpenInLatest)
-  //    and Q(n) (via stillOpenInLatest), value changed materially.
-  //    We compare entryValueUsd of the latest-entered trade vs the prev trade.
-  //    For open positions that span multiple quarters, the entryValueUsd is the
-  //    original entry value — so we use the closest "prev" trade as baseline.
-  for (const [ticker, prevTrade] of prevByTicker) {
-    // Find the current representation of this position in Q(n)
-    const currentTrade = stillOpenInLatest.get(ticker) ?? latestByTicker.get(ticker);
-    if (!currentTrade) continue; // exited — handled above
+  // 4. EXIT: a trade closed at the latest filing.
+  for (const t of trades) {
+    if (t.exitDate !== latestDate) continue;
+    if (t.entryValueUsd < minValueUsd) continue;
+    push(
+      {
+        ticker: t.ticker ?? t.issuer,
+        issuer: t.issuer,
+        changeType: "exit",
+        valueUsd: t.entryValueUsd,
+        fundName,
+        cik,
+        filingDate: latestDate,
+      },
+      t.cusip,
+    );
+  }
 
-    const prevValue = prevTrade.entryValueUsd;
-    const currentValue = currentTrade.entryValueUsd;
-    if (prevValue <= 0) continue;
-
-    const changePct = (currentValue - prevValue) / prevValue;
-
-    if (changePct >= minChangePct && currentValue >= minValueUsd) {
-      moves.push({
-        ticker,
-        issuer: currentTrade.issuer,
+  // 5. ADD: a buy signal at the latest filing for a position that already
+  //    existed before this filing (so it's an add, not a new open).
+  for (const s of buySignals) {
+    if (s.buyDate !== latestDate) continue;
+    if (!s.ticker || s.buyPrice <= 0) continue;
+    if (firstEntryByCusip.get(s.cusip) === latestDate) continue; // first-ever → counted as "new"
+    const addValue = s.sharesAdded * s.buyPrice;
+    if (addValue < minValueUsd) continue;
+    push(
+      {
+        ticker: s.ticker,
+        issuer: s.issuer,
         changeType: "add",
-        valueUsd: currentValue,
-        changePercent: changePct * 100,
+        valueUsd: addValue,
         fundName,
         cik,
         filingDate: latestDate,
-      });
-    } else if (changePct <= -minChangePct && prevValue >= minValueUsd) {
-      moves.push({
-        ticker,
-        issuer: currentTrade.issuer,
-        changeType: "trim",
-        valueUsd: currentValue,
-        changePercent: changePct * 100,
-        fundName,
-        cik,
-        filingDate: latestDate,
-      });
-    }
+      },
+      s.cusip,
+    );
   }
 
   return moves;

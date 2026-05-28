@@ -14,6 +14,30 @@ import citadel from "../data/backtest/1423053.json";
 import soros from "../data/backtest/1029160.json";
 import appaloosa from "../data/backtest/1656456.json";
 import twoSigma from "../data/backtest/1179392.json";
+// UE-01 new funds (generated 2026-05-28). Concentrated activists / Tiger
+// Cubs / solos — full history, all validated ≥64% CUSIP coverage with
+// healthy (non-flat) equity curves.
+//
+// SIX of the 18 UE-01 funds are intentionally NOT wired here — they fall
+// back to a live backtest and will be filled by the weekly snapshot cron:
+//   • Heavy quant books (D.E. Shaw, AQR, Millennium, Point72) — Yahoo
+//     rate-limited (429) before they finished generating.
+//   • Trian (1345472) — transient SEC fetch failure produced a 0-trade
+//     snapshot; CIK is valid (14 13F-HRs), so the cron will recover it.
+//   • Starboard (1517137) — only 26% of CUSIPs mapped via the bundled
+//     seed (small-cap activist targets), too low to represent the book.
+import elliott from "../data/backtest/1048445.json";
+import thirdPoint from "../data/backtest/1040273.json";
+import lonePine from "../data/backtest/1061165.json";
+import coatue from "../data/backtest/1135730.json";
+import viking from "../data/backtest/1103804.json";
+import d1 from "../data/backtest/1747057.json";
+import greenlight from "../data/backtest/1079114.json";
+import glenview from "../data/backtest/1138995.json";
+import scion from "../data/backtest/1649339.json";
+import maverick from "../data/backtest/934639.json";
+import jana from "../data/backtest/1159159.json";
+import duquesne from "../data/backtest/1536411.json";
 
 const SNAPSHOTS: Record<string, FundBacktest> = {
   "1067983": berkshire as unknown as FundBacktest,
@@ -25,6 +49,18 @@ const SNAPSHOTS: Record<string, FundBacktest> = {
   "1029160": soros as unknown as FundBacktest,
   "1656456": appaloosa as unknown as FundBacktest,
   "1179392": twoSigma as unknown as FundBacktest,
+  "1048445": elliott as unknown as FundBacktest,
+  "1040273": thirdPoint as unknown as FundBacktest,
+  "1061165": lonePine as unknown as FundBacktest,
+  "1135730": coatue as unknown as FundBacktest,
+  "1103804": viking as unknown as FundBacktest,
+  "1747057": d1 as unknown as FundBacktest,
+  "1079114": greenlight as unknown as FundBacktest,
+  "1138995": glenview as unknown as FundBacktest,
+  "1649339": scion as unknown as FundBacktest,
+  "934639": maverick as unknown as FundBacktest,
+  "1159159": jana as unknown as FundBacktest,
+  "1536411": duquesne as unknown as FundBacktest,
 };
 
 export function getSnapshot(cik: string): FundBacktest | null {

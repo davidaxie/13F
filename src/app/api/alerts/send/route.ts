@@ -37,7 +37,12 @@ const SNAPSHOT_DIR = path.join(process.cwd(), "src", "data", "backtest");
 // ---------------------------------------------------------------------------
 function isAuthorized(req: NextRequest): boolean {
   const cronSecret = process.env.CRON_SECRET;
-  if (!cronSecret) return true; // not configured — open (dev only)
+
+  // If the secret isn't configured, allow ONLY in non-production (local dev).
+  // In production an unset secret must FAIL CLOSED — otherwise this endpoint
+  // becomes a public trigger for the entire mass-email loop once Resend is
+  // configured. Set CRON_SECRET in Vercel before relying on the cron.
+  if (!cronSecret) return process.env.NODE_ENV !== "production";
 
   // Vercel cron sends: Authorization: Bearer <secret>
   const authHeader = req.headers.get("authorization");
@@ -78,15 +83,13 @@ function buildEmailHtml(
   const typeLabel: Record<MaterialMove["changeType"], string> = {
     new: "New position",
     exit: "Full exit",
-    add: "Added (≥30%)",
-    trim: "Trimmed (≥30%)",
+    add: "Added",
   };
 
   const typeColor: Record<MaterialMove["changeType"], string> = {
     new: "#22c55e",
     exit: "#ef4444",
     add: "#3b82f6",
-    trim: "#f97316",
   };
 
   const rows = moves
@@ -128,7 +131,7 @@ function buildEmailHtml(
       <p style="margin:0 0 20px;color:#374151;line-height:1.6">
         <strong>${fundName}</strong> filed a new 13F on <strong>${filingDate}</strong>.
         We detected <strong>${moves.length} material move${moves.length !== 1 ? "s" : ""}</strong>
-        (positions ≥$50M with new entries, full exits, or ≥30% size changes).
+        (positions ≥$50M: new entries, full exits, or material adds).
       </p>
 
       <table style="width:100%;border-collapse:collapse;font-size:14px">

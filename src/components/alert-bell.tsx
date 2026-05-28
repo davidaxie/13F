@@ -207,7 +207,7 @@ export function AlertBell({ cik, size = 18 }: { cik: string; size?: number }) {
           </div>
           <p className="mb-3 text-xs leading-relaxed text-muted">
             We&apos;ll send you a digest when this fund files a new 13F with
-            material moves (new/exited positions ≥$50M or ≥30% size changes).
+            material moves (new positions, full exits, or adds ≥$50M).
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
             <input
