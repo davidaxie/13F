@@ -16,6 +16,53 @@ export const FUND_STYLE_LABELS: Record<FundStyle, string> = {
   macro: "Macro",
 };
 
+// How much a *new position* from this kind of firm actually tells a
+// long-horizon investor. The thesis: a concentrated value or activist book
+// opening a name is a deliberate, multi-year bet — high signal. A quant /
+// market-making platform (Citadel, Renaissance, AQR, Millennium) "opening" a
+// name is mostly mechanical, high-turnover flow — near-meaningless as a
+// long-term thesis even when the dollar amount is huge. Used to rank and tier
+// the /entries page so the noise sinks to the bottom.
+export type SignalTier = "high" | "medium" | "low" | "noise";
+
+export const STYLE_SIGNAL_TIER: Record<FundStyle, SignalTier> = {
+  value: "high",
+  activist: "high",
+  tigerCub: "medium",
+  macro: "low",
+  quant: "noise",
+};
+
+export const SIGNAL_TIER_META: Record<
+  SignalTier,
+  { rank: number; label: string; blurb: string }
+> = {
+  high: {
+    rank: 0,
+    label: "High-conviction · long horizon",
+    blurb:
+      "Concentrated value & activist books. A new position is a deliberate, multi-year bet — the strongest single-name signal here.",
+  },
+  medium: {
+    rank: 1,
+    label: "Fundamental growth",
+    blurb:
+      "Tiger-lineage long/short. Research-driven, but larger books and higher turnover dilute what any one entry means.",
+  },
+  low: {
+    rank: 2,
+    label: "Macro · thematic",
+    blurb:
+      "Top-down books that rotate fast and often express views via ETFs. A single-name entry is a weak standalone signal.",
+  },
+  noise: {
+    rank: 3,
+    label: "Systematic · market-making",
+    blurb:
+      "Quant & multi-strat platforms. Entries are mechanical, high-turnover flow — near-meaningless for a long-horizon thesis no matter how large. Shown for completeness, downranked by design.",
+  },
+};
+
 export type MarqueeFund = {
   cik: string;
   displayName: string;

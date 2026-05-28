@@ -35,6 +35,12 @@ export default function DashboardPage() {
             Full consensus &amp; crowding →
           </Link>
           <Link
+            href="/entries"
+            className="inline-flex items-center gap-2 border-b border-accent/30 pb-0.5 text-sm text-accent transition-colors hover:border-accent"
+          >
+            Entries by style →
+          </Link>
+          <Link
             href="/leaderboard"
             className="inline-flex items-center gap-2 border-b border-accent/30 pb-0.5 text-sm text-accent transition-colors hover:border-accent"
           >
