@@ -1,5 +1,16 @@
+import { tickerForCusip } from "@/lib/cusip-lookup";
 import { getAllFundDiffs, type Move } from "@/lib/dashboard";
-import { CrossFundHighlightsView } from "./cross-fund-highlights-view";
+import {
+  CrossFundHighlightsView,
+  type MoveWithTicker,
+} from "./cross-fund-highlights-view";
+
+// Resolve the CUSIP→ticker here on the server so the lookup map never ships to
+// the browser. The view leads each row with the ticker (the primary
+// identifier) rather than the underlying company name.
+function withTicker(m: Move): MoveWithTicker {
+  return { ...m, ticker: tickerForCusip(m.cusip) };
+}
 
 function isPut(m: Move): boolean {
   return (m.putCall ?? "").toUpperCase() === "PUT";
@@ -64,12 +75,12 @@ export async function CrossFundHighlights() {
 
   return (
     <CrossFundHighlightsView
-      newLong={newLong}
-      exits={exits}
-      adds={adds}
-      trims={trims}
-      shortOpens={shortOpens}
-      callOpens={callOpens}
+      newLong={newLong.map(withTicker)}
+      exits={exits.map(withTicker)}
+      adds={adds.map(withTicker)}
+      trims={trims.map(withTicker)}
+      shortOpens={shortOpens.map(withTicker)}
+      callOpens={callOpens.map(withTicker)}
     />
   );
 }

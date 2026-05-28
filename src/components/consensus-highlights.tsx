@@ -96,13 +96,10 @@ function ConsensusColumn({
                             {n.ticker}
                           </span>
                         ) : (
-                          <span className="font-mono text-xs text-muted">
+                          <span className="font-mono text-sm text-muted">
                             {n.cusip}
                           </span>
                         )}
-                        <span className="truncate font-serif text-sm text-foreground/80">
-                          {n.issuer}
-                        </span>
                       </div>
                       <div className="mt-0.5 truncate text-xs text-muted">
                         {fundList}

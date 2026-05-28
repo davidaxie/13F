@@ -14,6 +14,11 @@ import { downloadCSV, slugify, toCSV, type CsvColumn } from "@/lib/csv";
 import { formatPct, formatUSD } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
+// A move with its CUSIP resolved to a ticker (done on the server in
+// cross-fund-highlights.tsx). Rows lead with the ticker as the primary
+// identifier; the underlying company name is intentionally not shown.
+export type MoveWithTicker = Move & { ticker: string | null };
+
 // CIK → style lookup (computed once at module load).
 const STYLE_BY_CIK = new Map<string, FundStyle>(
   MARQUEE_FUNDS.map((f) => [f.cik, f.style]),
@@ -41,7 +46,7 @@ type Section = {
   key: string;
   title: string;
   subtitle: string;
-  moves: Move[];
+  moves: MoveWithTicker[];
   tone: "positive" | "negative";
   valueOf: (m: Move) => number; // dollar amount to display per row
   // Weight delta — positive magnitude, in percentage points of fund portfolio.
@@ -58,12 +63,12 @@ export function CrossFundHighlightsView({
   adds,
   trims,
 }: {
-  newLong: Move[];
-  shortOpens: Move[];
-  callOpens: Move[];
-  exits: Move[];
-  adds: Move[];
-  trims: Move[];
+  newLong: MoveWithTicker[];
+  shortOpens: MoveWithTicker[];
+  callOpens: MoveWithTicker[];
+  exits: MoveWithTicker[];
+  adds: MoveWithTicker[];
+  trims: MoveWithTicker[];
 }) {
   const [mode, setMode] = useState<RankMode>("dollar");
   const [selectedCohorts, setSelectedCohorts] = useState<Set<FundStyle>>(
@@ -418,6 +423,7 @@ function MoveSection({
     if (!f) return ranked;
     return ranked.filter(
       (m) =>
+        (m.ticker?.toLowerCase().includes(f) ?? false) ||
         m.issuer.toLowerCase().includes(f) ||
         m.fundName.toLowerCase().includes(f) ||
         m.cusip.toLowerCase().includes(f),
@@ -527,8 +533,16 @@ function MoveSection({
               >
                 <div className="flex items-baseline justify-between gap-4">
                   <div className="min-w-0 flex-1">
-                    <div className="truncate font-serif text-base leading-tight text-foreground transition-colors group-hover:text-accent">
-                      {m.issuer}
+                    <div className="truncate leading-tight">
+                      {m.ticker ? (
+                        <span className="font-mono text-base font-medium text-foreground transition-colors group-hover:text-accent">
+                          {m.ticker}
+                        </span>
+                      ) : (
+                        <span className="font-mono text-sm text-muted">
+                          {m.cusip}
+                        </span>
+                      )}
                       {m.putCall ? (
                         <span className="ml-1.5 font-mono text-[10px] uppercase tracking-wider text-muted">
                           {m.putCall}
@@ -539,8 +553,6 @@ function MoveSection({
                       <span>{m.fundName}</span>
                       <span className="mx-1.5">·</span>
                       <span>{m.quarter}</span>
-                      <span className="mx-1.5">·</span>
-                      <span className="font-mono">{m.cusip}</span>
                     </div>
                   </div>
                   <div className="shrink-0 text-right">
