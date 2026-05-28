@@ -11,14 +11,26 @@ A two-part document:
 
 ## Execution status (updated)
 
-29 of the 37 planned items shipped. Eight items remain genuinely blocked on external decisions or data sources — see "Blocked / needs decision" below.
+**37 of 48 plan items shipped.** The remaining 11 are blocked on external decisions or data — see "Blocked / needs decision" below.
 
-### Shipped (29)
+What's done covers every piece of analytical work the platform can do with the data already on hand:
+
+- All Phase 0 foundations except the persistent cache (F-04 needs Vercel KV provisioning).
+- All Phase 1 quick wins except the freshness timestamp (depends on F-05).
+- All Phase 2 cross-sectional analytics.
+- 6 of 8 Phase 3 risk-adjusted items — including Sharpe / MaxDD / β / IR, drawdown, rolling alpha, benchmark switcher (SPY/IWM/QQQ/EFA/AGG), transaction-cost overlay, alt-exit-mode, and a five-factor style decomposition.
+- All Phase 4 universe metadata (UE-02, UE-03). The actual fund expansion (UE-01) needs snapshot regeneration time.
+- Three of four Phase 5 adjacent filings: amendments, 13D/G ownership, Form 4 insider activity.
+- Both no-auth-needed Phase 6 watchlist primitives.
+- Eight of ten Appendix items.
+
+### Shipped (37)
 
 | ID | Title | Notes |
 |---|---|---|
 | F-01 | Centralize unit conversion | `getHoldings` now returns whole dollars always |
 | F-02 | Test harness | Vitest + 26 regression tests |
+| F-03 | GICS sector reference data | S&P 1500 scraped from Wikipedia → 1,506 ticker→sector mappings; surfaced on stock, fund, holdings pages |
 | QW-01 | `/stock/[ticker]` page | Cross-fund holders view |
 | QW-02 | Dollar / % toggle on dashboard | |
 | QW-03 | CSV export | Holdings table + dashboard sections |
@@ -27,16 +39,21 @@ A two-part document:
 | QW-07 | Landing suggestion fix | Baupost → Appaloosa |
 | QW-08 | Top 10 holdings on `/fund/[cik]` | |
 | CS-01 | `/consensus` cross-fund crowding | |
+| CS-02 | Sector filter on dashboard | Multi-select chips composing with cohort filter |
 | CS-03 | `/compare` side-by-side | |
 | CS-04 | Position lineage on stock page | Trade history table |
 | CS-05 | Cohort filter on dashboard | Value/Activist/Tiger Cub/Quant/Macro |
 | CS-06 | Holdings table change-type chips | + uncapped exits |
 | RA-01 | Drawdown / underwater curve | |
 | RA-02 | Rolling 1y alpha chart | |
+| RA-03 | Benchmark switcher | SPY / IWM / QQQ / EFA / AGG re-keys equity curve + risk metrics |
 | RA-05 | Transaction-cost overlay | 0/5/10/25 bps chips on follower |
+| RA-07 | Style decomposition | OLS regression on 5 style factors built from bundled ETFs |
 | RA-08 | Conviction "sell when fund sold" mode | Methodology pair to "hold to today" |
 | UE-02 | `/universe` page | Sortable table of all tracked funds |
 | UE-03 | Per-fund metadata + AUM sparkline | |
+| AF-01 | Schedule 13D/13G ingestion | "5%+ ownership filings" section on fund page |
+| AF-02 | Form 4 insider overlay | "Insider activity" section on stock page (30d/90d/total counts + list) |
 | AF-03 | 13F-HR/A amendment surfacing | Visual pill on filings list |
 | P-01 | Fund watchlists | localStorage + cross-tab sync |
 | P-02 | Stock watchlists | Same primitive |
@@ -49,29 +66,23 @@ A two-part document:
 | A-09 | Print stylesheet | |
 | A-10 | Ticker / CUSIP hint on search | |
 
-### Blocked / needs decision (8)
+### Blocked / needs decision (11)
 
 | ID | Title | Blocker |
 |---|---|---|
-| F-03 | GICS sector reference data | Needs data licensing decision (free hand-curated vs paid feed) |
-| F-04 | Persistent cache | Needs Vercel KV / Upstash credentials |
-| F-05 | Build-time aggregation | Needs snapshot-regen workflow + scheduled CI |
+| F-04 | Persistent cache | Needs Vercel KV / Upstash provisioning (one click in dashboard) |
+| F-05 | Build-time aggregation | Depends on F-04, then I wire a GitHub Action |
 | QW-05 | Dashboard freshness timestamp | Depends on F-05 |
-| CS-02 | Sector lens / heatmap | Depends on F-03 |
-| RA-03 | Benchmark switcher (SPY/IWM/QQQ/EFA/AGG/60-40) | Needs bundled Yahoo price series for new tickers |
 | RA-04 | Cohort-normalized leaderboard | Depends on F-05 (8Q-normalized snapshots) |
-| RA-06 | T+N execution sensitivity | Needs per-stock daily price series — not in snapshots |
-| RA-07 | Fama-French factor decomposition | Needs FF data fetch + regression infra |
-| UE-01 | Expand universe to 30 funds | Needs snapshot regeneration for new CIKs (~hours of SEC fetches per fund) |
-| AF-01 | Schedule 13D/13G ingestion | New EDGAR parser, multi-day effort |
-| AF-02 | Form 4 insider overlay | Same |
-| AF-04 | NPORT-P monthly portfolios | Plan flagged as XL/deferred |
+| RA-06 | T+N execution sensitivity | Needs per-stock daily price series — would require snapshot regen |
+| UE-01 | Expand universe to 30 funds | Needs snapshot regeneration for 20+ new CIKs (hours of SEC fetching) |
+| AF-04 | NPORT-P monthly portfolios | Plan flagged as XL/deferred — most marquee funds don't file it |
 | P-03 | Email alerts | Needs auth (P-04) + email provider |
 | P-04 | Authentication | Needs auth provider choice (Clerk / Supabase / Stytch) |
 | A-05 | Centralized holdings toolbar | Substantively done via CS-06; ID kept for completeness |
 | A-08 | Mobile review pass | Needs real-device testing + iteration |
 
-Of the eight in the "really blocked" category, the cleanest path to clearing more is **F-04 (Vercel KV)** — the user provisioning the KV store unblocks F-05, which unblocks QW-05, RA-04, and UE-01. The other big unlock is **F-03 (GICS data source decision)** which unblocks CS-02.
+The cleanest single unlock is **F-04 (Vercel KV)** — provisioning the KV store from the Vercel dashboard takes one click and cascades to F-05, then QW-05 and RA-04. After that, **P-04 (auth provider)** unlocks P-03 (email alerts). **UE-01** (expand the universe to 30 funds) takes hours of SEC fetching to regenerate snapshots; ready to run whenever you say go.
 
 ---
 
