@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { ConsensusHighlights } from "@/components/consensus-highlights";
 import { CrossFundHighlights } from "@/components/cross-fund-highlights";
 import {
   FundCardSkeleton,
@@ -16,26 +17,44 @@ export default function DashboardPage() {
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
       <div className="border-b border-hairline pb-10">
         <div className="text-xs uppercase tracking-widest text-muted">
-          Activity
+          Cross-fund signal
         </div>
         <h1 className="mt-2 font-serif text-5xl leading-tight tracking-tight text-foreground">
-          Latest 13F moves
+          Consensus moves
         </h1>
-        <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">
-          Quarter-over-quarter changes from leading institutional managers — new
-          positions, full exits, and the largest adds and trims.
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
+          Where the smart money converges — the names multiple top funds are
+          buying, or dumping, in the same quarter. The highest-conviction
+          cross-fund signal, front and center.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
+          <Link
+            href="/consensus"
+            className="inline-flex items-center gap-2 border-b border-accent/30 pb-0.5 text-sm text-accent transition-colors hover:border-accent"
+          >
+            Full consensus &amp; crowding →
+          </Link>
           <Link
             href="/leaderboard"
             className="inline-flex items-center gap-2 border-b border-accent/30 pb-0.5 text-sm text-accent transition-colors hover:border-accent"
           >
-            View backtest leaderboard →
+            Backtest leaderboard →
           </Link>
         </div>
       </div>
 
-      <div className="mt-16">
+      {/* CORE FEATURE — consensus entries & exits (snapshot-backed, instant). */}
+      <div className="mt-14">
+        <ConsensusHighlights />
+      </div>
+
+      {/* Secondary — every individual move (live SEC fetch, hence Suspense). */}
+      <div className="mt-24 border-b border-hairline pb-3">
+        <h2 className="font-serif text-2xl text-foreground">
+          All moves <span className="text-muted">· every fund, every change</span>
+        </h2>
+      </div>
+      <div className="mt-8">
         <Suspense fallback={<HighlightsSkeleton />}>
           <CrossFundHighlights />
         </Suspense>

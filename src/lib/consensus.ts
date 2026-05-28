@@ -33,6 +33,11 @@ export type ConsensusView = {
   consensusNewBuys: ConsensusName[]; // ≥3 funds newly opened in their latest quarter
   consensusExits: ConsensusName[];   // ≥3 funds fully sold in their latest quarter
   disagreement: ConsensusName[];     // ≥2 new AND ≥2 exited this quarter — research signal
+  // Dashboard hero lists — a softer ≥2-fund floor so the front page is
+  // always populated, sorted by fund-count then capital. The count is shown
+  // in the UI so a 2-fund vs 6-fund consensus is distinguishable.
+  topBuys: ConsensusName[];
+  topExits: ConsensusName[];
   asOfDate: string;                  // latest activity across the universe
   fundsCovered: number;
 };
@@ -40,6 +45,7 @@ export type ConsensusView = {
 const MIN_HOLDERS_FOR_CONSENSUS = 2; // floor for "most owned" (drops singletons)
 const MIN_FOR_CONSENSUS_MOVE = 3;    // ≥3 funds = a real consensus move
 const MIN_FOR_DISAGREEMENT = 2;      // ≥2 each side = meaningful split
+const MIN_FOR_DASHBOARD = 2;         // ≥2 funds = the softest "consensus" worth a hero row
 
 // Per-fund "latest activity date" — proxy for the fund's most recent filing.
 function latestActivityDate(snap: ReturnType<typeof getSnapshot>): string {
@@ -188,11 +194,31 @@ export const computeConsensusView = cache((): ConsensusView => {
         (a.newThisQuarter.length + a.exitedThisQuarter.length),
     );
 
+  // Dashboard hero lists: softer ≥2-fund floor, ranked by how many funds
+  // moved together (then by capital). Always-populated front-page signal.
+  const topBuys = names
+    .filter((n) => n.newThisQuarter.length >= MIN_FOR_DASHBOARD)
+    .sort(
+      (a, b) =>
+        b.newThisQuarter.length - a.newThisQuarter.length ||
+        b.totalEntryValueUsd - a.totalEntryValueUsd,
+    );
+
+  const topExits = names
+    .filter((n) => n.exitedThisQuarter.length >= MIN_FOR_DASHBOARD)
+    .sort(
+      (a, b) =>
+        b.exitedThisQuarter.length - a.exitedThisQuarter.length ||
+        b.totalEntryValueUsd - a.totalEntryValueUsd,
+    );
+
   return {
     mostOwned,
     consensusNewBuys,
     consensusExits,
     disagreement,
+    topBuys,
+    topExits,
     asOfDate,
     fundsCovered,
   };
