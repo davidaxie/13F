@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sparkline } from "@/components/charts/sparkline";
 import { WatchlistStar } from "@/components/watchlist-star";
+import { AlertBell } from "@/components/alert-bell";
 import { getFundInfo, getOwnershipFilings } from "@/lib/edgar";
 import { getTopHoldings } from "@/lib/dashboard";
 import { MARQUEE_FUNDS, FUND_STYLE_LABELS } from "@/lib/funds";
@@ -62,6 +63,7 @@ export default async function FundPage({
             </span>
           )}
           <WatchlistStar kind="fund" id={fund.cik} />
+          <AlertBell cik={cleanCik} />
         </div>
         <div className="mt-4 flex flex-wrap gap-x-8 gap-y-1 text-sm text-muted">
           <span className="font-mono uppercase tracking-wider">

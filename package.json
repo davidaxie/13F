@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^7.4.2",
+    "@vercel/kv": "^3.0.0",
     "clsx": "^2.1.1",
     "fast-xml-parser": "^4.5.0",
     "lucide-react": "^0.460.0",
@@ -20,6 +21,7 @@
     "react-dom": "19.2.4",
     "tailwind-merge": "^2.5.4",
     "undici": "^8.3.0",
+    "resend": "^6.12.4",
     "yahoo-finance2": "^3.14.1"
   },
   "devDependencies": {
@@ -30,6 +32,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
+    "tsx": "^4.22.3",
     "typescript": "^5",
     "vitest": "^4.1.7"
   }

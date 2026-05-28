@@ -1,6 +1,8 @@
 // localStorage-backed watchlist primitives. No auth, no server state — a
-// per-browser "Following" list of fund CIKs and stock tickers. Future
-// follow-up: wire to user accounts so the watchlist syncs across devices.
+// per-browser "Following" list of fund CIKs and stock tickers.
+//
+// kvWatchlist is the server-backed counterpart used when the user is signed
+// in. Both share the same key normalisation (cleanCik / toUpperCase).
 
 const FUND_KEY = "13f.watchlist.funds.v1";
 const STOCK_KEY = "13f.watchlist.stocks.v1";
@@ -59,6 +61,106 @@ export const watchlist = {
     },
   },
 };
+
+// ---------------------------------------------------------------------------
+// Server-backed watchlist API (requires Clerk auth).
+// Each method calls /api/watchlist which reads/writes Vercel KV Sets.
+// ---------------------------------------------------------------------------
+
+export const kvWatchlist = {
+  funds: {
+    /** Returns the signed-in user's fund watchlist from KV. */
+    list: async (): Promise<string[]> => {
+      const r = await fetch("/api/watchlist?kind=fund");
+      if (!r.ok) return [];
+      return r.json();
+    },
+    /**
+     * Toggles a fund CIK in KV.
+     * Returns `true` if the item is now in the watchlist, `false` if removed.
+     */
+    toggle: async (cik: string): Promise<boolean> => {
+      const id = cleanCik(cik);
+      // Check current state first so we know which verb to use.
+      const current = await kvWatchlist.funds.list();
+      const isPresent = current.includes(id);
+      const method = isPresent ? "DELETE" : "POST";
+      const r = await fetch("/api/watchlist", {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind: "fund", id }),
+      });
+      if (!r.ok) return isPresent; // no change on error
+      return !isPresent;
+    },
+  },
+  stocks: {
+    /** Returns the signed-in user's stock watchlist from KV. */
+    list: async (): Promise<string[]> => {
+      const r = await fetch("/api/watchlist?kind=stock");
+      if (!r.ok) return [];
+      return r.json();
+    },
+    /**
+     * Toggles a ticker in KV.
+     * Returns `true` if the item is now in the watchlist, `false` if removed.
+     */
+    toggle: async (ticker: string): Promise<boolean> => {
+      const id = ticker.toUpperCase();
+      const current = await kvWatchlist.stocks.list();
+      const isPresent = current.includes(id);
+      const method = isPresent ? "DELETE" : "POST";
+      const r = await fetch("/api/watchlist", {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind: "stock", id }),
+      });
+      if (!r.ok) return isPresent;
+      return !isPresent;
+    },
+  },
+};
+
+// ---------------------------------------------------------------------------
+// One-time migration: copy any localStorage items up to KV then clear them.
+// Call this once on mount when the user is signed in.
+// ---------------------------------------------------------------------------
+
+export async function migrateLocalStorageToKv(): Promise<void> {
+  if (typeof window === "undefined") return;
+
+  const localFunds = Array.from(readSet(FUND_KEY));
+  const localStocks = Array.from(readSet(STOCK_KEY));
+
+  if (localFunds.length === 0 && localStocks.length === 0) return;
+
+  // Upload all local items concurrently.
+  await Promise.all([
+    ...localFunds.map((cik) =>
+      fetch("/api/watchlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind: "fund", id: cleanCik(cik) }),
+      }).catch(() => {}),
+    ),
+    ...localStocks.map((ticker) =>
+      fetch("/api/watchlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ kind: "stock", id: ticker.toUpperCase() }),
+      }).catch(() => {}),
+    ),
+  ]);
+
+  // Clear local storage after successful upload.
+  try {
+    window.localStorage.removeItem(FUND_KEY);
+    window.localStorage.removeItem(STOCK_KEY);
+    window.dispatchEvent(new CustomEvent("watchlist:change", { detail: {} }));
+  } catch {
+    // Ignore
+  }
+}
 
 function cleanCik(cik: string): string {
   return cik.replace(/^0+/, "");
