@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { tickerForCusip } from "./cusip-lookup";
+import type { BacktestTrade, FundBacktest } from "./backtest";
 import { getAllFundDiffs } from "./dashboard";
 import {
   MARQUEE_FUNDS,
@@ -8,11 +8,13 @@ import {
   type FundStyle,
   type SignalTier,
 } from "./funds";
+import { getSnapshot } from "./snapshots";
 
 // A single new position, tagged with the opening fund's style so the page can
 // group entries by investing style and rank styles by signal quality. Built
-// from the live fund diffs (type === "new"), common stock only — options
-// opens are a different instrument and aren't comparable as "an entry".
+// from the committed snapshots (sync) so the page renders instantly — the
+// per-position conviction weight needs the live portfolio totals and streams
+// in separately (see getEntryWeights + /api/entry-weights).
 export type StyleEntry = {
   fundCik: string;
   fundName: string;
@@ -20,11 +22,6 @@ export type StyleEntry = {
   cusip: string;
   ticker: string | null;
   entryValueUsd: number;
-  // The position's weight in the opening fund's portfolio. This is the
-  // conviction dimension: a value fund putting 9% of its book into a new name
-  // means something very different from a quant opening it at 0.02%.
-  weightInPortfolio: number;
-  quarter: string;
 };
 
 export type StyleGroup = {
@@ -37,41 +34,55 @@ export type StyleGroup = {
   entryCount: number;
 };
 
-const cikToStyle = new Map<string, FundStyle>(
-  MARQUEE_FUNDS.map((f) => [f.cik, f.style]),
-);
+// Stable key joining a fund + security, used to look a conviction weight up
+// from the streamed weight map.
+export function entryWeightKey(fundCik: string, cusip: string): string {
+  return `${fundCik}:${cusip}`;
+}
 
-// Groups every new common-stock position this quarter by the opening fund's
-// investing style, then orders the groups by signal tier (high-conviction
-// value/activist first, mechanical quant flow last). Within each group the
-// biggest entries lead. Backed by the same live diffs the dashboard uses, so
-// it carries weightInPortfolio (conviction) which the snapshot path lacks.
-export const getEntriesByStyle = cache(async (): Promise<StyleGroup[]> => {
-  const diffs = await getAllFundDiffs();
+// Per-fund "latest activity date" — proxy for the fund's most recent filing.
+function latestActivityDate(snap: FundBacktest): string {
+  let max = "";
+  for (const t of snap.trades) {
+    if (t.entryDate > max) max = t.entryDate;
+    if (t.exitDate && t.exitDate > max) max = t.exitDate;
+  }
+  return max;
+}
 
+// INSTANT path: snapshot-backed and fully synchronous, so the page renders
+// with no live SEC fetch. A position counts as "new this quarter" when its
+// latest trade lifecycle opened on the fund's most-recent filing date. Carries
+// no weight — that's the deferred, live part (getEntryWeights).
+export const getEntriesByStyleFast = cache((): StyleGroup[] => {
   const byStyle = new Map<FundStyle, StyleEntry[]>();
 
-  for (const diff of diffs) {
-    for (const m of diff.moves) {
-      // Only genuine new positions in common stock.
-      if (m.type !== "new" || m.putCall) continue;
-      const style = cikToStyle.get(m.fundCik);
-      if (!style) continue;
+  for (const fund of MARQUEE_FUNDS) {
+    const snap = getSnapshot(fund.cik);
+    if (!snap) continue;
+    const latest = latestActivityDate(snap);
+    if (!latest) continue;
 
+    // Keep only the latest trade lifecycle per CUSIP.
+    const latestTradeByCusip = new Map<string, BacktestTrade>();
+    for (const t of snap.trades) {
+      const cur = latestTradeByCusip.get(t.cusip);
+      if (!cur || t.entryDate > cur.entryDate) latestTradeByCusip.set(t.cusip, t);
+    }
+
+    for (const t of latestTradeByCusip.values()) {
+      if (t.status !== "open" || t.entryDate !== latest) continue;
       const entry: StyleEntry = {
-        fundCik: m.fundCik,
-        fundName: m.fundName,
-        issuer: m.issuer,
-        cusip: m.cusip,
-        ticker: tickerForCusip(m.cusip),
-        entryValueUsd: m.currentValueUsd,
-        weightInPortfolio: m.weightInPortfolio,
-        quarter: m.quarter,
+        fundCik: fund.cik,
+        fundName: fund.displayName,
+        issuer: t.issuer,
+        cusip: t.cusip,
+        ticker: t.ticker,
+        entryValueUsd: t.entryValueUsd,
       };
-
-      const list = byStyle.get(style);
+      const list = byStyle.get(fund.style);
       if (list) list.push(entry);
-      else byStyle.set(style, [entry]);
+      else byStyle.set(fund.style, [entry]);
     }
   }
 
@@ -89,8 +100,8 @@ export const getEntriesByStyle = cache(async (): Promise<StyleGroup[]> => {
     });
   }
 
-  // Order by signal tier first (high → noise), then by capital deployed within
-  // the tier so the most active style leads each band.
+  // High-conviction tiers first (value/activist), mechanical quant flow last;
+  // ties broken by capital deployed.
   groups.sort(
     (a, b) =>
       SIGNAL_TIER_META[a.tier].rank - SIGNAL_TIER_META[b.tier].rank ||
@@ -99,3 +110,21 @@ export const getEntriesByStyle = cache(async (): Promise<StyleGroup[]> => {
 
   return groups;
 });
+
+// DEFERRED path: each new common-stock position's weight in its fund's 13F
+// book. Needs the live diffs (the snapshot doesn't store portfolio totals), so
+// it's slow — served from /api/entry-weights and fetched after first paint.
+// Keyed by entryWeightKey(fundCik, cusip).
+export const getEntryWeights = cache(
+  async (): Promise<Record<string, number>> => {
+    const diffs = await getAllFundDiffs();
+    const weights: Record<string, number> = {};
+    for (const diff of diffs) {
+      for (const m of diff.moves) {
+        if (m.type !== "new" || m.putCall) continue;
+        weights[entryWeightKey(m.fundCik, m.cusip)] = m.weightInPortfolio;
+      }
+    }
+    return weights;
+  },
+);

@@ -1,12 +1,15 @@
 import Link from "next/link";
-import { Suspense } from "react";
-import { HighlightsSkeleton } from "@/components/dashboard-skeletons";
 import {
-  getEntriesByStyle,
+  ConvictionBar,
+  ConvictionWeightsProvider,
+} from "@/components/conviction-bar";
+import {
+  entryWeightKey,
+  getEntriesByStyleFast,
   type StyleEntry,
   type StyleGroup,
 } from "@/lib/entries-by-style";
-import { formatPct, formatUSD } from "@/lib/format";
+import { formatUSD } from "@/lib/format";
 import {
   FUND_STYLE_LABELS,
   SIGNAL_TIER_META,
@@ -14,8 +17,10 @@ import {
 } from "@/lib/funds";
 import { cn } from "@/lib/utils";
 
-export const dynamic = "force-dynamic";
-export const maxDuration = 60;
+// Snapshot-backed and synchronous, so the page is statically rendered and
+// loads instantly. The conviction bars stream in afterward from the client
+// (see ConvictionWeightsProvider → /api/entry-weights).
+export const dynamic = "force-static";
 
 // Rows shown per style before truncating (quant books open hundreds of names
 // a quarter — we only want the biggest).
@@ -57,6 +62,8 @@ function tierTone(tier: SignalTier): {
 }
 
 export default function EntriesPage() {
+  const groups = getEntriesByStyleFast();
+
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
       <Link
@@ -113,9 +120,19 @@ export default function EntriesPage() {
         })}
       </div>
 
-      <Suspense fallback={<HighlightsSkeleton />}>
-        <EntriesBoard />
-      </Suspense>
+      <ConvictionWeightsProvider>
+        {groups.length === 0 ? (
+          <p className="mt-12 text-sm text-muted">
+            No new common-stock positions in the latest snapshots.
+          </p>
+        ) : (
+          <div className="mt-4">
+            {groups.map((group) => (
+              <StyleSection key={group.style} group={group} />
+            ))}
+          </div>
+        )}
+      </ConvictionWeightsProvider>
 
       <section className="mt-20 rounded border-l-2 border-accent/40 bg-subtle/30 px-6 py-5 text-xs leading-relaxed text-muted">
         <div className="mb-2 text-[10px] uppercase tracking-widest text-foreground/70">
@@ -142,26 +159,6 @@ export default function EntriesPage() {
           </li>
         </ul>
       </section>
-    </div>
-  );
-}
-
-async function EntriesBoard() {
-  const groups = await getEntriesByStyle();
-
-  if (groups.length === 0) {
-    return (
-      <p className="mt-12 text-sm text-muted">
-        No new common-stock positions in the latest filings.
-      </p>
-    );
-  }
-
-  return (
-    <div className="mt-4">
-      {groups.map((group) => (
-        <StyleSection key={group.style} group={group} />
-      ))}
     </div>
   );
 }
@@ -228,11 +225,6 @@ function StyleSection({ group }: { group: StyleGroup }) {
 }
 
 function EntryRow({ entry }: { entry: StyleEntry }) {
-  // Conviction bar: clamp weight to a 0–10% scale so a 10%+ position fills the
-  // bar and a 0.1% quant flicker barely registers — the visual makes the
-  // signal-vs-noise point on its own.
-  const convictionPct = Math.min(100, Math.max(0, entry.weightInPortfolio * 10));
-
   return (
     <li>
       <div className="group block py-3 transition-colors hover:bg-subtle/40">
@@ -260,17 +252,7 @@ function EntryRow({ entry }: { entry: StyleEntry }) {
             <div className="tabular text-base text-foreground">
               {formatUSD(entry.entryValueUsd, { compact: true })}
             </div>
-            <div className="mt-1 flex items-center justify-end gap-2">
-              <div className="h-1 w-16 overflow-hidden rounded-full bg-hairline">
-                <div
-                  className="h-full rounded-full bg-accent/70"
-                  style={{ width: `${convictionPct}%` }}
-                />
-              </div>
-              <span className="tabular text-xs text-muted">
-                {formatPct(entry.weightInPortfolio, 1)}
-              </span>
-            </div>
+            <ConvictionBar entryKey={entryWeightKey(entry.fundCik, entry.cusip)} />
           </div>
         </div>
       </div>
