@@ -1,15 +1,15 @@
 import { Sparkline } from "@/components/charts/sparkline";
 import {
-  fetchCompanyFacts,
+  fetchCompanyConcept,
   type ConceptDataPoint,
-  type XbrlFacts,
 } from "@/lib/sec-xbrl";
 import { formatPct, formatUSD } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 // Different issuers tag the same economic line under different us-gaap
-// concept names (and Apple/etc. switched mid-history). For each metric we
-// try a fallback list in order and take the first concept that has data.
+// concept names (and switched mid-history when ASC 606 landed). For each
+// metric we try a fallback list in order and pick the candidate with
+// the most-recent latest period-end.
 const REVENUE_CONCEPTS = [
   "Revenues",
   "RevenueFromContractWithCustomerExcludingAssessedTax",
@@ -40,96 +40,106 @@ type AnnualPoint = {
   end: string;
 };
 
+type MetricSeries = { series: AnnualPoint[]; entityName: string };
+
 /**
- * For a metric: walk the concept fallback list and pick the candidate
- * with the most recent latest period-end (tie-break: longer history).
+ * For one metric: walk the concept fallback list, fetching each
+ * candidate concept separately and picking the one with the most
+ * recent latest period-end (tie-break: longer history).
+ *
+ * Why per-concept fetches instead of one fetchCompanyFacts call:
+ * the companyfacts blob can be 5-10 MB for big multi-segment filers
+ * (MSFT is 6.4 MB), which exceeds Next.js's 2 MB data-cache item
+ * limit and bypasses the cache on every render. Per-concept JSONs
+ * are KB-sized and cache cleanly. With React.cache() de-duping
+ * within a request and Next's data cache holding 1-hour revalidate,
+ * a hot page reuses the previous render's payload entirely.
  *
  * Why de-dupe by `end` rather than `fy`: a single 10-K contains 2–3
- * FY entries — the current fiscal year plus 1–2 prior years for
- * comparison — and SEC tags ALL of them with `fy = the filing's
- * fiscal year`. Dedup-by-fy would conflate periods and keep an
- * arbitrary one. The `end` date is the actual period the value
- * belongs to and is unique per fiscal year-end.
+ * FY entries — current year + prior comparison years — all tagged
+ * with `fy = the filing's fiscal year`. Dedup-by-fy would conflate
+ * periods. The `end` date is the actual period the value belongs to
+ * and is unique per fiscal year-end.
  *
- * Why "most recent latest end" rather than "first non-empty" or
- * "longest series": companies that switched concepts mid-history
- * (Apple: pre-ASC-606 SalesRevenueNet → post-ASC-606
+ * Why "most recent latest end": companies that switched concepts
+ * mid-history (Apple: pre-ASC-606 SalesRevenueNet → post-ASC-606
  * RevenueFromContract...) report under both. The historical concept
- * has MORE years but its latest end-date is stale; we want the live
+ * has more years but its latest end is stale; we want the live
  * concept the issuer is currently filing against.
  */
-function annualSeries(
-  facts: XbrlFacts,
+async function metricSeries(
+  issuerCik: string,
   concepts: string[],
   unit: string,
   limit = 10,
-): AnnualPoint[] {
-  // Look in us-gaap first, then ifrs-full for foreign issuers.
-  const taxonomies = ["us-gaap", "ifrs-full"];
+): Promise<MetricSeries> {
   let best: AnnualPoint[] = [];
   let bestLatestEnd = "";
-  for (const tax of taxonomies) {
-    const taxFacts = facts.facts[tax];
-    if (!taxFacts) continue;
-    for (const c of concepts) {
-      const concept = taxFacts[c];
-      const pts = concept?.units?.[unit];
-      if (!pts || pts.length === 0) continue;
-      const fyOnly = pts.filter((p) => p.fp === "FY");
-      if (fyOnly.length === 0) continue;
-      // De-dupe by period end date. Multiple entries with the same `end`
-      // = multiple filings reporting the same fiscal year (original +
-      // amendments); keep the most-recently-filed value.
-      const byEnd = new Map<string, ConceptDataPoint>();
-      for (const p of fyOnly) {
-        if (!p.end) continue;
-        const cur = byEnd.get(p.end);
-        if (!cur || p.filed > cur.filed) byEnd.set(p.end, p);
-      }
-      if (byEnd.size < 2) continue; // need ≥2 periods for YoY + sparkline
-      const series = Array.from(byEnd.values())
-        .map((p): AnnualPoint => {
-          const endYear = Number.parseInt(p.end.slice(0, 4), 10);
-          return {
-            endYear: Number.isFinite(endYear) ? endYear : p.fy,
-            val: p.val,
-            filed: p.filed,
-            end: p.end,
-          };
-        })
-        .sort((a, b) => a.end.localeCompare(b.end))
-        .slice(-limit);
-      const latestEnd = series[series.length - 1].end;
-      if (
-        latestEnd > bestLatestEnd ||
-        (latestEnd === bestLatestEnd && series.length > best.length)
-      ) {
-        best = series;
-        bestLatestEnd = latestEnd;
-      }
+  let entityName = "";
+  for (const concept of concepts) {
+    const c = await fetchCompanyConcept(issuerCik, concept);
+    if (!c) continue;
+    if (!entityName && c.entityName) entityName = c.entityName;
+    const pts = c.units[unit];
+    if (!pts || pts.length === 0) continue;
+    const fyOnly = pts.filter((p) => p.fp === "FY");
+    if (fyOnly.length === 0) continue;
+    // De-dupe by period end date; on collision keep the most-recently-filed
+    // value (restated > original).
+    const byEnd = new Map<string, ConceptDataPoint>();
+    for (const p of fyOnly) {
+      if (!p.end) continue;
+      const cur = byEnd.get(p.end);
+      if (!cur || p.filed > cur.filed) byEnd.set(p.end, p);
+    }
+    if (byEnd.size < 2) continue; // need ≥2 periods for YoY + sparkline
+    const series = Array.from(byEnd.values())
+      .map((p): AnnualPoint => {
+        const endYear = Number.parseInt(p.end.slice(0, 4), 10);
+        return {
+          endYear: Number.isFinite(endYear) ? endYear : p.fy,
+          val: p.val,
+          filed: p.filed,
+          end: p.end,
+        };
+      })
+      .sort((a, b) => a.end.localeCompare(b.end))
+      .slice(-limit);
+    const latestEnd = series[series.length - 1].end;
+    if (
+      latestEnd > bestLatestEnd ||
+      (latestEnd === bestLatestEnd && series.length > best.length)
+    ) {
+      best = series;
+      bestLatestEnd = latestEnd;
     }
   }
-  return best;
+  return { series: best, entityName };
 }
 
 /**
- * Free cash flow = operating cash flow − capex. Intersect fiscal years
- * available in both series; if capex isn't reported for a year (rare),
- * fall back to OCF alone for that year so the series still draws.
+ * Free cash flow = operating cash flow − capex. Both pulled via
+ * per-concept fetches; aligned by period-end (years can drift across
+ * concepts on rare restatements; `end` is the unambiguous join key).
  */
-function freeCashFlow(facts: XbrlFacts, limit = 10): AnnualPoint[] {
-  const ocf = annualSeries(facts, OPERATING_CASH_CONCEPTS, "USD", 25);
-  if (ocf.length === 0) return [];
-  const capex = annualSeries(facts, CAPEX_CONCEPTS, "USD", 25);
-  // Align by period-end (years can drift across concepts on rare
-  // restatements; the end date is the unambiguous join key).
-  const capexByEnd = new Map(capex.map((p) => [p.end, p.val]));
-  const out: AnnualPoint[] = ocf.map((p) => {
-    // capex is filed as a positive outflow; FCF = OCF − capex.
-    const cx = capexByEnd.get(p.end) ?? 0;
-    return { endYear: p.endYear, val: p.val - cx, filed: p.filed, end: p.end };
-  });
-  return out.slice(-limit);
+async function freeCashFlowSeries(
+  issuerCik: string,
+  limit = 10,
+): Promise<MetricSeries> {
+  const ocf = await metricSeries(issuerCik, OPERATING_CASH_CONCEPTS, "USD", 25);
+  if (ocf.series.length === 0) return { series: [], entityName: ocf.entityName };
+  const capex = await metricSeries(issuerCik, CAPEX_CONCEPTS, "USD", 25);
+  const capexByEnd = new Map(capex.series.map((p) => [p.end, p.val]));
+  const series: AnnualPoint[] = ocf.series
+    .map((p) => ({
+      endYear: p.endYear,
+      // capex is reported as a positive outflow; FCF = OCF − capex.
+      val: p.val - (capexByEnd.get(p.end) ?? 0),
+      filed: p.filed,
+      end: p.end,
+    }))
+    .slice(-limit);
+  return { series, entityName: ocf.entityName || capex.entityName };
 }
 
 function yoyPct(series: AnnualPoint[]): number | null {
@@ -142,11 +152,12 @@ function yoyPct(series: AnnualPoint[]): number | null {
 }
 
 /**
- * Server component. Pulls XBRL companyfacts for the issuer and renders
- * a 4-tile panel (Revenue / Net income / EPS / Free cash flow) with
- * latest value, YoY change, and a ~10y sparkline. Renders nothing if
- * the issuer has no XBRL data (private companies, foreign filers
- * without us-gaap or ifrs-full tags, or new SPACs pre-first-filing).
+ * Server component. Pulls four metric time-series from SEC EDGAR XBRL
+ * via per-concept fetches (cacheable; the full companyfacts blob can
+ * exceed Next.js's 2 MB cache item limit for big filers). Renders a
+ * 4-tile panel with latest value, YoY change, and a ~10y sparkline.
+ * Renders nothing if no metrics have data (private companies, foreign
+ * filers without us-gaap/ifrs-full tags, pre-first-filing).
  */
 export async function StockFundamentals({
   issuerCik,
@@ -155,13 +166,15 @@ export async function StockFundamentals({
   issuerCik: string;
   entityName: string;
 }) {
-  const facts = await fetchCompanyFacts(issuerCik);
-  if (!facts) return null;
-
-  const revenue = annualSeries(facts, REVENUE_CONCEPTS, "USD");
-  const netIncome = annualSeries(facts, NET_INCOME_CONCEPTS, "USD");
-  const epsDiluted = annualSeries(facts, EPS_DILUTED_CONCEPTS, "USD/shares");
-  const fcf = freeCashFlow(facts);
+  // All four metrics fetched in parallel — fetchCompanyConcept is
+  // React-cached within the request and Next-data-cached across requests,
+  // so a hot page is essentially free.
+  const [revenue, netIncome, eps, fcf] = await Promise.all([
+    metricSeries(issuerCik, REVENUE_CONCEPTS, "USD"),
+    metricSeries(issuerCik, NET_INCOME_CONCEPTS, "USD"),
+    metricSeries(issuerCik, EPS_DILUTED_CONCEPTS, "USD/shares"),
+    freeCashFlowSeries(issuerCik),
+  ]);
 
   const metrics: Array<{
     label: string;
@@ -170,31 +183,38 @@ export async function StockFundamentals({
   }> = [
     {
       label: "Revenue",
-      series: revenue,
+      series: revenue.series,
       format: (v) => formatUSD(v, { compact: true }),
     },
     {
       label: "Net income",
-      series: netIncome,
+      series: netIncome.series,
       format: (v) => formatUSD(v, { compact: true }),
     },
     {
       label: "EPS (diluted)",
-      series: epsDiluted,
+      series: eps.series,
       format: (v) => `$${v.toFixed(2)}`,
     },
     {
       label: "Free cash flow",
-      series: fcf,
+      series: fcf.series,
       format: (v) => formatUSD(v, { compact: true }),
     },
   ];
 
-  // Need at least 2 points to show a sparkline + YoY.
   const populated = metrics.filter((m) => m.series.length >= 2);
   if (populated.length === 0) return null;
 
-  const sourceName = facts.entityName || entityName;
+  // Prefer the XBRL-reported entity name (more authoritative than our
+  // ticker map); fall back to the ticker map's name if none of the
+  // concepts resolved (defensive — shouldn't happen since we got here).
+  const sourceName =
+    revenue.entityName ||
+    netIncome.entityName ||
+    eps.entityName ||
+    fcf.entityName ||
+    entityName;
 
   return (
     <section className="mt-16">
