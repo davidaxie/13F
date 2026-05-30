@@ -18,12 +18,13 @@ import twoSigma from "../data/backtest/1179392.json";
 // Cubs / solos — full history, all validated ≥64% CUSIP coverage with
 // healthy (non-flat) equity curves.
 //
-// THREE of the 18 UE-01 funds are still NOT wired — they fall back to the
-// graceful "pending" state and will be filled by the weekly snapshot cron:
-//   • Point72 (1603466) — Yahoo 429-rate-limited before generation
-//     completed (thousands of unique small-cap tickers per quarter).
-//   • Trian (1345472) — transient SEC fetch keeps producing 0-trade
-//     snapshots; CIK is valid (14 13F-HRs), cron will recover it.
+// TWO of the 18 UE-01 funds are still NOT wired — they fall back to the
+// graceful "pending" state:
+//   • Trian (1345472) — pre-2012 13F filings aren't in the XML format
+//     the parser expects ("No information table XML found in filing"),
+//     so EVERY historical filing fails and the snapshot is 0 trades.
+//     This is a parser scope limitation, not a transient — a retry
+//     won't fix it. Wire it once the parser handles legacy 13Fs.
 //   • Starboard (1517137) — only 28% of CUSIPs map via the bundled seed
 //     (small-cap activist targets); too low to represent the book without
 //     an OpenFIGI key to expand the mapping.
@@ -45,6 +46,7 @@ import duquesne from "../data/backtest/1536411.json";
 import deShaw from "../data/backtest/1009207.json";
 import aqr from "../data/backtest/1167557.json";
 import millennium from "../data/backtest/1273087.json";
+import point72 from "../data/backtest/1603466.json";
 
 const SNAPSHOTS: Record<string, FundBacktest> = {
   "1067983": berkshire as unknown as FundBacktest,
@@ -71,6 +73,7 @@ const SNAPSHOTS: Record<string, FundBacktest> = {
   "1009207": deShaw as unknown as FundBacktest,
   "1167557": aqr as unknown as FundBacktest,
   "1273087": millennium as unknown as FundBacktest,
+  "1603466": point72 as unknown as FundBacktest,
 };
 
 export function getSnapshot(cik: string): FundBacktest | null {
