@@ -18,11 +18,10 @@ import twoSigma from "../data/backtest/1179392.json";
 // Cubs / solos — full history, all validated ≥64% CUSIP coverage with
 // healthy (non-flat) equity curves.
 //
-// FOUR of the 18 UE-01 funds are still NOT wired — they fall back to the
+// THREE of the 18 UE-01 funds are still NOT wired — they fall back to the
 // graceful "pending" state and will be filled by the weekly snapshot cron:
-//   • Millennium (1273087) and Point72 (1603466) — Yahoo 429-rate-limited
-//     before they finished generating (thousands of unique small-cap
-//     tickers per quarter).
+//   • Point72 (1603466) — Yahoo 429-rate-limited before generation
+//     completed (thousands of unique small-cap tickers per quarter).
 //   • Trian (1345472) — transient SEC fetch keeps producing 0-trade
 //     snapshots; CIK is valid (14 13F-HRs), cron will recover it.
 //   • Starboard (1517137) — only 28% of CUSIPs map via the bundled seed
@@ -45,6 +44,7 @@ import duquesne from "../data/backtest/1536411.json";
 // healthy equity curves (~95 daily points each).
 import deShaw from "../data/backtest/1009207.json";
 import aqr from "../data/backtest/1167557.json";
+import millennium from "../data/backtest/1273087.json";
 
 const SNAPSHOTS: Record<string, FundBacktest> = {
   "1067983": berkshire as unknown as FundBacktest,
@@ -70,6 +70,7 @@ const SNAPSHOTS: Record<string, FundBacktest> = {
   "1536411": duquesne as unknown as FundBacktest,
   "1009207": deShaw as unknown as FundBacktest,
   "1167557": aqr as unknown as FundBacktest,
+  "1273087": millennium as unknown as FundBacktest,
 };
 
 export function getSnapshot(cik: string): FundBacktest | null {
