@@ -18,14 +18,16 @@ import twoSigma from "../data/backtest/1179392.json";
 // Cubs / solos — full history, all validated ≥64% CUSIP coverage with
 // healthy (non-flat) equity curves.
 //
-// SIX of the 18 UE-01 funds are intentionally NOT wired here — they fall
-// back to a live backtest and will be filled by the weekly snapshot cron:
-//   • Heavy quant books (D.E. Shaw, AQR, Millennium, Point72) — Yahoo
-//     rate-limited (429) before they finished generating.
-//   • Trian (1345472) — transient SEC fetch failure produced a 0-trade
-//     snapshot; CIK is valid (14 13F-HRs), so the cron will recover it.
-//   • Starboard (1517137) — only 26% of CUSIPs mapped via the bundled
-//     seed (small-cap activist targets), too low to represent the book.
+// FOUR of the 18 UE-01 funds are still NOT wired — they fall back to the
+// graceful "pending" state and will be filled by the weekly snapshot cron:
+//   • Millennium (1273087) and Point72 (1603466) — Yahoo 429-rate-limited
+//     before they finished generating (thousands of unique small-cap
+//     tickers per quarter).
+//   • Trian (1345472) — transient SEC fetch keeps producing 0-trade
+//     snapshots; CIK is valid (14 13F-HRs), cron will recover it.
+//   • Starboard (1517137) — only 28% of CUSIPs map via the bundled seed
+//     (small-cap activist targets); too low to represent the book without
+//     an OpenFIGI key to expand the mapping.
 import elliott from "../data/backtest/1048445.json";
 import thirdPoint from "../data/backtest/1040273.json";
 import lonePine from "../data/backtest/1061165.json";
@@ -38,6 +40,11 @@ import scion from "../data/backtest/1649339.json";
 import maverick from "../data/backtest/934639.json";
 import jana from "../data/backtest/1159159.json";
 import duquesne from "../data/backtest/1536411.json";
+// Heavy quant books — capped to 8 recent quarters at generation time so the
+// Yahoo fetch volume stays manageable. Validated ≥75% ticker coverage and
+// healthy equity curves (~95 daily points each).
+import deShaw from "../data/backtest/1009207.json";
+import aqr from "../data/backtest/1167557.json";
 
 const SNAPSHOTS: Record<string, FundBacktest> = {
   "1067983": berkshire as unknown as FundBacktest,
@@ -61,6 +68,8 @@ const SNAPSHOTS: Record<string, FundBacktest> = {
   "934639": maverick as unknown as FundBacktest,
   "1159159": jana as unknown as FundBacktest,
   "1536411": duquesne as unknown as FundBacktest,
+  "1009207": deShaw as unknown as FundBacktest,
+  "1167557": aqr as unknown as FundBacktest,
 };
 
 export function getSnapshot(cik: string): FundBacktest | null {
