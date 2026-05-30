@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sparkline } from "@/components/charts/sparkline";
+import { StockFundamentals } from "@/components/stock-fundamentals";
+import { StockRecentFilings } from "@/components/stock-recent-filings";
 import { WatchlistStar } from "@/components/watchlist-star";
 import { getInsiderFilings } from "@/lib/edgar";
 import { cikForTicker, getSectorByTicker } from "@/lib/refdata";
@@ -493,6 +495,17 @@ export default async function StockPage({
               )}
             </section>
           )}
+
+          {/* ============= FUNDAMENTALS (SEC XBRL) ============= */}
+          {issuer && (
+            <StockFundamentals
+              issuerCik={issuer.cik}
+              entityName={issuer.name}
+            />
+          )}
+
+          {/* ============= RECENT SEC FILINGS ============= */}
+          {issuer && <StockRecentFilings issuerCik={issuer.cik} />}
 
           {/* ============= TRADE LINEAGE ============= */}
           {(() => {
