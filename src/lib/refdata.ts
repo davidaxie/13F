@@ -49,6 +49,20 @@ export function getGicsCoverage(): {
   return { totalTickers: Object.keys(GICS).length, sectorCounts: counts };
 }
 
+// Share-class separator varies by source: S&P uses ".", Yahoo uses "-",
+// Bloomberg uses "/", SEC's company_tickers.json sometimes drops the
+// separator entirely. Mirrors the variant generator in cusip-lookup.ts so
+// /stock/BRK.B routes through to the same issuer record as BRK-B / BRKB.
+function tickerVariants(input: string): string[] {
+  const upper = input.trim().toUpperCase();
+  const variants = new Set<string>([upper]);
+  variants.add(upper.replace(/[.\-/]/g, ""));
+  variants.add(upper.replace(/[.\-/]/g, "."));
+  variants.add(upper.replace(/[.\-/]/g, "-"));
+  variants.add(upper.replace(/[.\-/]/g, "/"));
+  return Array.from(variants);
+}
+
 /**
  * Look up a company's SEC CIK by its ticker symbol. Used to fetch
  * issuer-keyed EDGAR filings (Form 4 insider transactions, 13D/G filed
@@ -56,12 +70,20 @@ export function getGicsCoverage(): {
  *
  * Source: SEC's company_tickers.json (~10K public US issuers, refreshed
  * via scripts/build-company-tickers.ts).
+ *
+ * Tries the input as given, plus normalized variants (BRK.B → BRK-B → BRKB)
+ * so the issuer-side fetches (Insider, Fundamentals, Recent SEC filings)
+ * resolve regardless of which separator the URL or upstream source used.
  */
 export function cikForTicker(
   ticker: string | null | undefined,
 ): { cik: string; name: string } | null {
   if (!ticker) return null;
-  return COMPANY_TICKERS[ticker.toUpperCase()] ?? null;
+  for (const v of tickerVariants(ticker)) {
+    const hit = COMPANY_TICKERS[v];
+    if (hit) return hit;
+  }
+  return null;
 }
 
 /**

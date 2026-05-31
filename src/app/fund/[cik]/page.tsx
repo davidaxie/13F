@@ -188,13 +188,23 @@ export default async function FundPage({
                         {i + 1}
                       </td>
                       <td className="py-3 px-3 text-foreground">
+                        {/* Wrap the issuer in a block-level div so it
+                            sits on its own line above the ticker/cusip
+                            block. Previously the inline <Link> + block
+                            <div> sequence rendered as a single visual
+                            run ("APPLE INCAAPL") in some flex contexts
+                            (and in HTML scrapes via curl). Forcing block
+                            display via the wrapper restores a clean
+                            two-line layout. */}
                         {ticker ? (
-                          <Link
-                            href={`/stock/${ticker}`}
-                            className="font-serif text-base leading-tight transition-colors hover:text-accent"
-                          >
-                            {r.issuer}
-                          </Link>
+                          <div>
+                            <Link
+                              href={`/stock/${ticker}`}
+                              className="font-serif text-base leading-tight transition-colors hover:text-accent"
+                            >
+                              {r.issuer}
+                            </Link>
+                          </div>
                         ) : (
                           <div className="font-serif text-base leading-tight">
                             {r.issuer}

@@ -12,7 +12,19 @@ const W = 880;
 const H = 360;
 const M = { top: 30, right: 30, bottom: 36, left: 80 };
 
-export function PnlStairstepChart({ data }: { data: PnlPoint[] }) {
+export function PnlStairstepChart({
+  data,
+  mirrorScale = 1,
+}: {
+  data: PnlPoint[];
+  /**
+   * Multiplier applied to every cumulative-PnL and per-trade callout so the
+   * chart reflects the $10k-mirror narrative. Defaults to 1 (raw full-book
+   * values). For Berkshire's $89B first filing, mirrorScale ≈ 1.12e-7 — DEO's
+   * −$20.6B raw P&L renders as roughly −$2.3k after scaling.
+   */
+  mirrorScale?: number;
+}) {
   if (data.length < 2) {
     return (
       <div className="rounded border border-hairline px-6 py-12 text-center text-sm text-muted">
@@ -28,7 +40,7 @@ export function PnlStairstepChart({ data }: { data: PnlPoint[] }) {
   const xMax = new Date(data[data.length - 1].date + "T00:00:00Z").getTime();
   const xScale = makeScale(xMin, xMax, M.left, M.left + plotW);
 
-  const allVals = data.map((d) => d.cumulative);
+  const allVals = data.map((d) => d.cumulative * mirrorScale);
   let yMin = Math.min(0, ...allVals);
   let yMax = Math.max(0, ...allVals);
   if (yMin === yMax) yMax = yMin + 1;
@@ -39,7 +51,7 @@ export function PnlStairstepChart({ data }: { data: PnlPoint[] }) {
 
   const points: Array<[number, number]> = data.map((d) => [
     xScale(new Date(d.date + "T00:00:00Z").getTime()),
-    yScale(d.cumulative),
+    yScale(d.cumulative * mirrorScale),
   ]);
   // Anchor the start at y=0 so the step path starts from the zero line.
   const anchored: Array<[number, number]> = [
@@ -50,7 +62,8 @@ export function PnlStairstepChart({ data }: { data: PnlPoint[] }) {
   const yTicks = niceTicks(yMin, yMax, 5);
   const xTicks = yearTicks(data[0].date, data[data.length - 1].date);
 
-  // Label the top 4 biggest trades by abs P&L.
+  // Label the top 4 biggest trades by abs P&L. Rank by raw magnitude (the
+  // mirror scale is uniform, so it doesn't change ordering).
   const topTrades = [...data]
     .sort((a, b) => Math.abs(b.trade.pnlUsd) - Math.abs(a.trade.pnlUsd))
     .slice(0, 4);
@@ -123,7 +136,8 @@ export function PnlStairstepChart({ data }: { data: PnlPoint[] }) {
           const x = points[i][0];
           const y = points[i][1];
           const labelY = y - 14;
-          const labelText = `${p.trade.ticker ?? p.trade.issuer} ${p.trade.pnlUsd >= 0 ? "+" : "−"}${formatAxisDollar(Math.abs(p.trade.pnlUsd))}`;
+          const scaledPnl = p.trade.pnlUsd * mirrorScale;
+          const labelText = `${p.trade.ticker ?? p.trade.issuer} ${scaledPnl >= 0 ? "+" : "−"}${formatAxisDollar(Math.abs(scaledPnl))}`;
           return (
             <g key={i}>
               <line

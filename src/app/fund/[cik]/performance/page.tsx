@@ -103,6 +103,24 @@ export default async function PerformancePage({
   const closedTrades = trades.filter((t) => t.status === "closed");
   const openTrades = trades.filter((t) => t.status === "open");
 
+  // The page narrative is "$10k mirrored" — but stats.realizedPnlUsd is the
+  // full-book equivalent (sum of raw 13F trade P&L). Scale it to the mirror
+  // so the headline matches the story. mirrorRealizedPnlUsd ≈
+  // realizedPnlUsd × (startingCash / firstFilingTotalValueUsd).
+  const firstEntryDate = trades.reduce<string | null>((acc, t) => {
+    if (!acc || t.entryDate < acc) return t.entryDate;
+    return acc;
+  }, null);
+  const firstFilingTotalValueUsd = firstEntryDate
+    ? trades.reduce(
+        (sum, t) => (t.entryDate === firstEntryDate ? sum + t.entryValueUsd : sum),
+        0,
+      )
+    : 0;
+  const mirrorScale =
+    firstFilingTotalValueUsd > 0 ? startingCash / firstFilingTotalValueUsd : 0;
+  const mirrorRealizedPnlUsd = result.stats.realizedPnlUsd * mirrorScale;
+
   // Risk metrics derived from the existing weekly equity curve — no snapshot
   // regeneration needed.
   const risk = computeRiskMetrics(equityCurve);
@@ -248,9 +266,10 @@ export default async function PerformancePage({
             tone={stats.mirrorReturnPct >= 0 ? "up" : "down"}
           />
           <Stat
-            label={`Alpha vs ${selectedBench}`}
+            label={`Excess return vs ${selectedBench}`}
             value={`${stats.alphaPct >= 0 ? "+" : ""}${formatPct(stats.alphaPct, 1)}`}
             tone={stats.alphaPct >= 0 ? "up" : "down"}
+            title={`(Mirror final − ${selectedBench} final) ÷ starting cash. Cumulative dollar outperformance vs the benchmark — not factor alpha (see Jensen α / style α below).`}
           />
         </div>
       </section>
@@ -537,14 +556,15 @@ export default async function PerformancePage({
         </div>
 
         <div className="mt-6">
-          <PnlStairstepChart data={pnlSeries} />
+          <PnlStairstepChart data={pnlSeries} mirrorScale={mirrorScale} />
         </div>
 
         <div className="mt-8 grid grid-cols-2 gap-x-10 gap-y-6 border-t border-hairline pt-8 sm:grid-cols-4">
           <Stat
             label="Realized P&L"
-            value={`${stats.realizedPnlUsd >= 0 ? "+" : "−"}${formatUSD(Math.abs(stats.realizedPnlUsd), { compact: true })}`}
-            tone={stats.realizedPnlUsd >= 0 ? "up" : "down"}
+            value={`${mirrorRealizedPnlUsd >= 0 ? "+" : "−"}${formatUSD(Math.abs(mirrorRealizedPnlUsd), { compact: true })}`}
+            tone={mirrorRealizedPnlUsd >= 0 ? "up" : "down"}
+            title={`Scaled to the $${startingCash.toLocaleString()} mirror. Full-book equivalent ${stats.realizedPnlUsd >= 0 ? "+" : "−"}${formatUSD(Math.abs(stats.realizedPnlUsd), { compact: true })}.`}
           />
           <Stat label="Closed trades" value={stats.closedTrades.toLocaleString()} />
           <Stat

@@ -1,14 +1,83 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Sparkline } from "@/components/charts/sparkline";
 import { StockFundamentals } from "@/components/stock-fundamentals";
 import { StockRecentFilings } from "@/components/stock-recent-filings";
 import { WatchlistStar } from "@/components/watchlist-star";
 import { getInsiderFilings } from "@/lib/edgar";
+import { fetchCompanyConcept } from "@/lib/sec-xbrl";
+import { MARQUEE_FUNDS } from "@/lib/funds";
 import { cikForTicker, getSectorByTicker } from "@/lib/refdata";
 import { getStockView } from "@/lib/stock-view";
 import { formatDate, formatInt, formatPct, formatUSD, quarterLabel } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import companyTickerData from "@/data/company-tickers.json";
+
+// Set of canonical ticker keys as they appear in SEC's
+// company_tickers.json — this is the authoritative form we redirect to.
+// `cikForTicker` was widened to accept separator variants (BRK.B/BRK-B/
+// BRKB all resolve), so it can't be used to detect "already canonical".
+// We need the raw key set for that.
+const CANONICAL_TICKERS: Set<string> = new Set(
+  Object.keys(companyTickerData as Record<string, unknown>),
+);
+
+// Derive the 8Q-snapshot fund name list once from the single source of
+// truth in src/lib/funds.ts. Used in caveat callouts here, on
+// /backtest/follower, and /backtest/conviction so all three pages stay
+// in sync as we tag/untag funds.
+const HEAVY_FUNDS_LABEL = MARQUEE_FUNDS.filter(
+  (f) => f.snapshotMode === "8q",
+)
+  .map((f) => f.displayName)
+  .join(", ");
+
+/**
+ * Pick the canonical share-class form for a ticker. Class shares ship
+ * in multiple separator conventions across vendors — SEC and Yahoo use
+ * "-" (BRK-B), S&P uses "." (BRK.B), Bloomberg uses "/" (BRK/B), and the
+ * raw symbol "BRKB" floats around too. We canonicalize on whatever form
+ * keys appear *literally* in SEC's company_tickers.json so the
+ * fundamentals + recent-filings panels resolve on a single URL.
+ *
+ * Why we check the raw key set rather than `cikForTicker`: that helper
+ * was widened to accept variants, so `cikForTicker("BRK.B")` now also
+ * returns the BRK-B entry. The raw key set is the authoritative
+ * "this is the on-disk canonical form" signal.
+ *
+ * Returns the canonical form when the input matches a known variant.
+ * Returns the original (uppercased) input untouched when no canonical
+ * is found — callers should not redirect in that case.
+ */
+function canonicalizeTicker(input: string): string {
+  const upper = input.trim().toUpperCase();
+  // Already canonical? (Fast path — most tickers have no separator.)
+  if (CANONICAL_TICKERS.has(upper)) return upper;
+  // Try common separator variants against the raw key set.
+  const stripped = upper.replace(/[.\-/]/g, "");
+  const candidates = new Set<string>([
+    upper,
+    stripped,
+    // For 4–5 letter symbols with a possible class suffix, try
+    // inserting "-" / "." / "/" before the last character.
+    stripped.length >= 4
+      ? `${stripped.slice(0, -1)}-${stripped.slice(-1)}`
+      : stripped,
+    stripped.length >= 4
+      ? `${stripped.slice(0, -1)}.${stripped.slice(-1)}`
+      : stripped,
+    stripped.length >= 4
+      ? `${stripped.slice(0, -1)}/${stripped.slice(-1)}`
+      : stripped,
+    upper.replace(/[.\-/]/g, "-"),
+    upper.replace(/[.\-/]/g, "."),
+    upper.replace(/[.\-/]/g, "/"),
+  ]);
+  for (const c of candidates) {
+    if (CANONICAL_TICKERS.has(c)) return c;
+  }
+  return upper;
+}
 
 export const dynamic = "force-static";
 
@@ -18,7 +87,16 @@ export default async function StockPage({
   params: Promise<{ ticker: string }>;
 }) {
   const { ticker: rawTicker } = await params;
-  const view = getStockView(decodeURIComponent(rawTicker));
+  const decoded = decodeURIComponent(rawTicker).trim().toUpperCase();
+  // Canonicalize share-class separators (BRK.B → BRK-B per SEC), and
+  // redirect if the URL doesn't match the canonical form. Only kicks in
+  // when we have a known SEC mapping — unknown tickers pass through
+  // untouched so the page can still render the holders view.
+  const canonical = canonicalizeTicker(decoded);
+  if (canonical !== decoded) {
+    redirect(`/stock/${encodeURIComponent(canonical)}`);
+  }
+  const view = getStockView(decoded);
   if (!view) notFound();
 
   const hasAnyCoverage =
@@ -28,9 +106,24 @@ export default async function StockPage({
   // Insider transactions are filed against the issuer's CIK, not by 13F
   // filers. Resolve the issuer CIK from the ticker and fetch in parallel.
   const issuer = cikForTicker(view.ticker);
-  const insiderFilings = issuer
-    ? await getInsiderFilings(issuer.cik)
-    : [];
+  // Fetch the clean issuer name from SEC's XBRL endpoint. The fund-side
+  // 13F filings carry the issuer name in a width-padded fixed format
+  // ("APPLE   INC"), which leaks through `view.issuer` from snapshot
+  // trades. The XBRL companyconcept response includes a clean
+  // `entityName` ("Apple Inc.") — fetch any always-present concept to
+  // get it. `Assets` is the safest choice: every us-gaap filer reports
+  // it on every balance sheet. Result is React-cached, so the
+  // fundamentals panel below reuses this fetch on the same request.
+  // Falls back to `view.issuer` on private/foreign filers that don't
+  // tag us-gaap.
+  const [insiderFilings, xbrlSample] = await Promise.all([
+    issuer ? getInsiderFilings(issuer.cik) : Promise.resolve([]),
+    issuer
+      ? fetchCompanyConcept(issuer.cik, "Assets")
+      : Promise.resolve(null),
+  ]);
+  const cleanIssuerName =
+    xbrlSample?.entityName?.trim() || issuer?.name?.trim() || view.issuer;
 
   // Form 4s in the last 30 / 90 days — the canonical insider-activity
   // headline numbers. Compared against the latest filing date (not wall
@@ -63,7 +156,7 @@ export default async function StockPage({
           <h1 className="font-mono text-5xl tracking-tight text-foreground sm:text-6xl">
             {view.ticker}
           </h1>
-          <span className="font-serif text-2xl text-muted">{view.issuer}</span>
+          <span className="font-serif text-2xl text-muted">{cleanIssuerName}</span>
           <WatchlistStar kind="stock" id={view.ticker} size={20} />
         </div>
 
@@ -88,7 +181,9 @@ export default async function StockPage({
             <span className="tabular text-foreground">
               {view.currentHolders.length}
             </span>{" "}
-            of {view.stakes.length} marquee funds currently hold
+            of {view.stakes.length}
+            {" "}
+            marquee funds currently hold
           </span>
           <span>
             <span className="tabular text-foreground">
@@ -102,9 +197,11 @@ export default async function StockPage({
       {!hasAnyCoverage ? (
         <section className="mt-16">
           <p className="font-serif text-lg text-muted">
-            None of the {view.stakes.length} marquee funds tracked here have
-            ever reported a position in <span className="text-foreground">{view.ticker}</span>.
-            That doesn&apos;t mean it&apos;s unowned — only that it&apos;s
+            None of the {view.stakes.length}
+            {" "}
+            marquee funds tracked here have ever reported a position in{" "}
+            <span className="text-foreground">{view.ticker}</span>. That
+            doesn&apos;t mean it&apos;s unowned — only that it&apos;s
             outside this universe.
           </p>
           <div className="mt-6 text-sm text-muted">
@@ -238,7 +335,7 @@ export default async function StockPage({
                     <tr className="border-y border-hairline text-left text-xs uppercase tracking-wider text-muted">
                       <th className="py-3 pr-3 font-normal">Fund</th>
                       <th className="py-3 px-3 text-right font-normal">
-                        First bought
+                        First disclosed
                       </th>
                       <th className="py-3 px-3 text-right font-normal">
                         Held
@@ -256,6 +353,14 @@ export default async function StockPage({
                   </thead>
                   <tbody>
                     {view.currentHolders.map((s) => {
+                      // 8Q-snapshot funds (Renaissance / Citadel / Two
+                      // Sigma / Soros / D.E. Shaw / AQR / Millennium /
+                      // Point72) only have the last 8 quarters of data,
+                      // so what we show as "first disclosed" is just the
+                      // first quarter we have — NOT the fund's first-ever
+                      // buy. Annotate the cell so readers don't read it
+                      // as a fund-level tenure claim.
+                      const is8Q = s.fund.snapshotMode === "8q";
                       return (
                         <tr
                           key={s.fund.cik}
@@ -269,13 +374,21 @@ export default async function StockPage({
                               {s.fund.displayName}
                             </Link>
                             {s.tradeCount > 1 && (
-                              <span className="ml-2 font-mono text-[10px] uppercase tracking-wider text-muted">
-                                re-entered
-                              </span>
+                              <>
+                                {" "}
+                                <span className="ml-2 font-mono text-[10px] uppercase tracking-wider text-muted">
+                                  re-entered
+                                </span>
+                              </>
                             )}
                           </td>
                           <td className="py-3 px-3 text-right text-xs text-muted">
                             {quarterLabel(s.firstEverEntryDate)}
+                            {is8Q && (
+                              <span className="ml-1 text-muted/60">
+                                (8Q snapshot)
+                              </span>
+                            )}
                           </td>
                           <td className="py-3 px-3 text-right tabular text-muted">
                             {s.heldQuartersApprox}Q
@@ -364,9 +477,12 @@ export default async function StockPage({
                             {s.fund.displayName}
                           </Link>
                           {s.tradeCount > 1 && (
-                            <span className="ml-2 font-mono text-[10px] uppercase tracking-wider text-muted">
-                              {s.tradeCount}× in & out
-                            </span>
+                            <>
+                              {" "}
+                              <span className="ml-2 font-mono text-[10px] uppercase tracking-wider text-muted">
+                                {s.tradeCount}× in & out
+                              </span>
+                            </>
                           )}
                         </td>
                         <td className="py-3 px-3 text-right text-xs text-muted">
@@ -625,13 +741,15 @@ export default async function StockPage({
             </div>
             <ul className="ml-4 list-disc space-y-1">
               <li>
-                Covers only the {view.stakes.length} marquee funds tracked
-                here, not the full institutional universe. A &ldquo;0
-                holders&rdquo; reading does not mean unowned.
+                Covers only the {view.stakes.length}
+                {" "}
+                marquee funds tracked here, not the full institutional
+                universe. A &ldquo;0 holders&rdquo; reading does not mean
+                unowned.
               </li>
               <li>
-                Heavy funds (Renaissance, Citadel, Two Sigma, Soros) use
-                8-quarter snapshots, so their pre-2023 history is missing.
+                Heavy funds ({HEAVY_FUNDS_LABEL}) use 8-quarter snapshots,
+                so their pre-2024 history is missing.
               </li>
               <li>
                 &ldquo;Current&rdquo; reflects each fund&apos;s most recent

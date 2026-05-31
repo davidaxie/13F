@@ -1,7 +1,17 @@
 import Link from "next/link";
 import { computeConvictionBacktest } from "@/lib/conviction-backtest";
+import { MARQUEE_FUNDS } from "@/lib/funds";
 import { CaveatCallout } from "@/components/caveat-callout";
 import { ConvictionView } from "@/components/conviction-view";
+
+// Derived once from MARQUEE_FUNDS — single source of truth shared with
+// /stock/[ticker] and /backtest/follower caveat blocks. Keeps the three
+// caveat sites in lockstep as we tag/untag funds.
+const HEAVY_FUNDS_LABEL = MARQUEE_FUNDS.filter(
+  (f) => f.snapshotMode === "8q",
+)
+  .map((f) => f.displayName)
+  .join(", ");
 
 export default function ConvictionPage() {
   const data = computeConvictionBacktest();
@@ -50,7 +60,7 @@ export default function ConvictionPage() {
           },
           {
             title: "Heavy-fund window asymmetry",
-            body: "Renaissance / Citadel / Two Sigma / Soros only have 8 quarters of history; a ≥8Q filter mostly excludes them.",
+            body: `${HEAVY_FUNDS_LABEL} only have 8 quarters of history; a ≥8Q filter mostly excludes them.`,
           },
         ]}
       />
@@ -91,11 +101,10 @@ export default function ConvictionPage() {
             exit price (or today, for still-open positions).
           </li>
           <li>
-            Heavy funds (Renaissance, Citadel, Two Sigma, Soros) use
-            8-quarter snapshots, so a ≥8Q conviction filter will mostly
-            exclude them. Funds with full history (Berkshire, Pershing,
-            Tiger, Bridgewater, Appaloosa) dominate the high-conviction
-            buckets.
+            Heavy funds ({HEAVY_FUNDS_LABEL}) use 8-quarter snapshots, so
+            a ≥8Q conviction filter will mostly exclude them. Funds with
+            full history (Berkshire, Pershing, Tiger, Bridgewater,
+            Appaloosa) dominate the high-conviction buckets.
           </li>
           <li>
             Each &ldquo;buy signal&rdquo; is a separate $10k lot —

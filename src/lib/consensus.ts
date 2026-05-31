@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { assetClassForCusip } from "./asset-class";
 import { MARQUEE_FUNDS, type MarqueeFund } from "./dashboard";
 import { getSnapshot } from "./snapshots";
 import { tickerForCusip } from "./stock-view";
@@ -25,7 +26,15 @@ export type ConsensusName = {
   // Sums.
   totalHolders: number;
   netNewMinusExits: number;
+  // Sum of entryValueUsd across `holders` — i.e. capital currently parked in
+  // the name across the marquee universe. Zero on pure-exit consensus rows
+  // where everyone has sold (use totalExitValueUsd instead).
   totalEntryValueUsd: number;
+  // Sum of entryValueUsd across `exitedThisQuarter` — i.e. the last-known
+  // position size held by funds that just sold. The number the /consensus
+  // exits panel should render (previously was $0 because the dollar field
+  // was summed over `holders`, which is empty for pure exits).
+  totalExitValueUsd: number;
 };
 
 export type ConsensusView = {
@@ -96,6 +105,12 @@ export const computeConsensusView = cache((): ConsensusView => {
     }
 
     for (const [cusip, t] of latestTradeByCusip) {
+      // ETFs / treasury funds aren't single-name theses; dropping them keeps
+      // the most-owned / new-buys / exits lists about actual company picks
+      // rather than passive flow. Options are filtered upstream (no putCall
+      // can reach the snapshot trade-level data here).
+      if (assetClassForCusip(cusip) !== "common") continue;
+
       let acc = byCusip.get(cusip);
       if (!acc) {
         acc = {
@@ -107,9 +122,22 @@ export const computeConsensusView = cache((): ConsensusView => {
         };
         byCusip.set(cusip, acc);
       }
-      // Keep the longest issuer name seen — proxy for "cleanest" string.
-      if (t.issuer && t.issuer.length > acc.issuer.length) {
-        acc.issuer = t.issuer;
+      // Pick the cleanest issuer string across funds. A string with
+      // double-whitespace (e.g. "TAIWAN  SEMICONDUCTOR  MFG  LTD" from a
+      // mis-tokenized filing) is "mangled" — prefer a clean string even if
+      // it's shorter. If both are equally clean (or equally mangled), keep
+      // the longer one as a tiebreaker (more likely to include the legal
+      // suffix).
+      if (t.issuer) {
+        const accMangled = /\s{2,}/.test(acc.issuer);
+        const newMangled = /\s{2,}/.test(t.issuer);
+        if (accMangled && !newMangled) {
+          acc.issuer = t.issuer;
+        } else if (!accMangled && newMangled) {
+          // Keep current clean issuer.
+        } else if (t.issuer.length > acc.issuer.length) {
+          acc.issuer = t.issuer;
+        }
       }
 
       const activity: FundActivity = {
@@ -135,10 +163,27 @@ export const computeConsensusView = cache((): ConsensusView => {
   // Materialize into ConsensusName + apply summaries.
   const names: ConsensusName[] = [];
   for (const acc of byCusip.values()) {
-    const totalEntryValueUsd = acc.holders.reduce(
+    const holderEntryValueUsd = acc.holders.reduce(
       (s, h) => s + h.entryValueUsd,
       0,
     );
+    // Last-known dollar value of just-exited positions — the figure the
+    // /consensus exits panel needs. Previously the page read
+    // totalEntryValueUsd which is summed off `holders`; for fully-exited
+    // names `holders` is empty by definition, so every exit row rendered
+    // "$0 at entry" (~179 rows hit by this bug).
+    const totalExitValueUsd = acc.exitedThisQuarter.reduce(
+      (s, e) => s + e.entryValueUsd,
+      0,
+    );
+    // Reshape totalEntryValueUsd to "capital deployed in this name across
+    // the universe at the most recent activity" so renderers showing "$X at
+    // entry" get a meaningful number on exit-only rows too. For names with
+    // any active holders, this is the sum of open positions; for pure-exit
+    // rows, fall back to the sum of just-exited positions. Either way it's
+    // the latest snapshot's view of capital tied up in the name.
+    const totalEntryValueUsd =
+      acc.holders.length > 0 ? holderEntryValueUsd : totalExitValueUsd;
     names.push({
       cusip: acc.cusip,
       ticker: tickerForCusip(acc.cusip),
@@ -150,6 +195,7 @@ export const computeConsensusView = cache((): ConsensusView => {
       netNewMinusExits:
         acc.newThisQuarter.length - acc.exitedThisQuarter.length,
       totalEntryValueUsd,
+      totalExitValueUsd,
     });
   }
 
@@ -178,7 +224,9 @@ export const computeConsensusView = cache((): ConsensusView => {
   const consensusExits = names
     .filter((n) => n.exitedThisQuarter.length >= MIN_FOR_CONSENSUS_MOVE)
     .sort(
-      (a, b) => b.exitedThisQuarter.length - a.exitedThisQuarter.length,
+      (a, b) =>
+        b.exitedThisQuarter.length - a.exitedThisQuarter.length ||
+        b.totalExitValueUsd - a.totalExitValueUsd,
     );
 
   const disagreement = names
@@ -209,7 +257,7 @@ export const computeConsensusView = cache((): ConsensusView => {
     .sort(
       (a, b) =>
         b.exitedThisQuarter.length - a.exitedThisQuarter.length ||
-        b.totalEntryValueUsd - a.totalEntryValueUsd,
+        b.totalExitValueUsd - a.totalExitValueUsd,
     );
 
   return {

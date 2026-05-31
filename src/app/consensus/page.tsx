@@ -28,7 +28,7 @@ export default function ConsensusPage() {
           Consensus & crowding
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
-          Which names {view.fundsCovered} marquee funds collectively hold,
+          Which names {view.fundsCovered}{" "}marquee funds collectively hold,
           which ones they&apos;re piling into this quarter, which ones
           they&apos;re dumping, and where the smart money disagrees with
           itself. Inspired by Goldman&apos;s &ldquo;Hedge Fund VIP List&rdquo;

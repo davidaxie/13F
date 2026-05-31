@@ -3,13 +3,14 @@ import {
   ConvictionBar,
   ConvictionWeightsProvider,
 } from "@/components/conviction-bar";
+import { computeConsensusView } from "@/lib/consensus";
 import {
   entryWeightKey,
   getEntriesByStyleFast,
   type StyleEntry,
   type StyleGroup,
 } from "@/lib/entries-by-style";
-import { formatUSD } from "@/lib/format";
+import { formatDate, formatUSD } from "@/lib/format";
 import {
   FUND_STYLE_LABELS,
   SIGNAL_TIER_META,
@@ -63,6 +64,26 @@ function tierTone(tier: SignalTier): {
 
 export default function EntriesPage() {
   const groups = getEntriesByStyleFast();
+  // Same as-of date the /consensus page advertises — the latest filing date
+  // across the snapshotted universe. computeConsensusView is React-cached, so
+  // this is free if /consensus has already been rendered in the same request.
+  const { asOfDate } = computeConsensusView();
+
+  // Build a tier → full set of entry keys map, so each row's conviction bar
+  // can rank its weight against every entry in the same tier (across all
+  // styles that share that tier). Computed once per render — cheap, since
+  // entries are already in memory from getEntriesByStyleFast.
+  const tierKeysByTier: Record<SignalTier, string[]> = {
+    high: [],
+    medium: [],
+    low: [],
+    noise: [],
+  };
+  for (const g of groups) {
+    for (const e of g.entries) {
+      tierKeysByTier[g.tier].push(entryWeightKey(e.fundCik, e.cusip));
+    }
+  }
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -89,6 +110,24 @@ export default function EntriesPage() {
           new positions by the opening firm&apos;s style and ranks them by how
           much that entry actually tells you.
         </p>
+        {asOfDate && (
+          <div className="mt-3 text-xs text-muted">
+            As-of latest disclosure:{" "}
+            <span className="tabular text-foreground/80">
+              {formatDate(asOfDate)}
+            </span>
+          </div>
+        )}
+        <div className="mt-2 text-xs text-muted">
+          Funds not snapshotted: Trian, Starboard (see{" "}
+          <Link
+            href="/universe"
+            className="underline decoration-hairline underline-offset-2 hover:text-foreground"
+          >
+            /universe
+          </Link>{" "}
+          for status).
+        </div>
       </div>
 
       {/* Signal legend — the tier hierarchy, strongest first. */}
@@ -128,7 +167,11 @@ export default function EntriesPage() {
         ) : (
           <div className="mt-4">
             {groups.map((group) => (
-              <StyleSection key={group.style} group={group} />
+              <StyleSection
+                key={group.style}
+                group={group}
+                tierEntryKeys={tierKeysByTier[group.tier]}
+              />
             ))}
           </div>
         )}
@@ -163,56 +206,81 @@ export default function EntriesPage() {
   );
 }
 
-function StyleSection({ group }: { group: StyleGroup }) {
+function StyleSection({
+  group,
+  tierEntryKeys,
+}: {
+  group: StyleGroup;
+  // All entry keys in the same SignalTier as this group, across every style
+  // sharing that tier — so each row's conviction bar is ranked against the
+  // full tier distribution (e.g. all "high"-tier value+activist rows together)
+  // rather than just the rows visible in this section.
+  tierEntryKeys: readonly string[];
+}) {
   const meta = SIGNAL_TIER_META[group.tier];
   const tone = tierTone(group.tier);
   const shown = group.entries.slice(0, PER_STYLE_LIMIT);
   const hidden = group.entryCount - shown.length;
 
-  return (
-    <section className={cn("mt-16", tone.dim && "opacity-80")}>
-      <div
-        className={cn(
-          "flex flex-wrap items-baseline justify-between gap-3 border-b pb-3",
-          tone.border,
-        )}
-      >
-        <div className="min-w-0">
-          <div className="flex items-baseline gap-3">
-            <h2 className="font-serif text-2xl text-foreground">
-              {FUND_STYLE_LABELS[group.style]}
-            </h2>
-            <span
-              className={cn(
-                "rounded-sm border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest",
-                tone.badge,
-              )}
-            >
-              {meta.label}
+  // Quant rows are mostly mechanical, high-turnover flow; collapse them by
+  // default so the page leads with discretionary signal. Header stays visible
+  // — the disclosure widget reveals rows on click.
+  const collapsible = group.style === "quant";
+
+  const header = (
+    <div
+      className={cn(
+        "flex flex-wrap items-baseline justify-between gap-3 border-b pb-3",
+        tone.border,
+      )}
+    >
+      <div className="min-w-0">
+        <div className="flex items-baseline gap-3">
+          <h2 className="font-serif text-2xl text-foreground">
+            {FUND_STYLE_LABELS[group.style]}
+          </h2>
+          <span
+            className={cn(
+              "rounded-sm border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest",
+              tone.badge,
+            )}
+          >
+            {meta.label}
+          </span>
+          {collapsible && (
+            <span className="text-[10px] uppercase tracking-widest text-muted">
+              (click to expand)
             </span>
-          </div>
-          <p className="mt-1 max-w-xl text-xs leading-relaxed text-muted">
-            {meta.blurb}
-          </p>
+          )}
         </div>
-        <div className="text-right">
-          <div className="tabular text-sm text-foreground">
-            {formatUSD(group.totalEntryValueUsd, { compact: true })}
-          </div>
-          <div className="mt-0.5 text-xs uppercase tracking-widest text-muted">
-            {group.entryCount.toLocaleString()} entr
-            {group.entryCount === 1 ? "y" : "ies"} · {group.fundCount} fund
-            {group.fundCount === 1 ? "" : "s"}
-          </div>
+        <p className="mt-1 max-w-xl text-xs leading-relaxed text-muted">
+          {meta.blurb}
+        </p>
+      </div>
+      <div className="text-right">
+        <div className="tabular text-sm text-foreground">
+          {formatUSD(group.totalEntryValueUsd, { compact: true })}
+        </div>
+        <div className="mt-0.5 text-xs uppercase tracking-widest text-muted">
+          {group.entryCount.toLocaleString()} entr
+          {group.entryCount === 1 ? "y" : "ies"} · {group.fundCount} fund
+          {group.fundCount === 1 ? "" : "s"}
         </div>
       </div>
+    </div>
+  );
 
+  const body = (
+    <>
       <ul className="mt-2 divide-y divide-hairline/60">
         {shown.map((e) => (
-          <EntryRow key={`${e.fundCik}-${e.cusip}`} entry={e} />
+          <EntryRow
+            key={`${e.fundCik}-${e.cusip}`}
+            entry={e}
+            tierEntryKeys={tierEntryKeys}
+          />
         ))}
       </ul>
-
       {hidden > 0 && (
         <p className="mt-3 text-xs text-muted">
           + {hidden.toLocaleString()} smaller{" "}
@@ -220,11 +288,37 @@ function StyleSection({ group }: { group: StyleGroup }) {
           {hidden === 1 ? "y" : "ies"} not shown.
         </p>
       )}
+    </>
+  );
+
+  if (collapsible) {
+    return (
+      <section className={cn("mt-16", tone.dim && "opacity-80")}>
+        <details>
+          <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            {header}
+          </summary>
+          {body}
+        </details>
+      </section>
+    );
+  }
+
+  return (
+    <section className={cn("mt-16", tone.dim && "opacity-80")}>
+      {header}
+      {body}
     </section>
   );
 }
 
-function EntryRow({ entry }: { entry: StyleEntry }) {
+function EntryRow({
+  entry,
+  tierEntryKeys,
+}: {
+  entry: StyleEntry;
+  tierEntryKeys: readonly string[];
+}) {
   return (
     <li>
       <div className="group block py-3 transition-colors hover:bg-subtle/40">
@@ -252,7 +346,10 @@ function EntryRow({ entry }: { entry: StyleEntry }) {
             <div className="tabular text-base text-foreground">
               {formatUSD(entry.entryValueUsd, { compact: true })}
             </div>
-            <ConvictionBar entryKey={entryWeightKey(entry.fundCik, entry.cusip)} />
+            <ConvictionBar
+              entryKey={entryWeightKey(entry.fundCik, entry.cusip)}
+              tierEntryKeys={tierEntryKeys}
+            />
           </div>
         </div>
       </div>

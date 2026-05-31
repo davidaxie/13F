@@ -41,8 +41,12 @@ export function parseInfoTable(xml: string): Holding[] {
   if (!Array.isArray(rows)) rows = [rows];
 
   return rows.map((r) => ({
-    issuer: String(r.nameOfIssuer ?? "").trim(),
-    titleOfClass: String(r.titleOfClass ?? "").trim(),
+    // Collapse runs of whitespace into a single space — some filers'
+    // XBRL/XML emits issuer names with multi-space artifacts ("TAIWAN
+    // SEMICONDUCTOR  MFG  LTD") that propagate into every downstream display
+    // (consensus, dashboard) and break exact-string joins across funds.
+    issuer: String(r.nameOfIssuer ?? "").replace(/\s+/g, " ").trim(),
+    titleOfClass: String(r.titleOfClass ?? "").replace(/\s+/g, " ").trim(),
     cusip: String(r.cusip ?? "").trim(),
     value: Number(r.value ?? 0),
     shares: Number(r.shrsOrPrnAmt?.sshPrnamt ?? 0),

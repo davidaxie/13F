@@ -4,8 +4,18 @@ import {
   type EnrichedSignal,
   type FollowerBacktest,
 } from "@/lib/follower-backtest";
+import { MARQUEE_FUNDS } from "@/lib/funds";
 import { CaveatCallout } from "@/components/caveat-callout";
 import { FollowerView } from "@/components/follower-view";
+
+// Derived once from MARQUEE_FUNDS — single source of truth shared with
+// /stock/[ticker] and /backtest/conviction caveat blocks. Keeps the three
+// caveat sites in lockstep as we tag/untag funds.
+const HEAVY_FUNDS_LABEL = MARQUEE_FUNDS.filter(
+  (f) => f.snapshotMode === "8q",
+)
+  .map((f) => f.displayName)
+  .join(", ");
 
 // Static — backtest is computed once at build time. The slider mutates only
 // client-side state; it scales pre-computed dollar amounts by k.
@@ -79,7 +89,7 @@ export default function FollowerBacktestPage() {
           },
           {
             title: "Uneven sampling window",
-            body: "Renaissance, Bridgewater, Citadel, Two Sigma use only the last 8 quarters; the rest use full history.",
+            body: `${HEAVY_FUNDS_LABEL} use only the last 8 quarters; the rest use full history.`,
           },
         ]}
       />
@@ -107,9 +117,9 @@ export default function FollowerBacktestPage() {
             the roadmap.)
           </li>
           <li>
-            Heavy funds (Renaissance, Bridgewater, Citadel, Two Sigma) use
-            8-quarter snapshots; the rest use full history. The aggregate
-            return reflects this uneven sampling.
+            Heavy funds ({HEAVY_FUNDS_LABEL}) use 8-quarter snapshots; the
+            rest use full history. The aggregate return reflects this
+            uneven sampling.
           </li>
           <li>
             All buys priced at the 13F filing date (45 days after period-end —

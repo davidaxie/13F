@@ -77,6 +77,22 @@ export type MarqueeFund = {
   manager?: string;
   /** Approximate AUM, descriptive (e.g. "$300B+ equity book"). */
   aumApprox?: string;
+  /**
+   * Snapshot history coverage for this fund.
+   * - "all" (default): backtest snapshot covers full available history.
+   * - "8q": only the last 8 quarters are captured. Used for heavy quant
+   *   books where the Yahoo fetch volume across full history would be
+   *   prohibitive. Pre-snapshotStartDate entries simply don't exist —
+   *   "first disclosure" in the snapshot is NOT the fund's first-ever
+   *   buy, just the first one we have data for.
+   */
+  snapshotMode?: "all" | "8q";
+  /**
+   * For 8Q-mode funds: the ISO date (YYYY-MM or YYYY-MM-DD) marking the
+   * start of the snapshot window. Used for UI annotations like
+   * "First disclosed Q3 2024 (8Q snapshot)".
+   */
+  snapshotStartDate?: string;
 };
 
 export const MARQUEE_FUNDS: MarqueeFund[] = [
@@ -123,6 +139,8 @@ export const MARQUEE_FUNDS: MarqueeFund[] = [
     headquarters: "East Setauket, NY",
     manager: "Peter Brown (CEO, post-Simons)",
     aumApprox: "~$60B (long-only sleeve)",
+    snapshotMode: "8q",
+    snapshotStartDate: "2024-08",
   },
   {
     cik: "1350694",
@@ -145,6 +163,8 @@ export const MARQUEE_FUNDS: MarqueeFund[] = [
     headquarters: "Miami, FL",
     manager: "Ken Griffin",
     aumApprox: "$60B+ multi-strat",
+    snapshotMode: "8q",
+    snapshotStartDate: "2024-08",
   },
   {
     cik: "1029160",
@@ -156,6 +176,8 @@ export const MARQUEE_FUNDS: MarqueeFund[] = [
     headquarters: "New York, NY",
     manager: "Dawn Fitzpatrick (CIO)",
     aumApprox: "~$25B family office",
+    snapshotMode: "8q",
+    snapshotStartDate: "2024-08",
   },
   {
     cik: "1656456",
@@ -178,6 +200,8 @@ export const MARQUEE_FUNDS: MarqueeFund[] = [
     headquarters: "New York, NY",
     manager: "John Overdeck · David Siegel",
     aumApprox: "~$60B firm AUM",
+    snapshotMode: "8q",
+    snapshotStartDate: "2024-08",
   },
   // --- New funds added in UE-01 ---
   {
@@ -278,6 +302,8 @@ export const MARQUEE_FUNDS: MarqueeFund[] = [
     headquarters: "New York, NY",
     manager: "David Shaw (founder) · Max Stone",
     aumApprox: "~$60B",
+    snapshotMode: "8q",
+    snapshotStartDate: "2024-08",
   },
   {
     cik: "1167557",
@@ -289,6 +315,8 @@ export const MARQUEE_FUNDS: MarqueeFund[] = [
     headquarters: "Greenwich, CT",
     manager: "Cliff Asness",
     aumApprox: "~$120B firm AUM",
+    snapshotMode: "8q",
+    snapshotStartDate: "2024-08",
   },
   {
     cik: "1273087",
@@ -300,6 +328,8 @@ export const MARQUEE_FUNDS: MarqueeFund[] = [
     headquarters: "New York, NY",
     manager: "Izzy Englander",
     aumApprox: "~$70B",
+    snapshotMode: "8q",
+    snapshotStartDate: "2024-08",
   },
   {
     cik: "1649339",
@@ -377,5 +407,7 @@ export const MARQUEE_FUNDS: MarqueeFund[] = [
     headquarters: "Stamford, CT",
     manager: "Steve Cohen",
     aumApprox: "~$35B",
+    snapshotMode: "8q",
+    snapshotStartDate: "2024-08",
   },
 ];

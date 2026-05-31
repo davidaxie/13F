@@ -359,6 +359,11 @@ function RankToggle({
   mode: RankMode;
   onChange: (m: RankMode) => void;
 }) {
+  // The "% of portfolio" branch is disabled because the server pre-caps each
+  // section to the top 200 moves BY DOLLAR before this view ever receives
+  // them — so ranking those 200 by portfolio weight is misleading (it ranks a
+  // dollar-truncated subset, not the universe). Re-enable only after the
+  // server cap is lifted or replaced with a weight-aware pre-cap.
   return (
     <div
       className="mt-12 flex items-center gap-3 text-xs uppercase tracking-widest text-muted"
@@ -382,13 +387,13 @@ function RankToggle({
         </button>
         <button
           type="button"
-          onClick={() => onChange("weight")}
-          aria-pressed={mode === "weight"}
+          disabled
+          aria-disabled
+          aria-pressed={false}
+          title="Disabled — server pre-caps each section to the top 200 by dollar, so a portfolio-weight ranking of that subset would be misleading."
           className={cn(
             "border-l border-hairline px-3 py-1 transition-colors",
-            mode === "weight"
-              ? "bg-foreground text-background"
-              : "text-muted hover:text-foreground",
+            "cursor-not-allowed text-muted/40",
           )}
         >
           % of portfolio
@@ -487,7 +492,7 @@ function MoveSection({
             title={
               filter.trim()
                 ? `Export ${filtered.length} filtered rows`
-                : `Export all ${moves.length} rows`
+                : `Export visible ${filtered.length} rows`
             }
           >
             <Download size={11} strokeWidth={1.5} />
@@ -525,15 +530,24 @@ function MoveSection({
         <p className="mt-6 text-sm text-muted">No matches.</p>
       ) : (
         <ul className="mt-1 divide-y divide-hairline/60">
-          {visible.map((m, i) => (
-            <li key={`${m.fundCik}-${m.cusip}-${m.titleOfClass}-${m.putCall ?? ""}-${i}`}>
-              <Link
-                href={`/fund/${m.fundCik}/${m.filingAccession}`}
+          {visible.map((m, i) => {
+            // Two link destinations per row: the ticker/value targets the
+            // filing-detail page (the original behaviour), the fund name
+            // targets /fund/:cik so a user can jump straight to the fund
+            // overview without first detouring through the filing.
+            // Split into two side-by-side <Link>s rather than nesting anchors.
+            const filingHref = `/fund/${m.fundCik}/${m.filingAccession}`;
+            return (
+              <li
+                key={`${m.fundCik}-${m.cusip}-${m.titleOfClass}-${m.putCall ?? ""}-${i}`}
                 className="group block py-3 transition-colors hover:bg-subtle/40"
               >
                 <div className="flex items-baseline justify-between gap-4">
                   <div className="min-w-0 flex-1">
-                    <div className="truncate leading-tight">
+                    <Link
+                      href={filingHref}
+                      className="truncate leading-tight"
+                    >
                       {m.ticker ? (
                         <span className="font-mono text-base font-medium text-foreground transition-colors group-hover:text-accent">
                           {m.ticker}
@@ -548,14 +562,19 @@ function MoveSection({
                           {m.putCall}
                         </span>
                       ) : null}
-                    </div>
+                    </Link>
                     <div className="mt-0.5 truncate text-xs text-muted">
-                      <span>{m.fundName}</span>
+                      <Link
+                        href={`/fund/${m.fundCik}`}
+                        className="hover:text-foreground hover:underline"
+                      >
+                        {m.fundName}
+                      </Link>
                       <span className="mx-1.5">·</span>
                       <span>{m.quarter}</span>
                     </div>
                   </div>
-                  <div className="shrink-0 text-right">
+                  <Link href={filingHref} className="shrink-0 text-right">
                     <div
                       className={cn(
                         "tabular text-sm",
@@ -574,11 +593,11 @@ function MoveSection({
                         m.deltaSharesPct != null &&
                         `${m.deltaSharesPct > 0 ? "+" : ""}${formatPct(m.deltaSharesPct, 0)}`}
                     </div>
-                  </div>
+                  </Link>
                 </div>
-              </Link>
-            </li>
-          ))}
+              </li>
+            );
+          })}
         </ul>
       )}
 

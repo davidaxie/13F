@@ -5,6 +5,10 @@
 
 import seedData from "./cusip-seed.json";
 
+// Re-export so consumers can pull the asset-class classifier through the
+// single cusip-lookup entry point.
+export { assetClassForCusip, type AssetClass } from "./asset-class";
+
 type SeedRow = { ticker: string | null; name: string; exchCode: string | null };
 
 let tickerToCusips: Map<string, string[]> | null = null;

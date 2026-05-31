@@ -140,12 +140,21 @@ export const getStockView = cache((tickerInput: string): StockView | null => {
       a.entryDate.localeCompare(b.entryDate),
     );
     const latest = sorted[sorted.length - 1];
-    const firstEverEntryDate = sorted[0].entryDate;
+    const first = sorted[0];
+    const firstEverEntryDate = first.entryDate;
 
     if (latest.status === "open") {
+      // Pair `entrySharePrice` with the FIRST-EVER trade (not the latest
+      // re-entry) so the "First bought Q3 2013, Entry $X" row in the
+      // holders table reflects the price at that first disclosure.
+      // Previously this read from `latest.entrySharePrice`, which silently
+      // mis-paired the price (latest re-open) with the date (first ever) —
+      // e.g. Bridgewater AAPL showed "First bought Q3 2013, Entry $182"
+      // when 2013 AAPL was actually ~$15.
+      const entrySharePrice = first.entrySharePrice;
       const priceReturnPct =
-        latestPrice != null && latest.entrySharePrice > 0
-          ? (latestPrice / latest.entrySharePrice - 1) * 100
+        latestPrice != null && entrySharePrice > 0
+          ? (latestPrice / entrySharePrice - 1) * 100
           : null;
       const heldQuartersApprox = Math.max(
         1,
@@ -159,7 +168,7 @@ export const getStockView = cache((tickerInput: string): StockView | null => {
         status: "current",
         sharesAtOpen: latest.shares,
         entryDate: latest.entryDate,
-        entrySharePrice: latest.entrySharePrice,
+        entrySharePrice,
         currentPrice: latestPrice,
         priceReturnPct,
         firstEverEntryDate,
