@@ -108,7 +108,15 @@ export async function StockRecentFilings({
                 </span>
               </div>
               <div className="truncate text-sm text-foreground/85 transition-colors group-hover:text-accent">
-                {f.primaryDocDescription || FORM_LABELS[f.form] || f.form}
+                {/* SEC's `primaryDocDescription` is often the form
+                    code itself (literal "10-Q" / "8-K") rather than
+                    a human-readable phrase. Treat that case as empty
+                    so FORM_LABELS supplies the plain-English label. */}
+                {(f.primaryDocDescription && f.primaryDocDescription !== f.form
+                  ? f.primaryDocDescription
+                  : null) ||
+                  FORM_LABELS[f.form] ||
+                  f.form}
               </div>
               <div className="tabular text-sm text-muted">
                 {formatDate(f.filingDate)}

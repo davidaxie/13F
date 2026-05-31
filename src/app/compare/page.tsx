@@ -1,8 +1,19 @@
 import Link from "next/link";
 import { computeCompare, type Position } from "@/lib/compare";
 import { MARQUEE_FUNDS } from "@/lib/funds";
+import { getSnapshot } from "@/lib/snapshots";
 import { formatPct, formatUSD } from "@/lib/format";
 import { cn } from "@/lib/utils";
+
+// Only funds with a wired snapshot are eligible for compare — those without
+// (e.g. parser-incompatible legacy 13Fs, low-coverage tickers) silently
+// render an empty Map otherwise.
+const COMPARE_AVAILABLE_FUNDS = MARQUEE_FUNDS.filter(
+  (f) => getSnapshot(f.cik) != null,
+);
+const COMPARE_UNAVAILABLE_FUNDS = MARQUEE_FUNDS.filter(
+  (f) => getSnapshot(f.cik) == null,
+);
 
 const DEFAULT_A = "1067983"; // Berkshire
 const DEFAULT_B = "1336528"; // Pershing Square
@@ -13,8 +24,14 @@ export default async function ComparePage({
   searchParams: Promise<{ a?: string; b?: string }>;
 }) {
   const sp = await searchParams;
-  const cikA = sp.a && MARQUEE_FUNDS.some((f) => f.cik === sp.a) ? sp.a : DEFAULT_A;
-  const cikB = sp.b && MARQUEE_FUNDS.some((f) => f.cik === sp.b) ? sp.b : DEFAULT_B;
+  const cikA =
+    sp.a && COMPARE_AVAILABLE_FUNDS.some((f) => f.cik === sp.a)
+      ? sp.a
+      : DEFAULT_A;
+  const cikB =
+    sp.b && COMPARE_AVAILABLE_FUNDS.some((f) => f.cik === sp.b)
+      ? sp.b
+      : DEFAULT_B;
 
   // Same-fund pick is a degenerate request — fall back to the default pair.
   const effectiveCikB = cikB === cikA ? (cikA === DEFAULT_B ? DEFAULT_A : DEFAULT_B) : cikB;
@@ -45,6 +62,7 @@ export default async function ComparePage({
 
       <FundPicker side="a" current={cikA} other={effectiveCikB} />
       <FundPicker side="b" current={effectiveCikB} other={cikA} />
+      <UnavailableFootnote />
 
       <section className="mt-10 grid grid-cols-2 gap-x-10 gap-y-8 border-b border-hairline pb-10 sm:grid-cols-4">
         <Stat
@@ -63,9 +81,9 @@ export default async function ComparePage({
           sub={view.fundB.displayName}
         />
         <Stat
-          label="Combined overlap value"
+          label="Combined overlap (entry-time)"
           value={formatUSD(view.combinedOverlapValueUsd, { compact: true })}
-          sub="A + B entry values"
+          sub="A + B entry values — ranking only, not mark-to-market"
         />
       </section>
 
@@ -176,7 +194,7 @@ function FundPicker({
   return (
     <div className="mt-6 flex flex-wrap items-baseline gap-x-3 gap-y-2 text-xs uppercase tracking-widest text-muted">
       <span className="font-mono w-4 text-foreground">{side.toUpperCase()}</span>
-      {MARQUEE_FUNDS.map((f) => {
+      {COMPARE_AVAILABLE_FUNDS.map((f) => {
         const active = f.cik === current;
         // Compose the new query string preserving the other pick.
         const params = new URLSearchParams();
@@ -203,6 +221,25 @@ function FundPicker({
         );
       })}
     </div>
+  );
+}
+
+function UnavailableFootnote() {
+  if (COMPARE_UNAVAILABLE_FUNDS.length === 0) return null;
+  const names = COMPARE_UNAVAILABLE_FUNDS.map((f) => f.displayName).join(", ");
+  return (
+    <p className="mt-3 text-xs leading-relaxed text-muted/70">
+      Not available for compare ({COMPARE_UNAVAILABLE_FUNDS.length} fund
+      {COMPARE_UNAVAILABLE_FUNDS.length === 1 ? "" : "s"} pending snapshot
+      coverage): {names}. See{" "}
+      <Link
+        href="/universe"
+        className="underline-offset-2 hover:text-foreground hover:underline"
+      >
+        /universe
+      </Link>{" "}
+      for the full tracked list.
+    </p>
   );
 }
 

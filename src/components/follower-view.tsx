@@ -37,8 +37,15 @@ export function FollowerView({ base, topGainers, topLosers }: Props) {
 
   // Rescale every dollar amount by k. Percentages, dates, counts unchanged.
   // When slipBps > 0, override the headline-affecting fields with the
-  // cost-adjusted variant (per-fund table and realized chart stay gross
-  // since the cost is only applied at the per-signal level for now).
+  // cost-adjusted variant AND apply the same proportional slip to each
+  // per-fund row so the table moves with the toggle.
+  //
+  // Slip math: each signal pays `slip` on the buy side and receives `slip`
+  // less on the sell side, so net follower-final = gross * (1-slip)/(1+slip)
+  // applied uniformly. This is exactly what computeCostVariants does at the
+  // aggregate level — we just propagate the same factor per-fund here.
+  // SPY is assumed cost-free (matches the aggregate convention).
+  const slipFactor = (1 - slipBps / 10000) / (1 + slipBps / 10000);
   const view = useMemo(() => {
     const stats = {
       ...base.stats,
@@ -52,13 +59,28 @@ export function FollowerView({ base, topGainers, topLosers }: Props) {
       avgReturnPct: costVariant.avgReturnPct,
       medianReturnPct: costVariant.medianReturnPct,
     };
-    const perFund: PerFundSummary[] = base.perFund.map((f) => ({
-      ...f,
-      invested: f.invested * k,
-      followerFinal: f.followerFinal * k,
-      spyFinal: f.spyFinal * k,
-      alphaUsd: f.alphaUsd * k,
-    }));
+    const perFund: PerFundSummary[] = base.perFund.map((f) => {
+      const followerFinalAdj = f.followerFinal * slipFactor;
+      const investedScaled = f.invested * k;
+      const followerFinalScaled = followerFinalAdj * k;
+      const spyFinalScaled = f.spyFinal * k;
+      const alphaUsdScaled = followerFinalScaled - spyFinalScaled;
+      const followerReturnPctAdj =
+        f.invested > 0 ? ((followerFinalAdj - f.invested) / f.invested) * 100 : 0;
+      const alphaPctAdj =
+        f.invested > 0
+          ? ((followerFinalAdj - f.spyFinal) / f.invested) * 100
+          : 0;
+      return {
+        ...f,
+        invested: investedScaled,
+        followerFinal: followerFinalScaled,
+        spyFinal: spyFinalScaled,
+        alphaUsd: alphaUsdScaled,
+        followerReturnPct: followerReturnPctAdj,
+        alphaPct: alphaPctAdj,
+      };
+    });
     const realizedSeries: RealizedPoint[] = base.realizedSeries.map((p) => ({
       date: p.date,
       cumulativeFollowerPnlUsd: p.cumulativeFollowerPnlUsd * k,
@@ -66,7 +88,7 @@ export function FollowerView({ base, topGainers, topLosers }: Props) {
       cumulativeAlphaUsd: p.cumulativeAlphaUsd * k,
     }));
     return { stats, perFund, realizedSeries };
-  }, [base, k, costVariant]);
+  }, [base, k, costVariant, slipFactor]);
 
   return (
     <>
@@ -280,7 +302,7 @@ function SlippageControl({
   const subtext =
     bps === 0
       ? "Headline figures assume frictionless execution at the filing-date price."
-      : `Buy paid ${bps} bps above the print, sell received ${bps} bps below. Round-trip cost ≈ ${bps * 2} bps per signal. Per-fund and the realized chart still show gross.`;
+      : `Buy paid ${bps} bps above the print, sell received ${bps} bps below. Round-trip cost ≈ ${bps * 2} bps per signal. Per-fund returns shift with this toggle; the realized P&L chart still shows gross.`;
   return (
     <div className="mt-6 rounded border border-hairline px-6 py-5">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
@@ -473,9 +495,9 @@ function SignalList({
                   </div>
                   <div className="mt-0.5 text-xs text-muted tabular">
                     {s.returnPct >= 0 ? "+" : ""}
-                    {formatPct(s.returnPct, 0)}% vs SPY{" "}
+                    {formatPct(s.returnPct, 0)} vs SPY{" "}
                     {s.spyReturnPct >= 0 ? "+" : ""}
-                    {formatPct(s.spyReturnPct, 0)}%
+                    {formatPct(s.spyReturnPct, 0)}
                   </div>
                 </div>
               </div>

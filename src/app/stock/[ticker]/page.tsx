@@ -79,7 +79,16 @@ function canonicalizeTicker(input: string): string {
   return upper;
 }
 
-export const dynamic = "force-static";
+// No `dynamic` directive. Stock pages accept arbitrary ticker params at
+// request time (anyone can deep-link /stock/$WHATEVER), so they're
+// rendered on-demand. Caching happens one layer down — fetchCompanyConcept
+// and fetchIssuerSubmissions both set `next: { revalidate: 3600 }`, so a
+// hot ticker reuses its SEC payload for an hour across requests, and
+// getStockView is built from precomputed snapshots. A `force-static`
+// directive was here previously, but it predated the SEC fetches and
+// didn't actually pin anything (no generateStaticParams), so it was a
+// no-op that read as a misleading promise.
+export const revalidate = 3600;
 
 export default async function StockPage({
   params,
@@ -253,16 +262,37 @@ export default async function StockPage({
                     height={64}
                     stroke="var(--foreground)"
                   />
-                  <div className="mt-2 flex justify-between text-xs tabular text-muted">
-                    <span>{formatDate(view.ownershipTimeline[0].date)}</span>
-                    <span>
-                      {formatDate(
-                        view.ownershipTimeline[
-                          view.ownershipTimeline.length - 1
-                        ].date,
-                      )}
-                    </span>
-                  </div>
+                  {/* Build a tick row with 4 evenly-spaced labels: start,
+                      two interior years, end. Interior labels are picked
+                      from the timeline at ~1/3 and ~2/3 indices so they
+                      align visually with the underlying sparkline. For
+                      very short series (<4 points) we fall through to
+                      just start + end, since interior ticks would
+                      duplicate the endpoints. */}
+                  {(() => {
+                    const tl = view.ownershipTimeline;
+                    const labels: string[] =
+                      tl.length >= 4
+                        ? [
+                            formatDate(tl[0].date),
+                            formatDate(tl[Math.floor(tl.length / 3)].date),
+                            formatDate(
+                              tl[Math.floor((tl.length * 2) / 3)].date,
+                            ),
+                            formatDate(tl[tl.length - 1].date),
+                          ]
+                        : [
+                            formatDate(tl[0].date),
+                            formatDate(tl[tl.length - 1].date),
+                          ];
+                    return (
+                      <div className="mt-2 flex justify-between text-xs tabular text-muted">
+                        {labels.map((l, i) => (
+                          <span key={`${l}-${i}`}>{l}</span>
+                        ))}
+                      </div>
+                    );
+                  })()}
                 </div>
                 <div className="text-right">
                   <div className="text-xs uppercase tracking-widest text-muted">
@@ -334,10 +364,14 @@ export default async function StockPage({
                   <thead>
                     <tr className="border-y border-hairline text-left text-xs uppercase tracking-wider text-muted">
                       <th className="py-3 pr-3 font-normal">Fund</th>
-                      <th className="py-3 px-3 text-right font-normal">
+                      {/* First-disclosed + Held columns are low-value on
+                          a 375px viewport — readers can tap the fund row
+                          for the full tenure picture, and the headline
+                          Fund + Return columns carry the actionable signal. */}
+                      <th className="hidden py-3 px-3 text-right font-normal sm:table-cell">
                         First disclosed
                       </th>
-                      <th className="py-3 px-3 text-right font-normal">
+                      <th className="hidden py-3 px-3 text-right font-normal sm:table-cell">
                         Held
                       </th>
                       <th className="py-3 px-3 text-right font-normal">
@@ -382,7 +416,7 @@ export default async function StockPage({
                               </>
                             )}
                           </td>
-                          <td className="py-3 px-3 text-right text-xs text-muted">
+                          <td className="hidden py-3 px-3 text-right text-xs text-muted sm:table-cell">
                             {quarterLabel(s.firstEverEntryDate)}
                             {is8Q && (
                               <span className="ml-1 text-muted/60">
@@ -390,7 +424,7 @@ export default async function StockPage({
                               </span>
                             )}
                           </td>
-                          <td className="py-3 px-3 text-right tabular text-muted">
+                          <td className="hidden py-3 px-3 text-right tabular text-muted sm:table-cell">
                             {s.heldQuartersApprox}Q
                           </td>
                           <td className="py-3 px-3 text-right tabular text-muted">
@@ -449,10 +483,14 @@ export default async function StockPage({
                   <thead>
                     <tr className="border-y border-hairline text-left text-xs uppercase tracking-wider text-muted">
                       <th className="py-3 pr-3 font-normal">Fund</th>
-                      <th className="py-3 px-3 text-right font-normal">
+                      {/* Entry + Exit date columns are hidden at <sm to
+                          keep Fund + Return readable on a 375px viewport.
+                          The lifecycle dates are still in the desktop view
+                          and on the fund's own performance page. */}
+                      <th className="hidden py-3 px-3 text-right font-normal sm:table-cell">
                         Last entry
                       </th>
-                      <th className="py-3 px-3 text-right font-normal">
+                      <th className="hidden py-3 px-3 text-right font-normal sm:table-cell">
                         Exited
                       </th>
                       <th className="py-3 px-3 text-right font-normal">
@@ -485,10 +523,10 @@ export default async function StockPage({
                             </>
                           )}
                         </td>
-                        <td className="py-3 px-3 text-right text-xs text-muted">
+                        <td className="hidden py-3 px-3 text-right text-xs text-muted sm:table-cell">
                           {quarterLabel(s.entryDate)}
                         </td>
-                        <td className="py-3 px-3 text-right text-xs text-muted">
+                        <td className="hidden py-3 px-3 text-right text-xs text-muted sm:table-cell">
                           {quarterLabel(s.exitDate)}
                         </td>
                         <td className="py-3 px-3 text-right tabular text-muted">
@@ -559,11 +597,33 @@ export default async function StockPage({
                   }
                 />
               </div>
+              {/* Surface the 30d/90d denominator so the reader isn't
+                  silently comparing against an outdated baseline. The
+                  windows are anchored to the most recent filing so the
+                  page render stays pure (no Date.now() drift between
+                  build and request). For an issuer whose insiders haven't
+                  filed in months, "0 last 30d" would otherwise read as
+                  "no insider activity" instead of "no recent filings
+                  since {latest}". */}
+              {latestInsiderDate && (
+                <p className="mt-3 text-xs text-muted">
+                  30d / 90d windows measured from {formatDate(latestInsiderDate)} —
+                  the most recent Form 4 on file — not from today.
+                </p>
+              )}
 
               <ul className="mt-6 divide-y divide-hairline border-y border-hairline">
                 {insiderFilings.slice(0, 15).map((f) => {
                   const accDashless = f.accessionNumber.replace(/-/g, "");
-                  const edgarUrl = `https://www.sec.gov/Archives/edgar/data/${issuer.cik}/${accDashless}/${f.primaryDocument || `${f.accessionNumber}-index.htm`}`;
+                  // For Form 4, `primaryDocument` is usually an XSL'd
+                  // raw XML path (xslF345X06/.../form4.xml). Hitting that
+                  // URL in some browsers shows the raw XML instead of the
+                  // rendered insider report. The filing-index page
+                  // (`{accession}-index.htm`) lands users on the
+                  // navigable list of the filing's docs — the same page
+                  // they'd reach from EDGAR search — which is what
+                  // readers expect when clicking through.
+                  const edgarUrl = `https://www.sec.gov/Archives/edgar/data/${issuer.cik}/${accDashless}/${f.accessionNumber}-index.htm`;
                   const isAmendment = f.form === "4/A";
                   return (
                     <li key={f.accessionNumber}>
@@ -673,10 +733,22 @@ export default async function StockPage({
                     <thead>
                       <tr className="border-y border-hairline text-left text-xs uppercase tracking-wider text-muted">
                         <th className="py-3 pr-3 font-normal">Fund</th>
-                        <th className="py-3 px-3 font-normal">Entered</th>
-                        <th className="py-3 px-3 font-normal">Exited</th>
-                        <th className="py-3 px-3 text-right font-normal">Entry</th>
-                        <th className="py-3 px-3 text-right font-normal">Exit</th>
+                        {/* Renamed from Entered/Exited/Entry/Exit so the
+                            column type is obvious — Entered/Exited read
+                            as the action, but the cells hold dates;
+                            Entry/Exit read as the event, but the cells
+                            hold prices. */}
+                        <th className="py-3 px-3 font-normal">Open date</th>
+                        <th className="py-3 px-3 font-normal">Close date</th>
+                        <th className="py-3 px-3 text-right font-normal">
+                          Open price
+                        </th>
+                        {/* Open trades render the current marked-to-market
+                            price in this column — the label makes that
+                            dual-purpose explicit. */}
+                        <th className="py-3 px-3 text-right font-normal">
+                          Close price / current
+                        </th>
                         <th className="py-3 pl-3 text-right font-normal">Return</th>
                       </tr>
                     </thead>

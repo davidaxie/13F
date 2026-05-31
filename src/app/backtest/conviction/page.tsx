@@ -32,14 +32,16 @@ export default function ConvictionPage() {
           Backtest · Conviction
         </div>
         <h1 className="mt-2 font-serif text-5xl leading-tight tracking-tight text-foreground">
-          Buy their ideas. Hold yours.
+          Most conviction filters lose to SPY.
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
-          Different from the quarter-to-quarter follower: here you buy
-          $10k at every fund disclosure but <strong>hold to today</strong>{" "}
-          (regardless of whether the fund still owns it). Then filter to
+          Buy $10k at every fund disclosure but <strong>hold to today</strong>{" "}
+          (regardless of whether the fund still owns it), then filter to
           signals where the fund itself held the position for at least N
-          quarters — using their duration as a conviction signal.
+          quarters. The pattern: filters from ≥1Q through ≥12Q
+          <em> underperform</em> SPY in aggregate. Only ≥16Q and ≥20Q eke
+          out positive alpha, and those buckets are dominated by six-to-eight
+          surviving value/activist funds — interpret accordingly.
         </p>
         <p className="mt-3 max-w-2xl text-xs leading-relaxed text-muted/80">
           {baseline.stats.totalSignals.toLocaleString()} total signals
@@ -51,12 +53,16 @@ export default function ConvictionPage() {
       <CaveatCallout
         items={[
           {
-            title: "Survivor-biased universe",
-            body: "Nine famous-name funds still operating; aggregate alpha is biased upward vs a sample including blown-up funds.",
+            title: "Headline buckets ≥1Q–≥12Q underperform SPY",
+            body: "Don't read this as 'longer hold = more alpha.' Until you reach ≥16Q the follower trails the benchmark in aggregate.",
+          },
+          {
+            title: "Severe survivorship bias at ≥8Q and above",
+            body: "Long-conviction buckets are dominated by 6–8 surviving value/activist funds (Berkshire, Pershing, Tiger, Appaloosa, Elliott, Third Point…). Blown-up names that held losers just as long are not in this sample.",
           },
           {
             title: "Conviction = duration, not weight",
-            body: "Holding period alone — a 100-share placeholder held 20Q scores the same as a 5%-weight core position.",
+            body: "A 100-share placeholder held 20Q scores the same as a 5%-of-book core position. Weight-aware ranking is on the roadmap.",
           },
           {
             title: "Heavy-fund window asymmetry",

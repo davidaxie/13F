@@ -26,6 +26,15 @@ export const metadata: Metadata = {
   title: "13F — Holdings research",
   description:
     "Elegant research tool for SEC Form 13F filings — track institutional fund holdings, quarter over quarter.",
+  icons: {
+    // Default: keep the existing src/app/favicon.ico (Next.js auto-serves it)
+    // as the fallback for older browsers; add the SVG variants for modern
+    // ones. Browsers prefer SVG when both are present.
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml", media: "(prefers-color-scheme: light)" },
+      { url: "/favicon-dark.svg", type: "image/svg+xml", media: "(prefers-color-scheme: dark)" },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -141,10 +150,18 @@ export default function RootLayout({
             {children}
           </main>
           <footer className="border-t border-hairline">
-            <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 text-xs text-muted">
+            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-xs text-muted">
               <span>Data sourced directly from SEC EDGAR.</span>
-              <span>
-                Built for personal research. Not investment advice.
+              <span className="flex items-center gap-5">
+                <Link
+                  href="/about"
+                  className="transition-colors hover:text-foreground"
+                >
+                  About &amp; methodology
+                </Link>
+                <span>
+                  Built for personal research. Not investment advice.
+                </span>
               </span>
             </div>
           </footer>

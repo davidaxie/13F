@@ -791,6 +791,53 @@ function BiggestTradesTable({
   );
 }
 
+/**
+ * Per-fund explanation for why a tracked fund's snapshot is missing.
+ * Some funds have a structural blocker (parser doesn't support their
+ * pre-2012 13F format; CUSIP→ticker map doesn't cover their universe)
+ * that won't resolve on the next weekly cron run — we say so explicitly
+ * rather than pretending a passive wait will fix it. Unknown CIKs fall
+ * through to the generic "weekly cron" copy (the only honest answer for
+ * tracked funds where we don't have a specific diagnosis).
+ */
+function PendingCopy({ cik, name }: { cik: string; name: string }) {
+  if (cik === "1345472") {
+    // Trian — historical 13Fs are in the legacy paper/non-XML format.
+    return (
+      <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
+        {name}&apos;s pre-2012 13F filings aren&apos;t in the structured
+        XML format our parser supports, so the snapshot pipeline can&apos;t
+        replay their trade history. The next weekly cron run won&apos;t
+        change that — extending the parser to handle the legacy format is
+        what unblocks it.
+      </p>
+    );
+  }
+  if (cik === "1517137") {
+    // Starboard — small-cap activist universe is sparsely covered by
+    // the bundled CUSIP→ticker seed.
+    return (
+      <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
+        Only about 28% of {name}&apos;s small-cap activist universe maps to
+        a ticker via the bundled CUSIP seed file, so the mirror would be
+        missing most positions. Filling the gaps needs an OpenFIGI API
+        key (which we don&apos;t bundle); the next weekly cron run
+        won&apos;t fix it on its own.
+      </p>
+    );
+  }
+  return (
+    <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
+      {name} is a tracked fund, but its $10k-mirror backtest snapshot
+      hasn&apos;t been generated yet. Snapshots are produced by a weekly
+      job; this one will appear after the next run. We render backtests
+      from pre-computed snapshots rather than live — a full SEC + price
+      replay for a large book can&apos;t finish inside the serverless time
+      limit.
+    </p>
+  );
+}
+
 // Graceful state when a fund has no pre-computed snapshot. Rendered instead
 // of a live backtest (which would 504 on Vercel for heavy funds). Honest
 // about why, and routes the user to the live data that DOES work.
@@ -826,14 +873,13 @@ function PendingBacktest({
           Performance backtest pending
         </h2>
         {isTracked ? (
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
-            {name} is a tracked fund, but its $10k-mirror backtest snapshot
-            hasn&apos;t been generated yet. Snapshots are produced by a
-            weekly job; this one will appear after the next run. We render
-            backtests from pre-computed snapshots rather than live — a
-            full SEC + price replay for a large book can&apos;t finish
-            inside the serverless time limit.
-          </p>
+          // Per-fund tailoring of the pending copy: a generic "weekly
+          // cron will fill it in" message is wrong for funds whose
+          // snapshot is blocked by an upstream gap (parser limitation,
+          // missing CUSIP→ticker map), since the next cron run won't
+          // help. The cleanCik used here is the leading-zero-stripped
+          // form, matching the keys in src/lib/funds.ts.
+          <PendingCopy cik={cik.replace(/^0+/, "")} name={name} />
         ) : (
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted">
             Backtests are pre-computed for the tracked marquee funds only.

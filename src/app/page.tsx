@@ -1,20 +1,30 @@
 import Link from "next/link";
 import { SearchInput } from "@/components/search-input";
+import { MARQUEE_FUNDS } from "@/lib/funds";
 
-const SUGGESTIONS = [
-  { label: "Berkshire Hathaway", q: "berkshire hathaway" },
-  { label: "Bridgewater Associates", q: "bridgewater" },
-  { label: "Renaissance Technologies", q: "renaissance technologies" },
-  { label: "Tiger Global", q: "tiger global" },
-  { label: "Pershing Square", q: "pershing square" },
-  { label: "Appaloosa", q: "appaloosa" },
-];
+// First 8 funds from the marquee list. This rotates implicitly as we add
+// snapshots (MARQUEE_FUNDS is ordered by inclusion date / prominence in
+// src/lib/funds.ts) instead of being a static hand-picked list that goes
+// stale. Slicing here keeps the home page light — no full universe load.
+const FUND_SUGGESTIONS = MARQUEE_FUNDS.slice(0, 8).map((f) => ({
+  label: f.displayName,
+  // Use the fund's CIK directly — tracked funds resolve to their performance
+  // page so the click lands on the rich backtest view, not the holdings list.
+  href: `/fund/${f.cik}/performance`,
+}));
 
+// Curated top-8 — the actual most-traded names across the marquee universe.
+// Hand-picked vs derived because computeConsensusView is a heavier server
+// call we don't want gating the home page.
 const STOCK_SUGGESTIONS = [
   { label: "AAPL", t: "AAPL" },
   { label: "NVDA", t: "NVDA" },
   { label: "GOOGL", t: "GOOGL" },
+  { label: "MSFT", t: "MSFT" },
   { label: "META", t: "META" },
+  { label: "AMZN", t: "AMZN" },
+  { label: "BRK-B", t: "BRK-B" },
+  { label: "JPM", t: "JPM" },
 ];
 
 export default function Home() {
@@ -27,8 +37,9 @@ export default function Home() {
           <em className="font-serif italic text-accent">beautifully.</em>
         </h1>
         <p className="mt-6 max-w-md text-base leading-relaxed text-muted">
-          Search any institutional fund manager and explore their 13F filings,
-          quarter over quarter. Data sourced directly from SEC EDGAR.
+          Cross-fund consensus from {MARQUEE_FUNDS.length}{" "}of the
+          world&apos;s most-watched institutional 13F filers. Quarter over
+          quarter, sourced directly from SEC EDGAR.
         </p>
 
         <div className="mt-12">
@@ -39,10 +50,10 @@ export default function Home() {
           <span className="text-xs uppercase tracking-widest text-muted/70">
             Try
           </span>
-          {SUGGESTIONS.map((s) => (
+          {FUND_SUGGESTIONS.map((s) => (
             <Link
-              key={s.q}
-              href={`/search?q=${encodeURIComponent(s.q)}`}
+              key={s.href}
+              href={s.href}
               className="transition-colors hover:text-foreground"
             >
               {s.label}

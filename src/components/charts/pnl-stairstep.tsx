@@ -5,12 +5,19 @@ import {
   formatYear,
   makeScale,
   niceTicks,
+  seededSample,
   yearTicks,
 } from "./chart-helpers";
 
 const W = 880;
 const H = 360;
 const M = { top: 30, right: 30, bottom: 36, left: 80 };
+
+// Cap per-step dot circles. Heavy multi-strat funds (Point72 ≈ 3.3k closed
+// trades) would otherwise add ~800KB to the rendered HTML and push the perf
+// page well past the 1.5MB budget. The stair-step path and top-trade callouts
+// still use the full series — only the dot decorations sample.
+const MAX_DOTS = 400;
 
 export function PnlStairstepChart({
   data,
@@ -68,6 +75,20 @@ export function PnlStairstepChart({
     .sort((a, b) => Math.abs(b.trade.pnlUsd) - Math.abs(a.trade.pnlUsd))
     .slice(0, 4);
 
+  // Decide which indices get a dot circle. Heavy funds (Point72 ≈ 3.3k closed
+  // trades) would otherwise emit one circle per point. Always keep the
+  // top-trade indices so their annotation pins still anchor on a visible dot.
+  const topIdxSet = new Set(topTrades.map((t) => data.indexOf(t)));
+  const sampleableIdx = data
+    .map((_, i) => i)
+    .filter((i) => !topIdxSet.has(i));
+  const sampledIdx = seededSample(
+    sampleableIdx,
+    Math.max(0, MAX_DOTS - topIdxSet.size),
+    `n${data.length}`,
+  );
+  const dotIdxSet = new Set([...topIdxSet, ...sampledIdx]);
+
   return (
     <svg viewBox={`0 0 ${W} ${H}`} width="100%" className="overflow-visible">
       {/* Y gridlines */}
@@ -118,6 +139,7 @@ export function PnlStairstepChart({
       {/* Dots at each step */}
       <g>
         {data.map((d, i) => {
+          if (!dotIdxSet.has(i)) return null;
           const x = points[i][0];
           const y = points[i][1];
           const pnl = d.trade.pnlUsd ?? 0;

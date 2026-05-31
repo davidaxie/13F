@@ -40,7 +40,14 @@ type AnnualPoint = {
   end: string;
 };
 
-type MetricSeries = { series: AnnualPoint[]; entityName: string };
+type MetricSeries = {
+  series: AnnualPoint[];
+  entityName: string;
+  /** Which concept name actually produced the winning series. Empty
+   * string when nothing matched. Callers use this to relabel a tile
+   * when a fallback concept fires (e.g. EPS Diluted → Basic). */
+  concept: string;
+};
 
 /**
  * For one metric: walk the concept fallback list, fetching each
@@ -75,6 +82,7 @@ async function metricSeries(
 ): Promise<MetricSeries> {
   let best: AnnualPoint[] = [];
   let bestLatestEnd = "";
+  let bestConcept = "";
   let entityName = "";
   for (const concept of concepts) {
     const c = await fetchCompanyConcept(issuerCik, concept);
@@ -112,9 +120,10 @@ async function metricSeries(
     ) {
       best = series;
       bestLatestEnd = latestEnd;
+      bestConcept = concept;
     }
   }
-  return { series: best, entityName };
+  return { series: best, entityName, concept: bestConcept };
 }
 
 /**
@@ -127,7 +136,9 @@ async function freeCashFlowSeries(
   limit = 10,
 ): Promise<MetricSeries> {
   const ocf = await metricSeries(issuerCik, OPERATING_CASH_CONCEPTS, "USD", 25);
-  if (ocf.series.length === 0) return { series: [], entityName: ocf.entityName };
+  if (ocf.series.length === 0) {
+    return { series: [], entityName: ocf.entityName, concept: "" };
+  }
   const capex = await metricSeries(issuerCik, CAPEX_CONCEPTS, "USD", 25);
   const capexByEnd = new Map(capex.series.map((p) => [p.end, p.val]));
   const series: AnnualPoint[] = ocf.series
@@ -139,7 +150,11 @@ async function freeCashFlowSeries(
       end: p.end,
     }))
     .slice(-limit);
-  return { series, entityName: ocf.entityName || capex.entityName };
+  return {
+    series,
+    entityName: ocf.entityName || capex.entityName,
+    concept: ocf.concept,
+  };
 }
 
 function yoyPct(series: AnnualPoint[]): number | null {
@@ -176,10 +191,23 @@ export async function StockFundamentals({
     freeCashFlowSeries(issuerCik),
   ]);
 
+  // EPS tile is relabeled when the diluted fallback resolves to the basic
+  // concept — the issuer didn't tag a diluted figure (small caps, some
+  // foreign filers). Without this, the tile would silently claim "diluted"
+  // while showing the basic series. The "diluted" string is the first
+  // entry of EPS_DILUTED_CONCEPTS, so any other resolved concept means
+  // fallback fired.
+  const epsLabel =
+    eps.concept && eps.concept !== EPS_DILUTED_CONCEPTS[0]
+      ? "EPS (basic)"
+      : "EPS (diluted)";
+
   const metrics: Array<{
     label: string;
     series: AnnualPoint[];
     format: (v: number) => string;
+    /** Optional info-tooltip text shown on a small "?" next to the label. */
+    info?: string;
   }> = [
     {
       label: "Revenue",
@@ -192,29 +220,59 @@ export async function StockFundamentals({
       format: (v) => formatUSD(v, { compact: true }),
     },
     {
-      label: "EPS (diluted)",
+      label: epsLabel,
       series: eps.series,
-      format: (v) => `$${v.toFixed(2)}`,
+      // EPS sub-$1 loses precision at 2 decimals ("$0.01" hides whether
+      // it's $0.005 or $0.014). 3–4 decimals for |val| < 1 keeps the
+      // tile honest while leaving the typical case ($x.xx) untouched.
+      format: (v) =>
+        Math.abs(v) < 1 ? `$${v.toFixed(4)}` : `$${v.toFixed(2)}`,
     },
     {
       label: "Free cash flow",
       series: fcf.series,
       format: (v) => formatUSD(v, { compact: true }),
+      info: "OCF − PP&E capex; excludes intangibles and acquisitions.",
     },
   ];
 
   const populated = metrics.filter((m) => m.series.length >= 2);
-  if (populated.length === 0) return null;
 
   // Prefer the XBRL-reported entity name (more authoritative than our
   // ticker map); fall back to the ticker map's name if none of the
-  // concepts resolved (defensive — shouldn't happen since we got here).
+  // concepts resolved.
   const sourceName =
     revenue.entityName ||
     netIncome.entityName ||
     eps.entityName ||
     fcf.entityName ||
     entityName;
+
+  // Empty-state path: SPAC trust, pre-revenue biotech, pre-IPO, foreign
+  // filer not tagged in us-gaap. Render a small placeholder so the
+  // section is visible (and the reader knows we tried) instead of an
+  // invisible null that looks like a layout bug.
+  if (populated.length === 0) {
+    return (
+      <section className="mt-16">
+        <div className="flex items-baseline justify-between border-b border-hairline pb-3">
+          <h2 className="font-serif text-2xl text-foreground">
+            Fundamentals
+          </h2>
+          <span className="text-xs uppercase tracking-widest text-muted">
+            XBRL · {sourceName}
+          </span>
+        </div>
+        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
+          Not enough XBRL history to plot. {sourceName} hasn&apos;t tagged
+          revenue, net income, EPS, or operating cash flow in the SEC
+          us-gaap taxonomy with at least two fiscal-year periods — typical
+          for SPACs / trust vehicles, pre-revenue biotechs, recent IPOs,
+          and foreign filers reporting under IFRS.
+        </p>
+      </section>
+    );
+  }
 
   return (
     <section className="mt-16">
@@ -233,26 +291,66 @@ export async function StockFundamentals({
         {populated.map((m) => {
           const latest = m.series[m.series.length - 1];
           const yoy = yoyPct(m.series);
-          const trendUp = latest.val >= (m.series[0]?.val ?? 0);
+          // Sparkline color follows the 1y YoY direction (matching the
+          // YoY badge underneath the value). Previously this was the
+          // 10-year first-vs-last trend, which contradicted the YoY
+          // badge whenever the long-run trend disagreed with the most
+          // recent year (e.g. META net income FY24→FY25 down 3% on an
+          // otherwise rising decade).
+          const trendUp = yoy == null ? true : yoy >= 0;
+          // YoY display is clamped to ±500% — outliers (NI swing from a
+          // tiny base year, post-spinoff restatements) otherwise produce
+          // visually-loud "+1233%" tiles that drown out the rest of
+          // the panel. The clamp is signaled with a trailing "+" (e.g.
+          // "+500%+ YoY") and the raw value is in the hover tooltip.
+          const YOY_CLAMP = 500;
+          const yoyIsClamped = yoy != null && Math.abs(yoy) > YOY_CLAMP;
+          const yoyDisplay = yoyIsClamped
+            ? Math.sign(yoy as number) * YOY_CLAMP
+            : yoy;
+          const yoyTitle = yoyIsClamped
+            ? `Raw YoY: ${(yoy as number) >= 0 ? "+" : ""}${formatPct(yoy as number, 0)} (display capped at ±${YOY_CLAMP}%)`
+            : undefined;
+          // FY label tooltip — disambiguate fiscal years across issuers
+          // (AAPL ends Sep, META ends Dec, MSFT ends Jun). Derive month
+          // name from the ISO period-end date.
+          const fyMonth = monthName(latest.end);
+          const fyEndYearForLabel = latest.end.slice(0, 4);
+          const fyTitle = fyMonth
+            ? `Fiscal year ended ${fyMonth} ${fyEndYearForLabel}`
+            : undefined;
           return (
             <div key={m.label}>
-              <div className="text-xs uppercase tracking-widest text-muted">
-                {m.label}
+              <div className="flex items-baseline gap-1 text-xs uppercase tracking-widest text-muted">
+                <span>{m.label}</span>
+                {m.info && (
+                  <span
+                    className="cursor-help text-muted/70"
+                    title={m.info}
+                    aria-label={m.info}
+                  >
+                    (?)
+                  </span>
+                )}
               </div>
               <div className="mt-2 font-serif text-3xl tabular text-foreground">
                 {m.format(latest.val)}
               </div>
               <div className="mt-1 flex items-baseline gap-2 text-xs">
-                <span className="text-muted">FY{latest.endYear}</span>
-                {yoy != null && (
+                <span className="text-muted" title={fyTitle}>
+                  FY{latest.endYear}
+                </span>
+                {yoyDisplay != null && (
                   <span
                     className={cn(
                       "tabular",
-                      yoy >= 0 ? "text-positive" : "text-negative",
+                      yoyDisplay >= 0 ? "text-positive" : "text-negative",
                     )}
+                    title={yoyTitle}
                   >
-                    {yoy >= 0 ? "+" : ""}
-                    {formatPct(yoy, 0)} YoY
+                    {yoyDisplay >= 0 ? "+" : ""}
+                    {formatPct(yoyDisplay, 0)}
+                    {yoyIsClamped ? "+" : ""} YoY
                   </span>
                 )}
               </div>
@@ -270,4 +368,29 @@ export async function StockFundamentals({
       </div>
     </section>
   );
+}
+
+/**
+ * Return the full English month name for the month component of an
+ * ISO date string (YYYY-MM-DD). Empty string when the input can't be
+ * parsed — callers should suppress the FY tooltip in that case.
+ */
+function monthName(iso: string): string {
+  if (!iso || iso.length < 7) return "";
+  const m = Number.parseInt(iso.slice(5, 7), 10);
+  if (!Number.isFinite(m) || m < 1 || m > 12) return "";
+  return [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ][m - 1];
 }

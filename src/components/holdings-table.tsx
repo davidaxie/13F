@@ -174,7 +174,7 @@ export function HoldingsTable({
             }
           >
             <Download size={12} strokeWidth={1.5} aria-hidden="true" />
-            CSV
+            Export CSV
           </button>
         </div>
       </div>

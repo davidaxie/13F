@@ -118,17 +118,19 @@ export type ConvictionBucket = {
   perFund: ConvictionPerFund[];
   topGainers: ConvictionSignal[];
   topLosers: ConvictionSignal[];
-  /**
-   * Positions in the fund's most-recent 13F that have been held for at
-   * least minHoldQuarters in the current (still-open) lifecycle. Sorted
-   * by current hold duration, descending.
-   */
-  currentPicks: CurrentPick[];
 };
 
 export type ConvictionBacktest = {
   positionSizeUsd: number;
   buckets: ConvictionBucket[];
+  /**
+   * All currently-held picks across every fund, sorted by current hold
+   * duration (longest first). The client filters this array per-bucket by
+   * `p.currentHoldDays >= minHoldQuarters * 90` — shipping it once instead
+   * of materializing one filtered copy per bucket cuts the page payload
+   * roughly 10x.
+   */
+  allCurrentPicks: CurrentPick[];
 };
 
 const todayIso = new Date().toISOString().slice(0, 10);
@@ -370,12 +372,6 @@ function _build(): ConvictionBacktest {
         .sort((a, b) => a.alphaUsd - b.alphaUsd)
         .slice(0, 10);
 
-      // Filter currently-held picks by the same hold-quarter threshold,
-      // sorted longest-held first (= strongest conviction).
-      const currentPicks = allCurrentPicks
-        .filter((p) => p.currentHoldDays >= minDays)
-        .sort((a, b) => b.currentHoldDays - a.currentHoldDays);
-
       return {
         minHoldQuarters,
         fundExitStats,
@@ -406,14 +402,18 @@ function _build(): ConvictionBacktest {
         perFund,
         topGainers,
         topLosers,
-        currentPicks,
       };
     },
   );
 
+  // Sort once, on the way out — every bucket needs the same descending-hold
+  // order; client-side filtering preserves that order.
+  allCurrentPicks.sort((a, b) => b.currentHoldDays - a.currentHoldDays);
+
   return {
     positionSizeUsd: POSITION_SIZE_USD,
     buckets,
+    allCurrentPicks,
   };
 }
 

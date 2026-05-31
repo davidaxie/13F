@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CaveatCallout } from "@/components/caveat-callout";
 import { Leaderboard } from "@/components/leaderboard";
 
 export default function LeaderboardPage() {
@@ -23,6 +24,24 @@ export default function LeaderboardPage() {
           quarter by quarter, ranked vs SPY.
         </p>
       </div>
+
+      <CaveatCallout
+        anchor={null}
+        items={[
+          {
+            title: "Mirror return ≠ actual fund return",
+            body: "We rebalance $10k into the disclosed weights each quarter. The fund's real net return includes fees, leverage, options, shorts, and intra-quarter trades — none of which appear here.",
+          },
+          {
+            title: "Survivor-biased universe",
+            body: "These are well-known, still-operating funds. Aggregate alpha is biased upward versus a sample including blown-up managers.",
+          },
+          {
+            title: "Two cohorts, ranked separately",
+            body: "Heavy quant books (Renaissance, Citadel, Two Sigma, Soros, D.E. Shaw, AQR, Millennium, Point72) use only the last 8 quarters — not comparable on raw totals to funds with 20+ years of history.",
+          },
+        ]}
+      />
 
       <div className="mt-12">
         <Leaderboard />

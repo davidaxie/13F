@@ -3,6 +3,7 @@ import {
   formatAxisPct,
   formatYear,
   makeScale,
+  seededSample,
   yearTicks,
 } from "./chart-helpers";
 
@@ -10,7 +11,22 @@ const W = 880;
 const H = 400;
 const M = { top: 30, right: 30, bottom: 36, left: 70 };
 
-export function TradeScatterChart({ trades }: { trades: BacktestTrade[] }) {
+// Max SVG circles. Above this every fund's perf page blows past 3MB of HTML
+// (Point72 = 4.1k trades, Mill = 1.1k). Deterministic random sampling keeps
+// the visual character intact without the bloat.
+const MAX_CIRCLES = 1500;
+
+export function TradeScatterChart({
+  trades,
+  seed,
+}: {
+  trades: BacktestTrade[];
+  /**
+   * Stable seed for the sampling PRNG — pass the fund's CIK so the rendered
+   * scatter is identical across SSR and CSR for the same fund.
+   */
+  seed?: string;
+}) {
   const usable = trades.filter(
     (t) => t.ticker && t.entrySharePrice > 0 && isFinite(t.returnPct),
   );
@@ -21,6 +37,15 @@ export function TradeScatterChart({ trades }: { trades: BacktestTrade[] }) {
       </div>
     );
   }
+
+  // Deterministic down-sample for funds with too many trades. Axes/scales
+  // derive from the *full* usable set so the plot's framing doesn't shift
+  // based on sampling.
+  const dotsToRender = seededSample(
+    usable,
+    MAX_CIRCLES,
+    seed ?? `n${usable.length}`,
+  );
 
   const plotW = W - M.left - M.right;
   const plotH = H - M.top - M.bottom;
@@ -98,7 +123,7 @@ export function TradeScatterChart({ trades }: { trades: BacktestTrade[] }) {
 
       {/* Dots */}
       <g>
-        {usable.map((t, i) => {
+        {dotsToRender.map((t, i) => {
           const cx = xScale(new Date(t.entryDate + "T00:00:00Z").getTime());
           const cy = yScale(Math.max(yMin, Math.min(yMax, t.returnPct)));
           const r = rScale(t.entryValueUsd);

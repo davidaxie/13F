@@ -71,7 +71,7 @@ export function ConsensusHighlights({
       </div>
       <div className="grid grid-cols-1 gap-x-12 gap-y-10 md:grid-cols-2">
         <ConsensusColumn
-          title="Funds are buying"
+          title="Heavily bought"
           subtitle="Multiple funds opened the same name this quarter"
           tone="positive"
           names={buys}
@@ -79,7 +79,7 @@ export function ConsensusHighlights({
           emptyText="No name has ≥2 funds newly opening it this quarter."
         />
         <ConsensusColumn
-          title="Funds are selling"
+          title="Heavily sold"
           subtitle="Multiple funds fully exited the same name this quarter"
           tone="negative"
           names={exits}

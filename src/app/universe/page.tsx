@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CaveatCallout } from "@/components/caveat-callout";
 import { Sparkline } from "@/components/charts/sparkline";
 import { MARQUEE_FUNDS, FUND_STYLE_LABELS } from "@/lib/funds";
 import { getSnapshot } from "@/lib/snapshots";
@@ -37,6 +38,24 @@ export default function UniversePage() {
         </p>
       </div>
 
+      <CaveatCallout
+        anchor={null}
+        items={[
+          {
+            title: "Mirror return ≠ actual fund return",
+            body: "$10k rebalanced into the disclosed weights each quarter. The fund's real net return includes fees, leverage, options, shorts, and intra-quarter trades — none of which appear here.",
+          },
+          {
+            title: "Survivor-biased universe",
+            body: "These are well-known, still-operating funds. Aggregate alpha is biased upward versus a sample including blown-up managers.",
+          },
+          {
+            title: "Two cohorts, different windows",
+            body: "Heavy quant books use only the last 8 quarters of snapshots; the rest use full history. Compare cohorts on /leaderboard, where they're ranked separately.",
+          },
+        ]}
+      />
+
       <section className="mt-12">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -49,6 +68,7 @@ export default function UniversePage() {
                 <th className="py-3 px-3 text-right font-normal">
                   Mirror return
                 </th>
+                <th className="py-3 px-3 text-right font-normal">α vs SPY</th>
                 <th className="py-3 px-3 hidden font-normal sm:table-cell">
                   Equity curve
                 </th>
@@ -101,6 +121,33 @@ export default function UniversePage() {
                         {snap.stats.mirrorReturnPct >= 0 ? "+" : ""}
                         {formatPct(snap.stats.mirrorReturnPct, 0)}
                       </>
+                    )}
+                  </td>
+                  <td
+                    className={cn(
+                      "py-3 px-3 text-right tabular text-sm",
+                      snap == null
+                        ? "text-muted"
+                        : snap.stats.mirrorReturnPct -
+                              snap.stats.spyReturnPct >=
+                            0
+                          ? "text-positive"
+                          : "text-negative",
+                    )}
+                  >
+                    {snap == null ? (
+                      "—"
+                    ) : (
+                      (() => {
+                        const a =
+                          snap.stats.mirrorReturnPct - snap.stats.spyReturnPct;
+                        return (
+                          <>
+                            {a >= 0 ? "+" : ""}
+                            {formatPct(a, 0)}
+                          </>
+                        );
+                      })()
                     )}
                   </td>
                   <td className="py-3 px-3 hidden sm:table-cell">

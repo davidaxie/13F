@@ -31,8 +31,7 @@ export default function ConsensusPage() {
           Which names {view.fundsCovered}{" "}marquee funds collectively hold,
           which ones they&apos;re piling into this quarter, which ones
           they&apos;re dumping, and where the smart money disagrees with
-          itself. Inspired by Goldman&apos;s &ldquo;Hedge Fund VIP List&rdquo;
-          pattern.
+          itself.
         </p>
         <div className="mt-3 text-xs text-muted">
           {view.asOfDate && (

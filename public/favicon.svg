@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!--
+    Light-mode favicon. Cream background + dark serif "13F" with the
+    accent green dot — matches the wordmark in src/app/layout.tsx. The
+    existing favicon.ico in src/app/ is a richer multi-resolution version;
+    this SVG is the modern alternative and degrades gracefully.
+
+    Manually composed glyph paths to avoid any font dependency at icon
+    rendering time (browsers don't load app fonts for favicons).
+  -->
+  <rect width="64" height="64" fill="#fafaf7"/>
+  <text x="32" y="44" text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-weight="400"
+    font-size="32"
+    fill="#111111">13F</text>
+  <circle cx="51" cy="43" r="3" fill="#1f4d3a"/>
+</svg>

@@ -26,12 +26,12 @@ export default function DashboardPage() {
           Cross-fund signal
         </div>
         <h1 className="mt-2 font-serif text-5xl leading-tight tracking-tight text-foreground">
-          Consensus moves
+          Where the smart money converges
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
-          Where the smart money converges — the names multiple top funds are
-          buying, or dumping, in the same quarter. The highest-conviction
-          cross-fund signal, front and center.
+          The names multiple top funds are opening, or fully unwinding, in the
+          same quarter. The highest-conviction cross-fund signal, front and
+          center.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link

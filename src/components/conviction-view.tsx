@@ -22,6 +22,16 @@ export function ConvictionView({ data }: { data: ConvictionBacktest }) {
   const [idx, setIdx] = useState(defaultIdx);
   const [exitMode, setExitMode] = useState<ExitMode>("today");
   const bucket = data.buckets[idx];
+  // Filter the shared all-picks array to the selected bucket's hold-quarters
+  // threshold. The source array is sorted longest-hold-first, so the filter
+  // preserves the "strongest conviction at top" ordering for free.
+  const currentPicks = useMemo(
+    () =>
+      data.allCurrentPicks.filter(
+        (p) => p.currentHoldDays >= bucket.minHoldQuarters * 90,
+      ),
+    [data.allCurrentPicks, bucket.minHoldQuarters],
+  );
 
   // Pick the appropriate headline stats based on exit mode. "today" uses the
   // existing hold-to-today logic; "fund-exit" uses the fund's actual exit
@@ -266,7 +276,7 @@ export function ConvictionView({ data }: { data: ConvictionBacktest }) {
           actual trades by up to 45 days, and a fund&apos;s reason for owning
           a name often doesn&apos;t survive the move from their book to yours.
         </p>
-        <CurrentPicksTable picks={bucket.currentPicks} />
+        <CurrentPicksTable picks={currentPicks} />
       </section>
 
       {/* Top winners / losers ================================================= */}
@@ -411,13 +421,11 @@ function CurrentPicksTable({ picks }: { picks: CurrentPick[] }) {
 
       <p className="mt-6 text-xs leading-relaxed text-muted">
         Each row is a position the fund is still holding in their latest
-        13F, that has been held for at least {""}
-        {/* dynamic message replaced by parent's slider state */}
-        the selected conviction filter. Sorted by current hold duration
-        (longest first = strongest conviction). &ldquo;Cost&rdquo; is the
-        price at the first disclosure; a follower buying today pays the
-        &ldquo;Now&rdquo; price, so their forward return won&apos;t mirror
-        the column shown here.
+        13F that has met the conviction filter selected above. Sorted by
+        current hold duration (longest first = strongest conviction).
+        &ldquo;Cost&rdquo; is the price at the first disclosure; a follower
+        buying today pays the &ldquo;Now&rdquo; price, so their forward
+        return won&apos;t mirror the column shown here.
       </p>
     </>
   );
@@ -658,9 +666,9 @@ function SignalList({
                   </div>
                   <div className="mt-0.5 text-xs text-muted tabular">
                     {s.returnPct >= 0 ? "+" : ""}
-                    {formatPct(s.returnPct, 0)}% vs SPY{" "}
+                    {formatPct(s.returnPct, 0)} vs SPY{" "}
                     {s.spyReturnPct >= 0 ? "+" : ""}
-                    {formatPct(s.spyReturnPct, 0)}%
+                    {formatPct(s.spyReturnPct, 0)}
                   </div>
                 </div>
               </div>

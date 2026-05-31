@@ -96,3 +96,46 @@ export function buildAreaPath(
   const firstX = points[0][0];
   return `${line} L${lastX.toFixed(2)},${baselineY.toFixed(2)} L${firstX.toFixed(2)},${baselineY.toFixed(2)} Z`;
 }
+
+// mulberry32 — small, stable PRNG. We can't use Math.random() (sandbox blocks
+// it) and need a stable seed so SSR/CSR match and renders are reproducible
+// across requests for the same input.
+function mulberry32(seed: number): () => number {
+  let t = seed >>> 0;
+  return function () {
+    t = (t + 0x6d2b79f5) >>> 0;
+    let r = t;
+    r = Math.imul(r ^ (r >>> 15), r | 1);
+    r ^= r + Math.imul(r ^ (r >>> 7), r | 61);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// FNV-1a → 32-bit unsigned, used to derive a seed from a string key.
+function hashSeed(s: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+/**
+ * Cap a series for SVG rendering: returns up to `cap` items uniformly sampled
+ * without replacement, using a deterministic per-seed PRNG so the same input
+ * renders identically across SSR/CSR and across requests. Returns the array
+ * unchanged when it's already within the cap.
+ *
+ * Fisher-Yates partial shuffle — O(cap), not O(n).
+ */
+export function seededSample<T>(items: T[], cap: number, seed: string): T[] {
+  if (items.length <= cap) return items;
+  const rand = mulberry32(hashSeed(seed));
+  const arr = items.slice();
+  for (let i = 0; i < cap; i++) {
+    const j = i + Math.floor(rand() * (arr.length - i));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.slice(0, cap);
+}

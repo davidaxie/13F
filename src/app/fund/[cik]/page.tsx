@@ -161,6 +161,20 @@ export default async function FundPage({
               className="text-xs uppercase tracking-widest text-accent transition-opacity hover:opacity-70"
             >
               All {topHoldings.positionCount.toLocaleString()} positions →
+              {/* Concentrated funds (e.g. Pershing's 11) fit essentially
+                  their entire portfolio into the top-10 view above. The
+                  "All N positions" link then reads as "click to see one
+                  or two more rows" — the hint reassures the reader that
+                  yes, this is the whole book. Threshold of +2 catches
+                  Pershing-style activist books without firing for
+                  diversified funds where the link genuinely reveals
+                  much more. */}
+              {topHoldings.positionCount > 0 &&
+                topHoldings.positionCount - topHoldings.rows.length <= 2 && (
+                  <span className="ml-1 normal-case tracking-normal text-muted">
+                    (complete portfolio)
+                  </span>
+                )}
             </Link>
           </div>
           <div className="mt-4 overflow-x-auto">

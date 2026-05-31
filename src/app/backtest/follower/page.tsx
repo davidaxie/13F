@@ -27,7 +27,8 @@ export default function FollowerBacktestPage() {
   //   - perFund summary (small)
   //   - realizedSeries (one point per closed-trade exit date — ~hundreds of points)
   //   - top 10 winners + top 10 losers by alpha
-  // We do NOT ship the full 61k EnrichedSignal[] — that would be ~30MB payload.
+  // The full EnrichedSignal[] (currently ~116k after the expanded universe)
+  // is intentionally omitted — shipping it would push the page past 50MB.
   const base: FollowerBacktest = {
     positionSizeUsd: result.positionSizeUsd,
     signals: [], // intentionally empty for the client; not needed

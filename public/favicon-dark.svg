@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!--
+    Dark-mode favicon variant. Charcoal background + cream serif "13F"
+    with the lighter accent green dot — matches the dark theme palette
+    in src/app/globals.css.
+  -->
+  <rect width="64" height="64" fill="#0c0c0b"/>
+  <text x="32" y="44" text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-weight="400"
+    font-size="32"
+    fill="#f1efe9">13F</text>
+  <circle cx="51" cy="43" r="3" fill="#74c69d"/>
+</svg>

@@ -284,7 +284,10 @@ function StyleSection({
       {hidden > 0 && (
         <p className="mt-3 text-xs text-muted">
           + {hidden.toLocaleString()} smaller{" "}
-          {FUND_STYLE_LABELS[group.style].toLowerCase()} entr
+          {/* Use the original-case label ("Quant", "Value", etc.) so the
+              footnote matches the section header above instead of producing
+              "smaller quant entries" with a stray lowercase. */}
+          {FUND_STYLE_LABELS[group.style]} entr
           {hidden === 1 ? "y" : "ies"} not shown.
         </p>
       )}
