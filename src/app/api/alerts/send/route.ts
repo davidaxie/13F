@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
 import { Resend } from "resend";
+import crypto from "crypto";
 import { detectMaterialMoves, type MaterialMove } from "@/lib/alerts";
 import type { FundBacktest } from "@/lib/backtest";
+import { getFundInfo } from "@/lib/edgar";
 import path from "path";
 import fs from "fs";
 
@@ -25,8 +27,8 @@ function getResend(): Resend | null {
   return _resend;
 }
 const FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL ?? "alerts@thirteen-f.vercel.app";
-const BASE_URL = "https://thirteen-f.vercel.app";
+  process.env.RESEND_FROM_EMAIL ?? "alerts@13f.mapperlab.co";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://13f.mapperlab.co";
 const SNAPSHOT_DIR = path.join(process.cwd(), "src", "data", "backtest");
 
 // ---------------------------------------------------------------------------
@@ -70,6 +72,20 @@ function loadSnapshot(cik: string): FundBacktest | null {
 }
 
 // ---------------------------------------------------------------------------
+// Compute the one-click unsubscribe token for {userId, cik}.
+// HMAC-SHA256 over "userId:cik" using CRON_SECRET, base64url-encoded.
+// NOTE: CRON_SECRET reuse is provisional — once we add a dedicated
+// UNSUBSCRIBE_SECRET we should rotate this off the cron key.
+// ---------------------------------------------------------------------------
+function buildUnsubscribeToken(userId: string, cik: string): string {
+  const secret = process.env.CRON_SECRET ?? "";
+  return crypto
+    .createHmac("sha256", secret)
+    .update(`${userId}:${cik}`)
+    .digest("base64url");
+}
+
+// ---------------------------------------------------------------------------
 // Build the alert email HTML.
 // ---------------------------------------------------------------------------
 function buildEmailHtml(
@@ -77,8 +93,10 @@ function buildEmailHtml(
   cik: string,
   moves: MaterialMove[],
   filingDate: string,
+  unsubscribeToken: string,
 ): string {
   const fundUrl = `${BASE_URL}/fund/${cik}`;
+  const unsubscribeUrl = `${BASE_URL}/api/alerts/unsubscribe?token=${unsubscribeToken}`;
 
   const typeLabel: Record<MaterialMove["changeType"], string> = {
     new: "New position",
@@ -162,7 +180,7 @@ function buildEmailHtml(
       <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.6">
         You're receiving this because you watched <strong>${fundName}</strong> on
         <a href="${BASE_URL}" style="color:#6b7280">13F Platform</a>.
-        To unsubscribe, visit the fund page and click the bell icon, or reply to this email.
+        <a href="${unsubscribeUrl}" style="color:#6b7280">Unsubscribe from ${fundName} alerts</a>
       </p>
     </div>
   </div>
@@ -235,27 +253,41 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         continue;
       }
 
-      // 5. Check that the latest filing is < 7 days old.
+      // 5. Check that the latest entry is < 7 days old.
       const allDates = Array.from(
         new Set(snapshot.trades.map((t) => t.entryDate)),
       ).sort();
-      const latestFilingDate = allDates[allDates.length - 1];
-      if (!latestFilingDate) {
+      const latestEntryDate = allDates[allDates.length - 1];
+      if (!latestEntryDate) {
         results.push({ userId, cik, status: "skipped", reason: "no filings" });
         continue;
       }
 
       const daysSinceFiling =
-        (Date.now() - new Date(latestFilingDate).getTime()) /
+        (Date.now() - new Date(latestEntryDate).getTime()) /
         (1000 * 60 * 60 * 24);
       if (daysSinceFiling > 7) {
         results.push({
           userId,
           cik,
           status: "skipped",
-          reason: `latest filing ${latestFilingDate} is ${daysSinceFiling.toFixed(1)} days old`,
+          reason: `latest filing ${latestEntryDate} is ${daysSinceFiling.toFixed(1)} days old`,
         });
         continue;
+      }
+
+      // 5b. Resolve the actual SEC filingDate via EDGAR. Match the filing whose
+      // reportDate === latestEntryDate (i.e. treat the snapshot's entryDate
+      // as period-end). If the lookup fails — network blip, no matching
+      // reportDate, snapshot entryDate already being the filingDate, etc. —
+      // fall back to the snapshot entryDate so we still send the email.
+      let displayFilingDate = latestEntryDate;
+      try {
+        const info = await getFundInfo(cik, "recent");
+        const match = info.filings.find((f) => f.reportDate === latestEntryDate);
+        if (match?.filingDate) displayFilingDate = match.filingDate;
+      } catch {
+        // network/parse failure → keep displayFilingDate = latestEntryDate
       }
 
       // 6. Detect material moves.
@@ -267,20 +299,22 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
       // 7. Send email.
       try {
+        const unsubscribeToken = buildUnsubscribeToken(userId, cik);
         await resend.emails.send({
           from: FROM_EMAIL,
           to: userEmail,
-          subject: `[13F Alert] ${snapshot.fundName} filed new moves`,
+          subject: `[13F Alert] ${snapshot.fundName} filed new moves (${displayFilingDate})`,
           html: buildEmailHtml(
             snapshot.fundName,
             cik,
             moves,
-            latestFilingDate,
+            displayFilingDate,
+            unsubscribeToken,
           ),
         });
 
         // 8. Set last-sent guard with 7-day TTL (604800 seconds).
-        await kv.set(sentKey, latestFilingDate, { ex: 604800 });
+        await kv.set(sentKey, latestEntryDate, { ex: 604800 });
 
         results.push({ userId, cik, status: "sent" });
       } catch (err) {
@@ -303,4 +337,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     summary: { sent, skipped, errors },
     results,
   });
+}
+
+// ---------------------------------------------------------------------------
+// GET /api/alerts/send
+// Vercel cron sends GET by default — alias to POST so the cron triggers
+// the digest run.
+// ---------------------------------------------------------------------------
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  return POST(req);
 }
