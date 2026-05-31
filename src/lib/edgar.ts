@@ -442,21 +442,81 @@ export async function getHoldings(
 }
 
 /**
- * SEC 13F modernization: filings due on or before 2023-05-25 reported
- * `value` in $1000s; filings after that report in whole dollars. Used
- * internally by getHoldings — call sites should consume the converted
- * Holding[] directly and never need to know the vintage.
+ * Normalize a single holding's reported `value` to whole dollars.
+ *
+ * BACKGROUND — the "1000× inflation bug":
+ *   The SEC's 13F-HR XML schema historically reported holding `value` in
+ *   THOUSANDS of dollars. As part of the 13F modernization, filings due on
+ *   or AFTER 2023-05-25 must report `value` in WHOLE dollars. The boundary
+ *   here is strict `<`: a filing dated exactly 2023-05-25 is post-cutover
+ *   and already in whole dollars. (The previous implementation used `<=`,
+ *   which incorrectly inflated boundary-date filings by 1000×.)
+ *
+ *   Worse: some filers reported in whole-dollars BEFORE the deadline
+ *   (either anticipating the rule or as a long-standing house style).
+ *   Blindly multiplying every pre-cutoff row by 1000 inflates those
+ *   filers' holdings by 1000× — Berkshire's 2023-05-15 COF entry, for
+ *   instance, came back as $954B instead of $954M.
+ *
+ * SANITY CHECK:
+ *   For pre-cutoff filings with shares > 0, compute the per-share price
+ *   that the multiplication would imply. If that per-share value exceeds
+ *   PER_SHARE_PLAUSIBILITY_CEILING_USD, assume the filer already reports
+ *   in whole dollars and skip the multiplication.
+ *
+ *   The ceiling is set at $50,000/share. Rationale:
+ *     - Legitimate institutional 13F holdings rarely show a per-share
+ *       above this (Berkshire-A around $500-700k is the lone US-equity
+ *       exception, and institutional 13F filers almost universally hold
+ *       Berkshire-B at ~$300, not the A shares).
+ *     - The bug inflates per-share by exactly 1000×. Real Capital One
+ *       at ~$100/share becomes ~$96,000/share when wrongly multiplied —
+ *       well above this ceiling, which catches it.
+ *   The trade-off: a legitimate pre-cutoff Berkshire-A holding would
+ *   false-trigger and be under-reported by 1000×. We accept this for the
+ *   ~597 known buggy snapshot trades; correct Berkshire-A holdings in
+ *   13F filings are vanishingly rare.
+ *
+ * SHARES = 0:
+ *   Options/puts/calls/contracts sometimes have no notional share count
+ *   (the SEC schema permits sshPrnamt=0 for principal-amount instruments).
+ *   We cannot compute a per-share check, so fall back to the date-based
+ *   rule alone: multiply pre-cutoff, leave post-cutoff untouched.
  */
-function isValueInThousands(filingDateIso: string): boolean {
-  return filingDateIso <= "2023-05-25";
+const SEC_WHOLE_DOLLAR_CUTOVER_ISO = "2023-05-25";
+const PER_SHARE_PLAUSIBILITY_CEILING_USD = 50_000;
+
+export function normalizeHoldingValue(
+  rawValue: number,
+  shares: number,
+  filingDateIso: string,
+): number {
+  // Filings on or after the cutover are already in whole dollars.
+  if (filingDateIso >= SEC_WHOLE_DOLLAR_CUTOVER_ISO) return rawValue;
+
+  // Pre-cutoff. Default behavior is to multiply by 1000 (thousands → whole).
+  const candidate = rawValue * 1000;
+
+  // If we have a positive share count, check whether the multiplied value
+  // would imply an absurd per-share price. If so, the filer is already
+  // reporting in whole dollars — return the raw value unchanged.
+  if (shares > 0) {
+    const impliedPerShare = candidate / shares;
+    if (impliedPerShare > PER_SHARE_PLAUSIBILITY_CEILING_USD) {
+      return rawValue;
+    }
+  }
+
+  return candidate;
 }
 
 function applyUnits(holdings: Holding[], filingDate: string): Holding[] {
-  if (!isValueInThousands(filingDate)) return holdings;
-  // Convert $1000s → whole dollars. Return a NEW array so we don't mutate
-  // the in-memory / disk cache (which stores raw values for forward
-  // compatibility).
-  return holdings.map((h) => ({ ...h, value: h.value * 1000 }));
+  // Return a NEW array so we don't mutate the in-memory / disk cache
+  // (which stores raw values for forward compatibility).
+  return holdings.map((h) => ({
+    ...h,
+    value: normalizeHoldingValue(h.value, h.shares, filingDate),
+  }));
 }
 
 export type { Holding };
