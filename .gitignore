@@ -44,3 +44,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# claude code — per-agent isolated worktrees (each is a full repo sub-clone;
+# committing them would create a repo-inside-a-repo). launch.json IS tracked.
+.claude/worktrees/
+

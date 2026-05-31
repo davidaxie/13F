@@ -1,0 +1,30 @@
+{
+  "cik": "1345472",
+  "fundName": "Trian Fund Management",
+  "startDate": "2026-05-30",
+  "endDate": "2026-05-30",
+  "startingCash": 10000,
+  "trades": [],
+  "buySignals": [],
+  "latestPriceByTicker": {},
+  "equityCurve": [],
+  "pnlSeries": [],
+  "filingCount": 0,
+  "mappedCusipCount": 0,
+  "unmappedCusipCount": 0,
+  "stats": {
+    "mirrorFinal": 10000,
+    "spyFinal": 10000,
+    "mirrorReturnPct": 0,
+    "spyReturnPct": 0,
+    "alphaPct": 0,
+    "maxDrawdownPct": 0,
+    "realizedPnlUsd": 0,
+    "closedTrades": 0,
+    "openTrades": 0,
+    "winRate": 0,
+    "avgReturnPct": 0,
+    "bestTrade": null,
+    "worstTrade": null
+  }
+}
