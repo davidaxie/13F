@@ -2,7 +2,7 @@
   "cik": "1167557",
   "fundName": "AQR Capital Management",
   "startDate": "2024-08-14",
-  "endDate": "2026-05-28",
+  "endDate": "2026-05-31",
   "startingCash": 10000,
   "trades": [
     {
@@ -16797,12 +16797,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 38.865604400634766,
-      "exitSharePrice": 42.11000061035156,
+      "entrySharePrice": 38.8656005859375,
+      "exitSharePrice": 42.810001373291016,
       "entryValueUsd": 25053092,
       "shares": 631537,
-      "returnPct": 8.347731264572356,
-      "pnlUsd": 2091364.793626076,
+      "returnPct": 10.148822423654224,
+      "pnlUsd": 2542593.8187147225,
       "status": "open"
     },
     {
@@ -16846,11 +16846,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 159.23794555664062,
-      "exitSharePrice": 396.94000244140625,
+      "exitSharePrice": 380.3399963378906,
       "entryValueUsd": 839532603,
       "shares": 4609018,
-      "returnPct": 149.27475737886576,
-      "pnlUsd": 1253210256.2447262,
+      "returnPct": 138.85010259856963,
+      "pnlUsd": 1165691880.6139421,
       "status": "open"
     },
     {
@@ -16861,12 +16861,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 160.89344787597656,
-      "exitSharePrice": 393.1099853515625,
+      "entrySharePrice": 160.89346313476562,
+      "exitSharePrice": 376.42999267578125,
       "entryValueUsd": 504900103,
       "shares": 2752699,
-      "returnPct": 144.32939348443088,
-      "pnlUsd": 728719256.3621668,
+      "returnPct": 133.9622662982153,
+      "pnlUsd": 676375620.5208234,
       "status": "open"
     },
     {
@@ -17277,12 +17277,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 239.24407958984375,
-      "exitSharePrice": 312.239990234375,
+      "entrySharePrice": 239.2440948486328,
+      "exitSharePrice": 316.4700012207031,
       "entryValueUsd": 25284818,
       "shares": 109198,
-      "returnPct": 30.51106249720965,
-      "pnlUsd": 7714666.622285715,
+      "returnPct": 32.27912748313821,
+      "pnlUsd": 8161718.636099477,
       "status": "open"
     },
     {
@@ -17901,12 +17901,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 220.07028198242188,
-      "exitSharePrice": 297.8399963378906,
+      "entrySharePrice": 220.07029724121094,
+      "exitSharePrice": 312.05999755859375,
       "entryValueUsd": 1731201432,
       "shares": 8219549,
-      "returnPct": 35.338580772882636,
-      "pnlUsd": 611782016.3886209,
+      "returnPct": 41.8001436225427,
+      "pnlUsd": 723644684.9715158,
       "status": "open"
     },
     {
@@ -19229,12 +19229,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 37.266632080078125,
-      "exitSharePrice": 50.689998626708984,
+      "entrySharePrice": 37.26663589477539,
+      "exitSharePrice": 51.599998474121094,
       "entryValueUsd": 276252326,
       "shares": 6979594,
-      "returnPct": 36.019800549153146,
-      "pnlUsd": 99505536.83759634,
+      "returnPct": 38.461648697824025,
+      "pnlUsd": 106251199.14568758,
       "status": "open"
     },
     {
@@ -20925,12 +20925,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 133.29380798339844,
-      "exitSharePrice": 187.1699981689453,
+      "entrySharePrice": 132.72410583496094,
+      "exitSharePrice": 187.92999267578125,
       "entryValueUsd": 66440527,
       "shares": 485606,
-      "returnPct": 40.41912448945646,
-      "pnlUsd": 26854679.31958093,
+      "returnPct": 41.59446883708333,
+      "pnlUsd": 27635584.298208937,
       "status": "open"
     },
     {
@@ -21789,12 +21789,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 134.03848266601562,
-      "exitSharePrice": 196.1199951171875,
+      "entrySharePrice": 132.82192993164062,
+      "exitSharePrice": 182.4600067138672,
       "entryValueUsd": 134232523,
       "shares": 858155,
-      "returnPct": 46.316185632942975,
-      "pnlUsd": 62171384.53246287,
+      "returnPct": 37.37189845665829,
+      "pnlUsd": 50165242.19137049,
       "status": "open"
     },
     {
@@ -22430,11 +22430,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 65.21463012695312,
-      "exitSharePrice": 81.19999694824219,
+      "exitSharePrice": 79.01000213623047,
       "entryValueUsd": 212244222,
       "shares": 3334552,
-      "returnPct": 24.511933580195723,
-      "pnlUsd": 52025162.72444316,
+      "returnPct": 21.15379935824513,
+      "pnlUsd": 44897716.87134837,
       "status": "open"
     },
     {
@@ -23022,11 +23022,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 231.06564331054688,
-      "exitSharePrice": 147.5800018310547,
+      "exitSharePrice": 138.82000732421875,
       "entryValueUsd": 8895112,
       "shares": 34867,
-      "returnPct": -36.13070306920939,
-      "pnlUsd": -3213866.504393613,
+      "returnPct": -39.92183115788968,
+      "pnlUsd": -3551091.5939451833,
       "status": "open"
     },
     {
@@ -23998,11 +23998,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 148.8800048828125,
-      "exitSharePrice": 199.52000427246094,
+      "exitSharePrice": 194.36000061035156,
       "entryValueUsd": 9495232,
       "shares": 68523,
-      "returnPct": 34.013969457825155,
-      "pnlUsd": 3229705.3124296404,
+      "returnPct": 30.54808855180895,
+      "pnlUsd": 2900611.8795597,
       "status": "open"
     },
     {
@@ -24109,12 +24109,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 37.914546966552734,
-      "exitSharePrice": 70.23999786376953,
+      "entrySharePrice": 37.91454315185547,
+      "exitSharePrice": 82.4800033569336,
       "entryValueUsd": 36881293,
       "shares": 777431,
-      "returnPct": 85.25870274998539,
-      "pnlUsd": 31444511.96922117,
+      "returnPct": 117.54186256863068,
+      "pnlUsd": 43350958.73159401,
       "status": "open"
     },
     {
@@ -32397,12 +32397,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 54.058231353759766,
-      "exitSharePrice": 51.849998474121094,
+      "entrySharePrice": 54.05823516845703,
+      "exitSharePrice": 52.720001220703125,
       "entryValueUsd": 9447059,
       "shares": 190043,
-      "returnPct": -4.084915144907142,
-      "pnlUsd": -385904.3438393132,
+      "returnPct": -2.4755413186976605,
+      "pnlUsd": -233865.84894674603,
       "status": "open"
     },
     {
@@ -33101,12 +33101,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 31.246173858642578,
-      "exitSharePrice": 23.350000381469727,
+      "entrySharePrice": 31.24617576599121,
+      "exitSharePrice": 24.010000228881836,
       "entryValueUsd": 130912304,
       "shares": 4063076,
-      "returnPct": -25.270849201873713,
-      "pnlUsd": -33082650.93053849,
+      "returnPct": -23.15859576321443,
+      "pnlUsd": -30317451.287670393,
       "status": "open"
     },
     {
@@ -33133,12 +33133,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 50.53802490234375,
-      "exitSharePrice": 68.31999969482422,
+      "entrySharePrice": 50.538028717041016,
+      "exitSharePrice": 62.150001525878906,
       "entryValueUsd": 261542908,
       "shares": 5279429,
-      "returnPct": 35.18533782600557,
-      "pnlUsd": 92024755.73975895,
+      "returnPct": 22.976703095905336,
+      "pnlUsd": 60093937.439556845,
       "status": "open"
     },
     {
@@ -33550,11 +33550,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 158.9700927734375,
-      "exitSharePrice": 83.81999969482422,
+      "exitSharePrice": 89.77999877929688,
       "entryValueUsd": 238558745,
       "shares": 1592409,
-      "returnPct": -47.273101353546046,
-      "pnlUsd": -112774117.31159747,
+      "returnPct": -43.52396906048839,
+      "pnlUsd": -103830234.36488938,
       "status": "open"
     },
     {
@@ -34013,12 +34013,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 91.7349624633789,
-      "exitSharePrice": 70.44000244140625,
+      "entrySharePrice": 91.73497009277344,
+      "exitSharePrice": 76.37999725341797,
       "entryValueUsd": 18352167,
       "shares": 222910,
-      "returnPct": -23.213570322736786,
-      "pnlUsd": -4260193.192291094,
+      "returnPct": -16.738407200467464,
+      "pnlUsd": -3071860.4425698137,
       "status": "open"
     },
     {
@@ -34253,12 +34253,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 14.827510833740234,
-      "exitSharePrice": 18.520000457763672,
+      "entrySharePrice": 14.82751178741455,
+      "exitSharePrice": 21.760000228881836,
       "entryValueUsd": 45067519,
       "shares": 2389582,
-      "returnPct": 24.90296358860935,
-      "pnlUsd": 11223147.8468596,
+      "returnPct": 46.75422647346343,
+      "pnlUsd": 21070969.899231162,
       "status": "open"
     },
     {
@@ -35613,12 +35613,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 458.8701171875,
-      "exitSharePrice": 443.4100036621094,
+      "entrySharePrice": 458.87005615234375,
+      "exitSharePrice": 453.25,
       "entryValueUsd": 4105917,
       "shares": 9754,
-      "returnPct": -3.36916982525437,
-      "pnlUsd": -138335.31661398947,
+      "returnPct": -1.224759837124323,
+      "pnlUsd": -50287.62236165989,
       "status": "open"
     },
     {
@@ -36349,12 +36349,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 53.463356018066406,
-      "exitSharePrice": 76.68000030517578,
+      "entrySharePrice": 53.46335220336914,
+      "exitSharePrice": 75.20999908447266,
       "entryValueUsd": 55693991,
       "shares": 1091398,
-      "returnPct": 43.42534030086696,
-      "pnlUsd": 24185305.118884213,
+      "returnPct": 40.6758012449004,
+      "pnlUsd": 22653977.084512718,
       "status": "open"
     },
     {
@@ -37053,12 +37053,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 137.37014770507812,
-      "exitSharePrice": 226.47999572753906,
+      "entrySharePrice": 137.37013244628906,
+      "exitSharePrice": 250,
       "entryValueUsd": 13313534,
       "shares": 84503,
-      "returnPct": 64.86842266033818,
-      "pnlUsd": 8636279.50614783,
+      "returnPct": 81.99006985579531,
+      "pnlUsd": 10915775.826875059,
       "status": "open"
     },
     {
@@ -37150,11 +37150,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 8571.48046875,
-      "exitSharePrice": 5716.77978515625,
+      "exitSharePrice": 6104.7998046875,
       "entryValueUsd": 100389060,
       "shares": 13229,
-      "returnPct": -33.30463965940831,
-      "pnlUsd": -33434214.6904672,
+      "returnPct": -28.777766840344,
+      "pnlUsd": -28889729.62001304,
       "status": "open"
     },
     {
@@ -37182,11 +37182,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 54.966678619384766,
-      "exitSharePrice": 59.70000076293945,
+      "exitSharePrice": 56.630001068115234,
       "entryValueUsd": 5077419,
       "shares": 80581,
-      "returnPct": 8.611257333430022,
-      "pnlUsd": 437229.61598646926,
+      "returnPct": 3.0260559497292894,
+      "pnlUsd": 153645.53974218538,
       "status": "open"
     },
     {
@@ -42942,11 +42942,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 532.543701171875,
-      "exitSharePrice": 738.6500244140625,
+      "exitSharePrice": 756.47998046875,
       "entryValueUsd": 18487798,
       "shares": 33971,
-      "returnPct": 38.702236603051674,
-      "pnlUsd": 7155191.324654256,
+      "returnPct": 42.050310388442846,
+      "pnlUsd": 7774176.442988329,
       "status": "open"
     },
     {
@@ -46973,12 +46973,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 172.7742919921875,
-      "exitSharePrice": 305.30999755859375,
+      "entrySharePrice": 172.31591796875,
+      "exitSharePrice": 285.3800048828125,
       "entryValueUsd": 139771110,
       "shares": 788687,
-      "returnPct": 76.71031612295609,
-      "pnlUsd": 107218860.32956469,
+      "returnPct": 65.61441812622732,
+      "pnlUsd": 91710000.53506914,
       "status": "open"
     },
     {
@@ -51389,12 +51389,12 @@
       "entryDate": "2024-11-14",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 25.17926025390625,
-      "exitSharePrice": 26.09000015258789,
+      "entrySharePrice": 25.179256439208984,
+      "exitSharePrice": 29.520000457763672,
       "entryValueUsd": 9263719,
       "shares": 391701,
-      "returnPct": 3.6170240487519933,
-      "pnlUsd": 335070.94403880765,
+      "returnPct": 17.239365384099692,
+      "pnlUsd": 1597006.3665662662,
       "status": "open"
     },
     {
@@ -69422,11 +69422,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 91.79000091552734,
-      "exitSharePrice": 96.37000274658203,
+      "exitSharePrice": 96.31999969482422,
       "entryValueUsd": 1240015,
       "shares": 15215,
-      "returnPct": 4.989652233765174,
-      "pnlUsd": 61872.43614652322,
+      "returnPct": 4.935176744867609,
+      "pnlUsd": 61196.93191287008,
       "status": "open"
     },
     {
@@ -69438,11 +69438,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 94.20999908447266,
-      "exitSharePrice": 98.97000122070312,
+      "exitSharePrice": 99.0999984741211,
       "entryValueUsd": 6547027,
       "shares": 78728,
-      "returnPct": 5.05254450959336,
-      "pnlUsd": 330791.45323009486,
+      "returnPct": 5.190531193258852,
+      "pnlUsd": 339825.4786660792,
       "status": "open"
     },
     {
@@ -89917,12 +89917,12 @@
       "issuer": "ALLY FINL INC",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 38.865604400634766,
+      "buyPrice": 38.8656005859375,
       "sharesAdded": 631537,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 42.11000061035156,
-      "returnPct": 8.347731264572356,
+      "sellPrice": 42.810001373291016,
+      "returnPct": 10.148822423654224,
       "status": "open"
     },
     {
@@ -89935,8 +89935,8 @@
       "sharesAdded": 187415,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 42.11000061035156,
-      "returnPct": 14.055943896987145,
+      "sellPrice": 42.810001373291016,
+      "returnPct": 15.951912706972028,
       "status": "open"
     },
     {
@@ -89945,12 +89945,12 @@
       "issuer": "ALLY FINL INC",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 34.709312438964844,
+      "buyPrice": 34.70931625366211,
       "sharesAdded": 873380,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 42.11000061035156,
-      "returnPct": 21.32190945700978,
+      "sellPrice": 42.810001373291016,
+      "returnPct": 23.33864793079645,
       "status": "open"
     },
     {
@@ -89963,8 +89963,8 @@
       "sharesAdded": 111987,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 42.11000061035156,
-      "returnPct": 8.67779505903159,
+      "sellPrice": 42.810001373291016,
+      "returnPct": 10.484362106128685,
       "status": "open"
     },
     {
@@ -89977,8 +89977,8 @@
       "sharesAdded": 40417,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 42.11000061035156,
-      "returnPct": 2.679890519520689,
+      "sellPrice": 42.810001373291016,
+      "returnPct": 4.386753513118813,
       "status": "open"
     },
     {
@@ -89991,8 +89991,8 @@
       "sharesAdded": 3317990,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 42.11000061035156,
-      "returnPct": 0.2857797739653334,
+      "sellPrice": 42.810001373291016,
+      "returnPct": 1.9528451108510536,
       "status": "open"
     },
     {
@@ -90145,8 +90145,8 @@
       "sharesAdded": 4609018,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 396.94000244140625,
-      "returnPct": 149.27475737886576,
+      "sellPrice": 380.3399963378906,
+      "returnPct": 138.85010259856963,
       "status": "open"
     },
     {
@@ -90159,8 +90159,8 @@
       "sharesAdded": 444588,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 396.94000244140625,
-      "returnPct": 142.93507946701916,
+      "sellPrice": 380.3399963378906,
+      "returnPct": 132.77554962092904,
       "status": "open"
     },
     {
@@ -90173,8 +90173,8 @@
       "sharesAdded": 1044228,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 396.94000244140625,
-      "returnPct": 43.80060397242047,
+      "sellPrice": 380.3399963378906,
+      "returnPct": 37.78687169814867,
       "status": "open"
     },
     {
@@ -90187,8 +90187,8 @@
       "sharesAdded": 383716,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 396.94000244140625,
-      "returnPct": 31.520909429463927,
+      "sellPrice": 380.3399963378906,
+      "returnPct": 26.020713213812165,
       "status": "open"
     },
     {
@@ -90201,8 +90201,8 @@
       "sharesAdded": 1265371,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 396.94000244140625,
-      "returnPct": 0.04032553621695634,
+      "sellPrice": 380.3399963378906,
+      "returnPct": -4.143354627749463,
       "status": "open"
     },
     {
@@ -90211,12 +90211,12 @@
       "issuer": "ALPHABET INC",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 160.89344787597656,
+      "buyPrice": 160.89346313476562,
       "sharesAdded": 2752699,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 393.1099853515625,
-      "returnPct": 144.32939348443088,
+      "sellPrice": 376.42999267578125,
+      "returnPct": 133.9622662982153,
       "status": "open"
     },
     {
@@ -90225,12 +90225,12 @@
       "issuer": "ALPHABET INC",
       "buyAccession": "0001085146-24-005943",
       "buyDate": "2024-11-14",
-      "buyPrice": 176.33782958984375,
+      "buyPrice": 176.3378448486328,
       "sharesAdded": 26028,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 393.1099853515625,
-      "returnPct": 122.93003507297553,
+      "sellPrice": 376.42999267578125,
+      "returnPct": 113.47090467103426,
       "status": "open"
     },
     {
@@ -90239,12 +90239,12 @@
       "issuer": "ALPHABET INC",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 186.01425170898438,
+      "buyPrice": 186.0142822265625,
       "sharesAdded": 140711,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 393.1099853515625,
-      "returnPct": 111.33326169361224,
+      "sellPrice": 376.42999267578125,
+      "returnPct": 102.36617756979291,
       "status": "open"
     },
     {
@@ -90253,12 +90253,12 @@
       "issuer": "ALPHABET INC",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 164.83016967773438,
+      "buyPrice": 164.8301544189453,
       "sharesAdded": 384312,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 393.1099853515625,
-      "returnPct": 138.49395175661502,
+      "sellPrice": 376.42999267578125,
+      "returnPct": 128.37447068029624,
       "status": "open"
     },
     {
@@ -90271,8 +90271,8 @@
       "sharesAdded": 811360,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 393.1099853515625,
-      "returnPct": 42.119853332683135,
+      "sellPrice": 376.42999267578125,
+      "returnPct": 36.08958648369367,
       "status": "open"
     },
     {
@@ -90285,8 +90285,8 @@
       "sharesAdded": 633355,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 393.1099853515625,
-      "returnPct": 29.9078442327513,
+      "sellPrice": 376.42999267578125,
+      "returnPct": 24.39574336766903,
       "status": "open"
     },
     {
@@ -90299,8 +90299,8 @@
       "sharesAdded": 658932,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 393.1099853515625,
-      "returnPct": -0.053397225858164976,
+      "sellPrice": 376.42999267578125,
+      "returnPct": -4.294217007505252,
       "status": "open"
     },
     {
@@ -92171,12 +92171,12 @@
       "issuer": "AMERICAN EXPRESS CO",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 239.24407958984375,
+      "buyPrice": 239.2440948486328,
       "sharesAdded": 109198,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 312.239990234375,
-      "returnPct": 30.51106249720965,
+      "sellPrice": 316.4700012207031,
+      "returnPct": 32.27912748313821,
       "status": "open"
     },
     {
@@ -92185,12 +92185,12 @@
       "issuer": "AMERICAN EXPRESS CO",
       "buyAccession": "0001085146-24-005943",
       "buyDate": "2024-11-14",
-      "buyPrice": 283.6982727050781,
+      "buyPrice": 283.69830322265625,
       "sharesAdded": 75527,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 312.239990234375,
-      "returnPct": 10.060589110095775,
+      "sellPrice": 316.4700012207031,
+      "returnPct": 11.5516016929881,
       "status": "open"
     },
     {
@@ -92199,12 +92199,12 @@
       "issuer": "AMERICAN EXPRESS CO",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 306.79498291015625,
+      "buyPrice": 306.7949523925781,
       "sharesAdded": 48681,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 312.239990234375,
-      "returnPct": 1.7748032489218746,
+      "sellPrice": 316.4700012207031,
+      "returnPct": 3.15358800810539,
       "status": "open"
     },
     {
@@ -92213,12 +92213,12 @@
       "issuer": "AMERICAN EXPRESS CO",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 296.4426574707031,
+      "buyPrice": 296.442626953125,
       "sharesAdded": 95305,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 312.239990234375,
-      "returnPct": 5.328967463204282,
+      "sellPrice": 316.4700012207031,
+      "returnPct": 6.755902305084138,
       "status": "open"
     },
     {
@@ -92231,8 +92231,8 @@
       "sharesAdded": 11191,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 312.239990234375,
-      "returnPct": 2.270925772843446,
+      "sellPrice": 316.4700012207031,
+      "returnPct": 3.656421395221443,
       "status": "open"
     },
     {
@@ -92245,8 +92245,8 @@
       "sharesAdded": 3006,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 312.239990234375,
-      "returnPct": -9.08568265754136,
+      "sellPrice": 316.4700012207031,
+      "returnPct": -7.854038495355553,
       "status": "open"
     },
     {
@@ -92259,8 +92259,8 @@
       "sharesAdded": 285172,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 312.239990234375,
-      "returnPct": -0.395566131330527,
+      "sellPrice": 316.4700012207031,
+      "returnPct": 0.9538057067713268,
       "status": "open"
     },
     {
@@ -94957,12 +94957,12 @@
       "issuer": "APPLE INC",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 220.07028198242188,
+      "buyPrice": 220.07029724121094,
       "sharesAdded": 8219549,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 297.8399963378906,
-      "returnPct": 35.338580772882636,
+      "sellPrice": 312.05999755859375,
+      "returnPct": 41.8001436225427,
       "status": "open"
     },
     {
@@ -94971,12 +94971,12 @@
       "issuer": "APPLE INC",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 243.3143768310547,
+      "buyPrice": 243.31439208984375,
       "sharesAdded": 2218738,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 297.8399963378906,
-      "returnPct": 22.409534618127314,
+      "sellPrice": 312.05999755859375,
+      "returnPct": 28.2538179835107,
       "status": "open"
     },
     {
@@ -94985,12 +94985,12 @@
       "issuer": "APPLE INC",
       "buyAccession": "0001167557-25-000065",
       "buyDate": "2025-11-14",
-      "buyPrice": 271.9048156738281,
+      "buyPrice": 271.90484619140625,
       "sharesAdded": 620245,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 297.8399963378906,
-      "returnPct": 9.538330757324221,
+      "sellPrice": 312.05999755859375,
+      "returnPct": 14.768089620190317,
       "status": "open"
     },
     {
@@ -95003,8 +95003,8 @@
       "sharesAdded": 1681401,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 297.8399963378906,
-      "returnPct": 12.973469534930594,
+      "sellPrice": 312.05999755859375,
+      "returnPct": 18.367247719346324,
       "status": "open"
     },
     {
@@ -95017,8 +95017,8 @@
       "sharesAdded": 2092434,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 297.8399963378906,
-      "returnPct": -0.7960612067346995,
+      "sellPrice": 312.05999755859375,
+      "returnPct": 3.9403078104687905,
       "status": "open"
     },
     {
@@ -100557,12 +100557,12 @@
       "issuer": "BANK AMERICA CORP",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 37.266632080078125,
+      "buyPrice": 37.26663589477539,
       "sharesAdded": 6979594,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 50.689998626708984,
-      "returnPct": 36.019800549153146,
+      "sellPrice": 51.599998474121094,
+      "returnPct": 38.461648697824025,
       "status": "open"
     },
     {
@@ -100575,8 +100575,8 @@
       "sharesAdded": 1649647,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 50.689998626708984,
-      "returnPct": -2.601273769567769,
+      "sellPrice": 51.599998474121094,
+      "returnPct": -0.8527468725651355,
       "status": "open"
     },
     {
@@ -100589,8 +100589,8 @@
       "sharesAdded": 1118631,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 50.689998626708984,
-      "returnPct": -3.343658169110786,
+      "sellPrice": 51.599998474121094,
+      "returnPct": -1.6084587471250744,
       "status": "open"
     },
     {
@@ -100603,8 +100603,8 @@
       "sharesAdded": 3624260,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 50.689998626708984,
-      "returnPct": 1.8484994182912384,
+      "sellPrice": 51.599998474121094,
+      "returnPct": 3.676909784058391,
       "status": "open"
     },
     {
@@ -108033,12 +108033,12 @@
       "issuer": "CAPITAL ONE FINL CORP",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 133.29380798339844,
+      "buyPrice": 132.72410583496094,
       "sharesAdded": 485606,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 187.1699981689453,
-      "returnPct": 40.41912448945646,
+      "sellPrice": 187.92999267578125,
+      "returnPct": 41.59446883708333,
       "status": "open"
     },
     {
@@ -108047,12 +108047,12 @@
       "issuer": "CAPITAL ONE FINL CORP",
       "buyAccession": "0001085146-24-005943",
       "buyDate": "2024-11-14",
-      "buyPrice": 180.00669860839844,
+      "buyPrice": 179.2373046875,
       "sharesAdded": 184732,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 187.1699981689453,
-      "returnPct": 3.9794627732885113,
+      "sellPrice": 187.92999267578125,
+      "returnPct": 4.849820746544342,
       "status": "open"
     },
     {
@@ -108061,12 +108061,12 @@
       "issuer": "CAPITAL ONE FINL CORP",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 198.8533172607422,
+      "buyPrice": 198.0033721923828,
       "sharesAdded": 244000,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 187.1699981689453,
-      "returnPct": -5.875345331291292,
+      "sellPrice": 187.92999267578125,
+      "returnPct": -5.087478766176834,
       "status": "open"
     },
     {
@@ -108075,12 +108075,12 @@
       "issuer": "CAPITAL ONE FINL CORP",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 194.8478240966797,
+      "buyPrice": 194.01502990722656,
       "sharesAdded": 161828,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 187.1699981689453,
-      "returnPct": -3.9404216923278446,
+      "sellPrice": 187.92999267578125,
+      "returnPct": -3.13637414294915,
       "status": "open"
     },
     {
@@ -108089,12 +108089,12 @@
       "issuer": "CAPITAL ONE FINL CORP",
       "buyAccession": "0001085146-25-005295",
       "buyDate": "2025-08-14",
-      "buyPrice": 218.8074188232422,
+      "buyPrice": 217.8721923828125,
       "sharesAdded": 436648,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 187.1699981689453,
-      "returnPct": -14.4590255780378,
+      "sellPrice": 187.92999267578125,
+      "returnPct": -13.743011156936124,
       "status": "open"
     },
     {
@@ -108103,12 +108103,12 @@
       "issuer": "CAPITAL ONE FINL CORP",
       "buyAccession": "0001167557-25-000065",
       "buyDate": "2025-11-14",
-      "buyPrice": 209.54820251464844,
+      "buyPrice": 208.6525421142578,
       "sharesAdded": 529033,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 187.1699981689453,
-      "returnPct": -10.679263328034882,
+      "sellPrice": 187.92999267578125,
+      "returnPct": -9.931606501649481,
       "status": "open"
     },
     {
@@ -108117,12 +108117,12 @@
       "issuer": "CAPITAL ONE FINL CORP",
       "buyAccession": "0001085146-26-000240",
       "buyDate": "2026-02-17",
-      "buyPrice": 205.95196533203125,
+      "buyPrice": 205.07168579101562,
       "sharesAdded": 1324845,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 187.1699981689453,
-      "returnPct": -9.119586274792791,
+      "sellPrice": 187.92999267578125,
+      "returnPct": -8.35887853026338,
       "status": "open"
     },
     {
@@ -108131,12 +108131,12 @@
       "issuer": "CAPITAL ONE FINL CORP",
       "buyAccession": "0001167557-26-000115",
       "buyDate": "2026-05-15",
-      "buyPrice": 187.1699981689453,
+      "buyPrice": 186.3699951171875,
       "sharesAdded": 247045,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 187.1699981689453,
-      "returnPct": 0,
+      "sellPrice": 187.92999267578125,
+      "returnPct": 0.8370433006734013,
       "status": "open"
     },
     {
@@ -111645,12 +111645,12 @@
       "issuer": "CHEVRON CORP NEW",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 134.03848266601562,
+      "buyPrice": 132.82192993164062,
       "sharesAdded": 858155,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 196.1199951171875,
-      "returnPct": 46.316185632942975,
+      "sellPrice": 182.4600067138672,
+      "returnPct": 37.37189845665829,
       "status": "open"
     },
     {
@@ -111659,12 +111659,12 @@
       "issuer": "CHEVRON CORP NEW",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 136.1337127685547,
+      "buyPrice": 134.89817810058594,
       "sharesAdded": 93891,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 196.1199951171875,
-      "returnPct": 44.06423738006575,
+      "sellPrice": 182.4600067138672,
+      "returnPct": 35.25757670190111,
       "status": "open"
     },
     {
@@ -111673,12 +111673,12 @@
       "issuer": "CHEVRON CORP NEW",
       "buyAccession": "0001085146-25-005295",
       "buyDate": "2025-08-14",
-      "buyPrice": 150.28671264648438,
+      "buyPrice": 148.92269897460938,
       "sharesAdded": 134274,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 196.1199951171875,
-      "returnPct": 30.497228706116953,
+      "sellPrice": 182.4600067138672,
+      "returnPct": 22.519943548011966,
       "status": "open"
     },
     {
@@ -111687,12 +111687,12 @@
       "issuer": "CHEVRON CORP NEW",
       "buyAccession": "0001167557-25-000065",
       "buyDate": "2025-11-14",
-      "buyPrice": 154.3689727783203,
+      "buyPrice": 152.9678955078125,
       "sharesAdded": 863726,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 196.1199951171875,
-      "returnPct": 27.04625261633582,
+      "sellPrice": 182.4600067138672,
+      "returnPct": 19.279935249255264,
       "status": "open"
     },
     {
@@ -111701,12 +111701,12 @@
       "issuer": "CHEVRON CORPORATION",
       "buyAccession": "0001167557-26-000115",
       "buyDate": "2026-05-15",
-      "buyPrice": 191.10000610351562,
+      "buyPrice": 189.36557006835938,
       "sharesAdded": 235808,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 196.1199951171875,
-      "returnPct": 2.6268910797169864,
+      "sellPrice": 182.4600067138672,
+      "returnPct": -3.6466836880639564,
       "status": "open"
     },
     {
@@ -114239,8 +114239,8 @@
       "sharesAdded": 3334552,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 81.19999694824219,
-      "returnPct": 24.511933580195723,
+      "sellPrice": 79.01000213623047,
+      "returnPct": 21.15379935824513,
       "status": "open"
     },
     {
@@ -114253,8 +114253,8 @@
       "sharesAdded": 261063,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 81.19999694824219,
-      "returnPct": 35.585722246911835,
+      "sellPrice": 79.01000213623047,
+      "returnPct": 31.92892373135441,
       "status": "open"
     },
     {
@@ -116745,8 +116745,8 @@
       "sharesAdded": 34867,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 147.5800018310547,
-      "returnPct": -36.13070306920939,
+      "sellPrice": 138.82000732421875,
+      "returnPct": -39.92183115788968,
       "status": "open"
     },
     {
@@ -116755,12 +116755,12 @@
       "issuer": "CONSTELLATION BRANDS INC",
       "buyAccession": "0001085146-24-005943",
       "buyDate": "2024-11-14",
-      "buyPrice": 232.9287567138672,
+      "buyPrice": 232.92874145507812,
       "sharesAdded": 19277,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 147.5800018310547,
-      "returnPct": -36.64157061880344,
+      "sellPrice": 138.82000732421875,
+      "returnPct": -40.40237093240332,
       "status": "open"
     },
     {
@@ -116773,8 +116773,8 @@
       "sharesAdded": 149393,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 147.5800018310547,
-      "returnPct": -6.455368717175414,
+      "sellPrice": 138.82000732421875,
+      "returnPct": -12.007953389993208,
       "status": "open"
     },
     {
@@ -116783,12 +116783,12 @@
       "issuer": "CONSTELLATION BRANDS INC",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 185.61329650878906,
+      "buyPrice": 185.61331176757812,
       "sharesAdded": 2631,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 147.5800018310547,
-      "returnPct": -20.490608912779827,
+      "sellPrice": 138.82000732421875,
+      "returnPct": -25.21010158040452,
       "status": "open"
     },
     {
@@ -116801,8 +116801,8 @@
       "sharesAdded": 6172,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 147.5800018310547,
-      "returnPct": 15.772429524701526,
+      "sellPrice": 138.82000732421875,
+      "returnPct": 8.900456126568468,
       "status": "open"
     },
     {
@@ -116815,8 +116815,8 @@
       "sharesAdded": 24878,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 147.5800018310547,
-      "returnPct": -2.7080839037144533,
+      "sellPrice": 138.82000732421875,
+      "returnPct": -8.483098404247292,
       "status": "open"
     },
     {
@@ -116829,8 +116829,8 @@
       "sharesAdded": 105086,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 147.5800018310547,
-      "returnPct": 3.6740396932163577,
+      "sellPrice": 138.82000732421875,
+      "returnPct": -2.4798023378586276,
       "status": "open"
     },
     {
@@ -120777,8 +120777,8 @@
       "sharesAdded": 68523,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 199.52000427246094,
-      "returnPct": 34.013969457825155,
+      "sellPrice": 194.36000061035156,
+      "returnPct": 30.54808855180895,
       "status": "open"
     },
     {
@@ -120791,8 +120791,8 @@
       "sharesAdded": 30771,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 199.52000427246094,
-      "returnPct": 29.256286268167386,
+      "sellPrice": 194.36000061035156,
+      "returnPct": 25.913448977608745,
       "status": "open"
     },
     {
@@ -120805,8 +120805,8 @@
       "sharesAdded": 2185,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 199.52000427246094,
-      "returnPct": 48.46343119176264,
+      "sellPrice": 194.36000061035156,
+      "returnPct": 44.62385705265683,
       "status": "open"
     },
     {
@@ -120819,8 +120819,8 @@
       "sharesAdded": 26996,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 199.52000427246094,
-      "returnPct": 32.6507542149094,
+      "sellPrice": 194.36000061035156,
+      "returnPct": 29.220128899786644,
       "status": "open"
     },
     {
@@ -120833,8 +120833,8 @@
       "sharesAdded": 363574,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 199.52000427246094,
-      "returnPct": -0.11014379425891008,
+      "sellPrice": 194.36000061035156,
+      "returnPct": -2.6935039225262414,
       "status": "open"
     },
     {
@@ -121221,12 +121221,12 @@
       "issuer": "DELTA AIR LINES INC DEL",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 37.914546966552734,
+      "buyPrice": 37.91454315185547,
       "sharesAdded": 777431,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.23999786376953,
-      "returnPct": 85.25870274998539,
+      "sellPrice": 82.4800033569336,
+      "returnPct": 117.54186256863068,
       "status": "open"
     },
     {
@@ -121239,8 +121239,8 @@
       "sharesAdded": 3666549,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.23999786376953,
-      "returnPct": 10.201530073901433,
+      "sellPrice": 82.4800033569336,
+      "returnPct": 29.40522276301234,
       "status": "open"
     },
     {
@@ -121253,8 +121253,8 @@
       "sharesAdded": 3577489,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.23999786376953,
-      "returnPct": 41.37400250024685,
+      "sellPrice": 82.4800033569336,
+      "returnPct": 66.0098028963368,
       "status": "open"
     },
     {
@@ -121267,8 +121267,8 @@
       "sharesAdded": 48974,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.23999786376953,
-      "returnPct": 20.138283365412857,
+      "sellPrice": 82.4800033569336,
+      "returnPct": 41.07355234397938,
       "status": "open"
     },
     {
@@ -121281,8 +121281,8 @@
       "sharesAdded": 1890521,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.23999786376953,
-      "returnPct": -0.327873928387612,
+      "sellPrice": 82.4800033569336,
+      "returnPct": 17.040967297918264,
       "status": "open"
     },
     {
@@ -121295,8 +121295,8 @@
       "sharesAdded": 2283366,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.23999786376953,
-      "returnPct": 0.014231106874862398,
+      "sellPrice": 82.4800033569336,
+      "returnPct": 17.44268747609363,
       "status": "open"
     },
     {
@@ -156851,12 +156851,12 @@
       "issuer": "JEFFERIES FINL GROUP INC",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 54.058231353759766,
+      "buyPrice": 54.05823516845703,
       "sharesAdded": 190043,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 51.849998474121094,
-      "returnPct": -4.084915144907142,
+      "sellPrice": 52.720001220703125,
+      "returnPct": -2.4755413186976605,
       "status": "open"
     },
     {
@@ -156865,12 +156865,12 @@
       "issuer": "JEFFERIES FINL GROUP INC",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 68.90577697753906,
+      "buyPrice": 68.9057846069336,
       "sharesAdded": 35564,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 51.849998474121094,
-      "returnPct": -24.75232012691414,
+      "sellPrice": 52.720001220703125,
+      "returnPct": -23.489730910925278,
       "status": "open"
     },
     {
@@ -156879,12 +156879,12 @@
       "issuer": "JEFFERIES FINL GROUP INC",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 51.48653793334961,
+      "buyPrice": 51.486541748046875,
       "sharesAdded": 90608,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 51.849998474121094,
-      "returnPct": 0.705933153326388,
+      "sellPrice": 52.720001220703125,
+      "returnPct": 2.3956929923401704,
       "status": "open"
     },
     {
@@ -156893,12 +156893,12 @@
       "issuer": "JEFFERIES FINL GROUP INC",
       "buyAccession": "0001085146-25-005295",
       "buyDate": "2025-08-14",
-      "buyPrice": 59.932884216308594,
+      "buyPrice": 59.93288040161133,
       "sharesAdded": 174536,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 51.849998474121094,
-      "returnPct": -13.486562256898749,
+      "sellPrice": 52.720001220703125,
+      "returnPct": -12.03492829407592,
       "status": "open"
     },
     {
@@ -156911,8 +156911,8 @@
       "sharesAdded": 17807,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 51.849998474121094,
-      "returnPct": -4.443411463529145,
+      "sellPrice": 52.720001220703125,
+      "returnPct": -2.8400460454523824,
       "status": "open"
     },
     {
@@ -156925,8 +156925,8 @@
       "sharesAdded": 2984055,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 51.849998474121094,
-      "returnPct": 0.5197276800600781,
+      "sellPrice": 52.720001220703125,
+      "returnPct": 2.2063707223155093,
       "status": "open"
     },
     {
@@ -156939,8 +156939,8 @@
       "sharesAdded": 1870390,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 51.849998474121094,
-      "returnPct": 0.03858121234798784,
+      "sellPrice": 52.720001220703125,
+      "returnPct": 1.7171509901726,
       "status": "open"
     },
     {
@@ -159973,12 +159973,12 @@
       "issuer": "KRAFT HEINZ CO",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 31.246173858642578,
+      "buyPrice": 31.24617576599121,
       "sharesAdded": 4063076,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 23.350000381469727,
-      "returnPct": -25.270849201873713,
+      "sellPrice": 24.010000228881836,
+      "returnPct": -23.15859576321443,
       "status": "open"
     },
     {
@@ -159987,12 +159987,12 @@
       "issuer": "KRAFT HEINZ CO",
       "buyAccession": "0001085146-25-005295",
       "buyDate": "2025-08-14",
-      "buyPrice": 26.381250381469727,
+      "buyPrice": 26.38125228881836,
       "sharesAdded": 73994,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 23.350000381469727,
-      "returnPct": -11.490168040439663,
+      "sellPrice": 24.010000228881836,
+      "returnPct": -8.988398404959618,
       "status": "open"
     },
     {
@@ -160005,8 +160005,8 @@
       "sharesAdded": 396737,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 23.350000381469727,
-      "returnPct": -0.1600424213544116,
+      "sellPrice": 24.010000228881836,
+      "returnPct": 2.6619856596314273,
       "status": "open"
     },
     {
@@ -160099,12 +160099,12 @@
       "issuer": "KROGER CO",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 50.53802490234375,
+      "buyPrice": 50.538028717041016,
       "sharesAdded": 5279429,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 68.31999969482422,
-      "returnPct": 35.18533782600557,
+      "sellPrice": 62.150001525878906,
+      "returnPct": 22.976703095905336,
       "status": "open"
     },
     {
@@ -160117,8 +160117,8 @@
       "sharesAdded": 1186757,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 68.31999969482422,
-      "returnPct": -1.4069714836970615,
+      "sellPrice": 62.150001525878906,
+      "returnPct": -10.310935302983316,
       "status": "open"
     },
     {
@@ -160131,8 +160131,8 @@
       "sharesAdded": 1170492,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 68.31999969482422,
-      "returnPct": 3.48379758967976,
+      "sellPrice": 62.150001525878906,
+      "returnPct": -5.861852944510771,
       "status": "open"
     },
     {
@@ -161979,8 +161979,8 @@
       "sharesAdded": 1592409,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 83.81999969482422,
-      "returnPct": -47.273101353546046,
+      "sellPrice": 89.77999877929688,
+      "returnPct": -43.52396906048839,
       "status": "open"
     },
     {
@@ -161989,12 +161989,12 @@
       "issuer": "LENNAR CORP",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 121.0266342163086,
+      "buyPrice": 121.02664184570312,
       "sharesAdded": 482808,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 83.81999969482422,
-      "returnPct": -30.742517762648568,
+      "sellPrice": 89.77999877929688,
+      "returnPct": -25.817987337236538,
       "status": "open"
     },
     {
@@ -162007,8 +162007,8 @@
       "sharesAdded": 1692766,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 83.81999969482422,
-      "returnPct": 1.8468974322036091,
+      "sellPrice": 89.77999877929688,
+      "returnPct": 9.088694350150828,
       "status": "open"
     },
     {
@@ -163683,12 +163683,12 @@
       "issuer": "LOUISIANA PAC CORP",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 91.7349624633789,
+      "buyPrice": 91.73497009277344,
       "sharesAdded": 222910,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.44000244140625,
-      "returnPct": -23.213570322736786,
+      "sellPrice": 76.37999725341797,
+      "returnPct": -16.738407200467464,
       "status": "open"
     },
     {
@@ -163697,12 +163697,12 @@
       "issuer": "LOUISIANA PAC CORP",
       "buyAccession": "0001085146-24-005943",
       "buyDate": "2024-11-14",
-      "buyPrice": 109.94271850585938,
+      "buyPrice": 109.94271087646484,
       "sharesAdded": 46605,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.44000244140625,
-      "returnPct": -35.93027041836139,
+      "sellPrice": 76.37999725341797,
+      "returnPct": -30.52745685046735,
       "status": "open"
     },
     {
@@ -163711,12 +163711,12 @@
       "issuer": "LOUISIANA PAC CORP",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 110.12091064453125,
+      "buyPrice": 110.12090301513672,
       "sharesAdded": 29815,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.44000244140625,
-      "returnPct": -36.03394484378577,
+      "sellPrice": 76.37999725341797,
+      "returnPct": -30.639873845822784,
       "status": "open"
     },
     {
@@ -163725,12 +163725,12 @@
       "issuer": "LOUISIANA PAC CORP",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 91.83502197265625,
+      "buyPrice": 91.83502960205078,
       "sharesAdded": 60832,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.44000244140625,
-      "returnPct": -23.297233529949324,
+      "sellPrice": 76.37999725341797,
+      "returnPct": -16.829125460735604,
       "status": "open"
     },
     {
@@ -163743,8 +163743,8 @@
       "sharesAdded": 234734,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.44000244140625,
-      "returnPct": -28.803924920768477,
+      "sellPrice": 76.37999725341797,
+      "returnPct": -22.800172763632844,
       "status": "open"
     },
     {
@@ -163757,8 +163757,8 @@
       "sharesAdded": 125316,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 70.44000244140625,
-      "returnPct": -20.102218351101687,
+      "sellPrice": 76.37999725341797,
+      "returnPct": -13.36467729436367,
       "status": "open"
     },
     {
@@ -164607,12 +164607,12 @@
       "issuer": "MACYS INC",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 14.827510833740234,
+      "buyPrice": 14.82751178741455,
       "sharesAdded": 2389582,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 18.520000457763672,
-      "returnPct": 24.90296358860935,
+      "sellPrice": 21.760000228881836,
+      "returnPct": 46.75422647346343,
       "status": "open"
     },
     {
@@ -164625,8 +164625,8 @@
       "sharesAdded": 3813210,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 18.520000457763672,
-      "returnPct": 61.30543952794911,
+      "sellPrice": 21.760000228881836,
+      "returnPct": 89.52517895736048,
       "status": "open"
     },
     {
@@ -164639,8 +164639,8 @@
       "sharesAdded": 1197785,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 18.520000457763672,
-      "returnPct": -15.784893324476268,
+      "sellPrice": 21.760000228881836,
+      "returnPct": -1.0517983131850706,
       "status": "open"
     },
     {
@@ -164653,8 +164653,8 @@
       "sharesAdded": 967593,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 18.520000457763672,
-      "returnPct": 0.5975046782361826,
+      "sellPrice": 21.760000228881836,
+      "returnPct": 18.196634487971686,
       "status": "open"
     },
     {
@@ -170599,12 +170599,12 @@
       "issuer": "MOODYS CORP",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 458.8701171875,
+      "buyPrice": 458.87005615234375,
       "sharesAdded": 9754,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 443.4100036621094,
-      "returnPct": -3.36916982525437,
+      "sellPrice": 453.25,
+      "returnPct": -1.224759837124323,
       "status": "open"
     },
     {
@@ -170617,8 +170617,8 @@
       "sharesAdded": 7730,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 443.4100036621094,
-      "returnPct": -6.734223142677265,
+      "sellPrice": 453.25,
+      "returnPct": -4.6645023534595325,
       "status": "open"
     },
     {
@@ -170627,12 +170627,12 @@
       "issuer": "MOODYS CORP",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 482.355224609375,
+      "buyPrice": 482.3551940917969,
       "sharesAdded": 20458,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 443.4100036621094,
-      "returnPct": -8.073970999029722,
+      "sellPrice": 453.25,
+      "returnPct": -6.033975470420216,
       "status": "open"
     },
     {
@@ -170645,8 +170645,8 @@
       "sharesAdded": 71225,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 443.4100036621094,
-      "returnPct": -14.233292572039236,
+      "sellPrice": 453.25,
+      "returnPct": -12.329988451622542,
       "status": "open"
     },
     {
@@ -170659,8 +170659,8 @@
       "sharesAdded": 371452,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 443.4100036621094,
-      "returnPct": 3.383075302427496,
+      "sellPrice": 453.25,
+      "returnPct": 5.677315563075647,
       "status": "open"
     },
     {
@@ -174057,12 +174057,12 @@
       "issuer": "NEW YORK TIMES CO",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 53.463356018066406,
+      "buyPrice": 53.46335220336914,
       "sharesAdded": 1091398,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 76.68000030517578,
-      "returnPct": 43.42534030086696,
+      "sellPrice": 75.20999908447266,
+      "returnPct": 40.6758012449004,
       "status": "open"
     },
     {
@@ -174071,12 +174071,12 @@
       "issuer": "NEW YORK TIMES CO",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 48.988304138183594,
+      "buyPrice": 48.98830795288086,
       "sharesAdded": 90571,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 76.68000030517578,
-      "returnPct": 56.5271581740836,
+      "sellPrice": 75.20999908447266,
+      "returnPct": 53.526427483090444,
       "status": "open"
     },
     {
@@ -174085,12 +174085,12 @@
       "issuer": "NEW YORK TIMES CO",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 54.898738861083984,
+      "buyPrice": 54.89873504638672,
       "sharesAdded": 1184729,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 76.68000030517578,
-      "returnPct": 39.675340264568185,
+      "sellPrice": 75.20999908447266,
+      "returnPct": 36.997690422054205,
       "status": "open"
     },
     {
@@ -174103,8 +174103,8 @@
       "sharesAdded": 1836788,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 76.68000030517578,
-      "returnPct": 28.624758491062007,
+      "sellPrice": 75.20999908447266,
+      "returnPct": 26.158945355407347,
       "status": "open"
     },
     {
@@ -174113,12 +174113,12 @@
       "issuer": "NEW YORK TIMES CO",
       "buyAccession": "0001167557-25-000065",
       "buyDate": "2025-11-14",
-      "buyPrice": 63.600650787353516,
+      "buyPrice": 63.60064697265625,
       "sharesAdded": 425401,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 76.68000030517578,
-      "returnPct": 20.564804535652637,
+      "sellPrice": 75.20999908447266,
+      "returnPct": 18.253512604687195,
       "status": "open"
     },
     {
@@ -174131,8 +174131,8 @@
       "sharesAdded": 1628200,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 76.68000030517578,
-      "returnPct": 3.8649398353100217,
+      "sellPrice": 75.20999908447266,
+      "returnPct": 1.8737871522308547,
       "status": "open"
     },
     {
@@ -174145,8 +174145,8 @@
       "sharesAdded": 1940951,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 76.68000030517578,
-      "returnPct": 2.9538088736369206,
+      "sellPrice": 75.20999908447266,
+      "returnPct": 0.9801231131001398,
       "status": "open"
     },
     {
@@ -177109,12 +177109,12 @@
       "issuer": "NUCOR CORP",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 137.37014770507812,
+      "buyPrice": 137.37013244628906,
       "sharesAdded": 84503,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 226.47999572753906,
-      "returnPct": 64.86842266033818,
+      "sellPrice": 250,
+      "returnPct": 81.99006985579531,
       "status": "open"
     },
     {
@@ -177127,8 +177127,8 @@
       "sharesAdded": 55585,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 226.47999572753906,
-      "returnPct": 99.12939042840623,
+      "sellPrice": 250,
+      "returnPct": 119.80902749128859,
       "status": "open"
     },
     {
@@ -177141,8 +177141,8 @@
       "sharesAdded": 557819,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 226.47999572753906,
-      "returnPct": 58.609381922586934,
+      "sellPrice": 250,
+      "returnPct": 75.08100595493417,
       "status": "open"
     },
     {
@@ -177155,8 +177155,8 @@
       "sharesAdded": 14653,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 226.47999572753906,
-      "returnPct": 54.301868597695105,
+      "sellPrice": 250,
+      "returnPct": 70.32615629254515,
       "status": "open"
     },
     {
@@ -177533,8 +177533,8 @@
       "sharesAdded": 13229,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 5716.77978515625,
-      "returnPct": -33.30463965940831,
+      "sellPrice": 6104.7998046875,
+      "returnPct": -28.777766840344,
       "status": "open"
     },
     {
@@ -177547,8 +177547,8 @@
       "sharesAdded": 3137,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 5716.77978515625,
-      "returnPct": -37.72306703428677,
+      "sellPrice": 6104.7998046875,
+      "returnPct": -33.496090020331025,
       "status": "open"
     },
     {
@@ -177561,8 +177561,8 @@
       "sharesAdded": 3198,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 5716.77978515625,
-      "returnPct": -22.38668292564896,
+      "sellPrice": 6104.7998046875,
+      "returnPct": -17.118766032073594,
       "status": "open"
     },
     {
@@ -177575,8 +177575,8 @@
       "sharesAdded": 1296,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 5716.77978515625,
-      "returnPct": -21.385228906444986,
+      "sellPrice": 6104.7998046875,
+      "returnPct": -16.049339443924392,
       "status": "open"
     },
     {
@@ -177589,8 +177589,8 @@
       "sharesAdded": 2459,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 5716.77978515625,
-      "returnPct": -22.964832432876293,
+      "sellPrice": 6104.7998046875,
+      "returnPct": -17.736156789010916,
       "status": "open"
     },
     {
@@ -177603,8 +177603,8 @@
       "sharesAdded": 263,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 5716.77978515625,
-      "returnPct": 2.75287788782701,
+      "sellPrice": 6104.7998046875,
+      "returnPct": 9.72711429071429,
       "status": "open"
     },
     {
@@ -177617,8 +177617,8 @@
       "sharesAdded": 80581,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 59.70000076293945,
-      "returnPct": 8.611257333430022,
+      "sellPrice": 56.630001068115234,
+      "returnPct": 3.0260559497292894,
       "status": "open"
     },
     {
@@ -177627,12 +177627,12 @@
       "issuer": "OCCIDENTAL PETE CORP",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 46.80220413208008,
+      "buyPrice": 46.80220031738281,
       "sharesAdded": 205648,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 59.70000076293945,
-      "returnPct": 27.558096611135284,
+      "sellPrice": 56.630001068115234,
+      "returnPct": 20.99858699823196,
       "status": "open"
     },
     {
@@ -177641,12 +177641,12 @@
       "issuer": "OCCIDENTAL PETE CORP",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 42.45061492919922,
+      "buyPrice": 42.45061111450195,
       "sharesAdded": 489767,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 59.70000076293945,
-      "returnPct": 40.63400698083981,
+      "sellPrice": 56.630001068115234,
+      "returnPct": 33.40208675763758,
       "status": "open"
     },
     {
@@ -177659,8 +177659,8 @@
       "sharesAdded": 1201,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 59.70000076293945,
-      "returnPct": 35.480073950492375,
+      "sellPrice": 56.630001068115234,
+      "returnPct": 28.51317645690019,
       "status": "open"
     },
     {
@@ -177673,8 +177673,8 @@
       "sharesAdded": 1040941,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 59.70000076293945,
-      "returnPct": 41.094356891798014,
+      "sellPrice": 56.630001068115234,
+      "returnPct": 33.838751748353246,
       "status": "open"
     },
     {
@@ -177687,8 +177687,8 @@
       "sharesAdded": 833860,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 59.70000076293945,
-      "returnPct": 30.56913553621168,
+      "sellPrice": 56.630001068115234,
+      "returnPct": 23.854777058372754,
       "status": "open"
     },
     {
@@ -177701,8 +177701,8 @@
       "sharesAdded": 6069253,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 59.70000076293945,
-      "returnPct": 0.13418623362622117,
+      "sellPrice": 56.630001068115234,
+      "returnPct": -5.01509211227188,
       "status": "open"
     },
     {
@@ -202649,8 +202649,8 @@
       "sharesAdded": 33971,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 738.6500244140625,
-      "returnPct": 38.702236603051674,
+      "sellPrice": 756.47998046875,
+      "returnPct": 42.050310388442846,
       "status": "open"
     },
     {
@@ -202663,8 +202663,8 @@
       "sharesAdded": 17356,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 738.6500244140625,
-      "returnPct": 26.718998716061005,
+      "sellPrice": 756.47998046875,
+      "returnPct": 29.777814262968548,
       "status": "open"
     },
     {
@@ -202673,12 +202673,12 @@
       "issuer": "SPDR S&P 500 ETF TR",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 600.9819946289062,
+      "buyPrice": 600.9820556640625,
       "sharesAdded": 45253,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 738.6500244140625,
-      "returnPct": 22.907180417304083,
+      "sellPrice": 756.47998046875,
+      "returnPct": 25.87397133394742,
       "status": "open"
     },
     {
@@ -202691,8 +202691,8 @@
       "sharesAdded": 230205,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 738.6500244140625,
-      "returnPct": 26.531446541538074,
+      "sellPrice": 756.47998046875,
+      "returnPct": 29.58573484696565,
       "status": "open"
     },
     {
@@ -202701,12 +202701,12 @@
       "issuer": "SPDR S&P 500 ETF TR",
       "buyAccession": "0001085146-25-005295",
       "buyDate": "2025-08-14",
-      "buyPrice": 639.525390625,
+      "buyPrice": 639.5254516601562,
       "sharesAdded": 72215,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 738.6500244140625,
-      "returnPct": 15.499718266414607,
+      "sellPrice": 756.47998046875,
+      "returnPct": 18.287705126510478,
       "status": "open"
     },
     {
@@ -202715,12 +202715,12 @@
       "issuer": "SPDR S&P 500 ETF TR",
       "buyAccession": "0001167557-25-000065",
       "buyDate": "2025-11-14",
-      "buyPrice": 668.125732421875,
+      "buyPrice": 668.1256713867188,
       "sharesAdded": 175133,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 738.6500244140625,
-      "returnPct": 10.555541954138704,
+      "sellPrice": 756.47998046875,
+      "returnPct": 13.224205095824072,
       "status": "open"
     },
     {
@@ -202733,8 +202733,8 @@
       "sharesAdded": 128776,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 738.6500244140625,
-      "returnPct": 8.467060661306181,
+      "sellPrice": 756.47998046875,
+      "returnPct": 11.085300505684902,
       "status": "open"
     },
     {
@@ -202747,8 +202747,8 @@
       "sharesAdded": 213491,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 738.6500244140625,
-      "returnPct": -0.07034356211904624,
+      "sellPrice": 756.47998046875,
+      "returnPct": 2.3418155443005517,
       "status": "open"
     },
     {
@@ -220859,12 +220859,12 @@
       "issuer": "VERISIGN INC",
       "buyAccession": "0001085146-24-004009",
       "buyDate": "2024-08-14",
-      "buyPrice": 172.7742919921875,
+      "buyPrice": 172.31591796875,
       "sharesAdded": 788687,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 305.30999755859375,
-      "returnPct": 76.71031612295609,
+      "sellPrice": 285.3800048828125,
+      "returnPct": 65.61441812622732,
       "status": "open"
     },
     {
@@ -220873,12 +220873,12 @@
       "issuer": "VERISIGN INC",
       "buyAccession": "0001085146-24-005943",
       "buyDate": "2024-11-14",
-      "buyPrice": 182.08810424804688,
+      "buyPrice": 181.60501098632812,
       "sharesAdded": 309132,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 305.30999755859375,
-      "returnPct": 67.67157789873501,
+      "sellPrice": 285.3800048828125,
+      "returnPct": 57.14324364336891,
       "status": "open"
     },
     {
@@ -220887,12 +220887,12 @@
       "issuer": "VERISIGN INC",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 226.41502380371094,
+      "buyPrice": 225.8143310546875,
       "sharesAdded": 229311,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 305.30999755859375,
-      "returnPct": 34.84529093055251,
+      "sellPrice": 285.3800048828125,
+      "returnPct": 26.37816366654755,
       "status": "open"
     },
     {
@@ -220901,12 +220901,12 @@
       "issuer": "VERISIGN INC",
       "buyAccession": "0001085146-25-003311",
       "buyDate": "2025-05-15",
-      "buyPrice": 278.1693420410156,
+      "buyPrice": 277.4312744140625,
       "sharesAdded": 1002510,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 305.30999755859375,
-      "returnPct": 9.756882379071197,
+      "sellPrice": 285.3800048828125,
+      "returnPct": 2.8651169503286056,
       "status": "open"
     },
     {
@@ -220915,12 +220915,12 @@
       "issuer": "VERISIGN INC",
       "buyAccession": "0001085146-25-005295",
       "buyDate": "2025-08-14",
-      "buyPrice": 264.25054931640625,
+      "buyPrice": 263.5494689941406,
       "sharesAdded": 767363,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 305.30999755859375,
-      "returnPct": 15.538074887036114,
+      "sellPrice": 285.3800048828125,
+      "returnPct": 8.283278267260407,
       "status": "open"
     },
     {
@@ -220929,12 +220929,12 @@
       "issuer": "VERISIGN INC",
       "buyAccession": "0001167557-25-000065",
       "buyDate": "2025-11-14",
-      "buyPrice": 251.16737365722656,
+      "buyPrice": 250.50100708007812,
       "sharesAdded": 426492,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 305.30999755859375,
-      "returnPct": 21.556392103401436,
+      "sellPrice": 285.3800048828125,
+      "returnPct": 13.923695640706368,
       "status": "open"
     },
     {
@@ -220943,12 +220943,12 @@
       "issuer": "VERISIGN INC",
       "buyAccession": "0001085146-26-000240",
       "buyDate": "2026-02-17",
-      "buyPrice": 215.4485321044922,
+      "buyPrice": 214.87692260742188,
       "sharesAdded": 496674,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 305.30999755859375,
-      "returnPct": 41.709017265672955,
+      "sellPrice": 285.3800048828125,
+      "returnPct": 32.8109139966599,
       "status": "open"
     },
     {
@@ -238569,12 +238569,12 @@
       "issuer": "SIRIUSXM HOLDINGS INC",
       "buyAccession": "0001085146-24-005943",
       "buyDate": "2024-11-14",
-      "buyPrice": 25.17926025390625,
+      "buyPrice": 25.179256439208984,
       "sharesAdded": 391701,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 26.09000015258789,
-      "returnPct": 3.6170240487519933,
+      "sellPrice": 29.520000457763672,
+      "returnPct": 17.239365384099692,
       "status": "open"
     },
     {
@@ -238583,12 +238583,12 @@
       "issuer": "SIRIUSXM HOLDINGS INC",
       "buyAccession": "0001085146-25-001702",
       "buyDate": "2025-02-14",
-      "buyPrice": 25.51971435546875,
+      "buyPrice": 25.519716262817383,
       "sharesAdded": 239947,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 26.09000015258789,
-      "returnPct": 2.234687227198262,
+      "sellPrice": 29.520000457763672,
+      "returnPct": 15.675269089001453,
       "status": "open"
     },
     {
@@ -238601,8 +238601,8 @@
       "sharesAdded": 1325870,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 26.09000015258789,
-      "returnPct": 22.411843742242255,
+      "sellPrice": 29.520000457763672,
+      "returnPct": 38.50508479005319,
       "status": "open"
     },
     {
@@ -238615,8 +238615,8 @@
       "sharesAdded": 3233922,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 26.09000015258789,
-      "returnPct": 15.04679569922136,
+      "sellPrice": 29.520000457763672,
+      "returnPct": 30.17176856430137,
       "status": "open"
     },
     {
@@ -238629,8 +238629,8 @@
       "sharesAdded": 1538960,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 26.09000015258789,
-      "returnPct": 1.0065823834680465,
+      "sellPrice": 29.520000457763672,
+      "returnPct": 14.28571639549654,
       "status": "open"
     },
     {
@@ -282561,8 +282561,8 @@
       "sharesAdded": 15215,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 96.37000274658203,
-      "returnPct": 4.989652233765174,
+      "sellPrice": 96.31999969482422,
+      "returnPct": 4.935176744867609,
       "status": "open"
     },
     {
@@ -282575,8 +282575,8 @@
       "sharesAdded": 4955,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 96.37000274658203,
-      "returnPct": -0.16574747201711926,
+      "sellPrice": 96.31999969482422,
+      "returnPct": -0.217548002826351,
       "status": "open"
     },
     {
@@ -282589,8 +282589,8 @@
       "sharesAdded": 78728,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 98.97000122070312,
-      "returnPct": 5.05254450959336,
+      "sellPrice": 99.0999984741211,
+      "returnPct": 5.190531193258852,
       "status": "open"
     },
     {
@@ -287390,11 +287390,11 @@
     "ALNT": 60.93000030517578,
     "ALSN": 114.05999755859375,
     "ALL": 221.2100067138672,
-    "ALLY": 42.11000061035156,
+    "ALLY": 42.810001373291016,
     "ALNY": 286.2699890136719,
     "AMR": 182.3000030517578,
-    "GOOGL": 396.94000244140625,
-    "GOOG": 393.1099853515625,
+    "GOOGL": 380.3399963378906,
+    "GOOG": 376.42999267578125,
     "ATEC": 8.09000015258789,
     "ALTG": 6.489999771118164,
     "OPTU": 0.7149999737739563,
@@ -287418,7 +287418,7 @@
     "ACIC": 11.0600004196167,
     "AEO": 14.859999656677246,
     "AEP": 127.68000030517578,
-    "AXP": 312.239990234375,
+    "AXP": 316.4700012207031,
     "AFG": 136.8800048828125,
     "AMH": 31.889999389648438,
     "AIG": 78.36000061035156,
@@ -287454,7 +287454,7 @@
     "APPF": 157.91000366210938,
     "APPN": 21.100000381469727,
     "APLE": 14.09000015258789,
-    "AAPL": 297.8399963378906,
+    "AAPL": 312.05999755859375,
     "AIT": 305.2200012207031,
     "AMAT": 413.57000732421875,
     "AAOI": 173.25999450683594,
@@ -287529,7 +287529,7 @@
     "SAN": 11.859999656677246,
     "TBBK": 54.27000045776367,
     "BAND": 55.95000076293945,
-    "BAC": 50.689998626708984,
+    "BAC": 51.599998474121094,
     "BFC": 143.66000366210938,
     "BMRC": 25.780000686645508,
     "BK": 136.5800018310547,
@@ -287627,7 +287627,7 @@
     "CCJ": 105.13999938964844,
     "CPB": 20.34000015258789,
     "CNQ": 48.95000076293945,
-    "COF": 187.1699981689453,
+    "COF": 187.92999267578125,
     "CFFN": 7.630000114440918,
     "CAH": 199.77000427246094,
     "CDNA": 20.59000015258789,
@@ -287678,7 +287678,7 @@
     "LNG": 247.74000549316406,
     "EXE": 98.44999694824219,
     "CPK": 126.83000183105469,
-    "CVX": 196.1199951171875,
+    "CVX": 182.4600067138672,
     "CHWY": 21.6299991607666,
     "CMG": 33.75,
     "CHH": 106.6500015258789,
@@ -287714,7 +287714,7 @@
     "CNO": 47.84000015258789,
     "CNX": 36.560001373291016,
     "CCB": 69.70999908447266,
-    "KO": 81.19999694824219,
+    "KO": 79.01000213623047,
     "COKE": 172.22999572753906,
     "KOF": 105.83000183105469,
     "CDXS": 2.549999952316284,
@@ -287749,7 +287749,7 @@
     "COP": 124.54000091552734,
     "CCSI": 28.31999969482422,
     "ED": 106.51000213623047,
-    "STZ": 147.5800018310547,
+    "STZ": 138.82000732421875,
     "CEG": 262,
     "ROAD": 114.94999694824219,
     "COO": 60.939998626708984,
@@ -287803,13 +287803,13 @@
     "DRI": 193.75,
     "DAR": 62.130001068115234,
     "DDOG": 208.82000732421875,
-    "DVA": 199.52000427246094,
+    "DVA": 194.36000061035156,
     "HYLB": 36.31999969482422,
     "DECK": 94.61000061035156,
     "DE": 564.489990234375,
     "DH": 0.8410000205039978,
     "DELL": 238.02999877929688,
-    "DAL": 70.23999786376953,
+    "DAL": 82.4800033569336,
     "DLX": 23.860000610351562,
     "XRAY": 9.819999694824219,
     "DSGN": 10.699999809265137,
@@ -288286,7 +288286,7 @@
     "J": 113.61000061035156,
     "JAKK": 21.65999984741211,
     "JBI": 4.880000114440918,
-    "JEF": 51.849998474121094,
+    "JEF": 52.720001220703125,
     "JELD": 1.5,
     "JBLU": 4.579999923706055,
     "JBTM": 126.77999877929688,
@@ -288328,9 +288328,9 @@
     "KOP": 40.38999938964844,
     "KFY": 65.68000030517578,
     "KOS": 3.2100000381469727,
-    "KHC": 23.350000381469727,
+    "KHC": 24.010000228881836,
     "KTOS": 54.220001220703125,
-    "KR": 68.31999969482422,
+    "KR": 62.150001525878906,
     "KRO": 6.880000114440918,
     "KRYS": 291.75,
     "KURA": 9.199999809265137,
@@ -288356,7 +288356,7 @@
     "LMAT": 100.83000183105469,
     "LMND": 54.47999954223633,
     "TREE": 36.25,
-    "LEN": 83.81999969482422,
+    "LEN": 89.77999877929688,
     "LII": 501.4100036621094,
     "DRS": 42.84000015258789,
     "LBRDA": 32.970001220703125,
@@ -288379,7 +288379,7 @@
     "LYG": 5.170000076293945,
     "LMT": 528.3099975585938,
     "L": 108.01000213623047,
-    "LPX": 70.44000244140625,
+    "LPX": 76.37999725341797,
     "LOVE": 15.470000267028809,
     "LOW": 218.02000427246094,
     "LPLA": 295.6199951171875,
@@ -288392,7 +288392,7 @@
     "MHO": 123.88999938964844,
     "MAC": 21.8700008392334,
     "MTSI": 356.25,
-    "M": 18.520000457763672,
+    "M": 21.760000228881836,
     "MSGS": 351.8399963378906,
     "MDGL": 522.22998046875,
     "MGY": 29.889999389648438,
@@ -288475,7 +288475,7 @@
     "MPWR": 1486.3299560546875,
     "MNRO": 15.739999771118164,
     "MNST": 88.54000091552734,
-    "MCO": 443.4100036621094,
+    "MCO": 453.25,
     "MS": 192.69000244140625,
     "MORN": 177.07000732421875,
     "MOS": 21.40999984741211,
@@ -288519,7 +288519,7 @@
     "NTST": 20.770000457763672,
     "NBIX": 157.2100067138672,
     "NJR": 57.619998931884766,
-    "NYT": 76.68000030517578,
+    "NYT": 75.20999908447266,
     "NWL": 3.6500000953674316,
     "NMRK": 14.300000190734863,
     "NEU": 700.6900024414062,
@@ -288558,13 +288558,13 @@
     "NVO": 44.279998779296875,
     "NRG": 125.5,
     "NUS": 5.860000133514404,
-    "NUE": 226.47999572753906,
+    "NUE": 250,
     "NTNX": 47.45000076293945,
     "NUVL": 99.9000015258789,
     "NUVB": 4.210000038146973,
     "NVDA": 222.32000732421875,
-    "NVR": 5716.77978515625,
-    "OXY": 59.70000076293945,
+    "NVR": 6104.7998046875,
+    "OXY": 56.630001068115234,
     "OII": 38.540000915527344,
     "OCFC": 18.440000534057617,
     "OFG": 44.66999816894531,
@@ -288902,7 +288902,7 @@
     "LUV": 38.36000061035156,
     "SWX": 88.94000244140625,
     "SPDW": 49.52000045776367,
-    "SPY": 738.6500244140625,
+    "SPY": 756.47998046875,
     "SPTI": 28.219999313354492,
     "SPAB": 25.260000228881836,
     "SPMD": 63.25,
@@ -289137,7 +289137,7 @@
     "VEEV": 163.85000610351562,
     "VCYT": 41.5,
     "VLTO": 86.70999908447266,
-    "VRSN": 305.30999755859375,
+    "VRSN": 285.3800048828125,
     "VRSK": 171.52000427246094,
     "VZ": 46.7599983215332,
     "VRRM": 13.369999885559082,
@@ -289383,7 +289383,7 @@
     "SCHV": 32.619998931884766,
     "SBCF": 30.190000534057617,
     "BSRR": 37.9900016784668,
-    "SIRI": 26.09000015258789,
+    "SIRI": 29.520000457763672,
     "SITC": 5.449999809265137,
     "SITE": 114.70999908447266,
     "SWBI": 15.529999732971191,
@@ -290107,8 +290107,8 @@
     "VNLA": 48.97999954223633,
     "JMSB": 21.25,
     "RODM": 41.220001220703125,
-    "LLYVA": 96.37000274658203,
-    "LLYVK": 98.97000122070312,
+    "LLYVA": 96.31999969482422,
+    "LLYVK": 99.0999984741211,
     "LTBR": 10.850000381469727,
     "METV": 18.690000534057617,
     "LFT": 1.100000023841858,
@@ -290297,478 +290297,478 @@
   "equityCurve": [
     {
       "date": "2024-08-14",
-      "mirror": 10000.000000000024,
+      "mirror": 10000.00000000002,
       "spy": 10000
     },
     {
       "date": "2024-08-21",
-      "mirror": 10311.345414526768,
+      "mirror": 10311.34834904162,
       "spy": 10310.252056228881
     },
     {
       "date": "2024-08-28",
-      "mirror": 10337.121033818215,
+      "mirror": 10337.12203223377,
       "spy": 10267.587112083214
     },
     {
       "date": "2024-09-04",
-      "mirror": 10215.238304497074,
+      "mirror": 10215.23950081891,
       "spy": 10132.413071293757
     },
     {
       "date": "2024-09-11",
-      "mirror": 10140.03680339231,
-      "spy": 10196.231694967082
+      "mirror": 10140.044798217265,
+      "spy": 10196.229402754965
     },
     {
       "date": "2024-09-18",
-      "mirror": 10384.826441556284,
+      "mirror": 10384.831702408579,
       "spy": 10324.5990118732
     },
     {
       "date": "2024-09-25",
-      "mirror": 10491.85171680121,
+      "mirror": 10491.858651072387,
       "spy": 10515.649161348354
     },
     {
       "date": "2024-10-02",
-      "mirror": 10529.940553196997,
-      "spy": 10493.881168973168
+      "mirror": 10529.937680293537,
+      "spy": 10493.883461185285
     },
     {
       "date": "2024-10-09",
-      "mirror": 10637.731130357533,
-      "spy": 10646.627307856466
+      "mirror": 10637.731845351413,
+      "spy": 10646.625015644348
     },
     {
       "date": "2024-10-16",
-      "mirror": 10811.714100764184,
-      "spy": 10741.812562147601
+      "mirror": 10811.718479875808,
+      "spy": 10741.811416041543
     },
     {
       "date": "2024-10-23",
-      "mirror": 10615.68123939833,
-      "spy": 10662.304892635077
+      "mirror": 10615.679422939267,
+      "spy": 10662.303746529018
     },
     {
       "date": "2024-10-30",
-      "mirror": 10651.05057264435,
+      "mirror": 10651.051451619476,
       "spy": 10699.56938503158
     },
     {
       "date": "2024-11-06",
-      "mirror": 11018.871544516722,
-      "spy": 10903.043324184351
+      "mirror": 11018.858907385153,
+      "spy": 10903.041031972234
     },
     {
       "date": "2024-11-13",
-      "mirror": 11092.462043602063,
+      "mirror": 11092.45283198752,
       "spy": 11016.491778522799
     },
     {
       "date": "2024-11-20",
-      "mirror": 10936.58688951918,
-      "spy": 10893.08137032108
+      "mirror": 10936.571666301035,
+      "spy": 10893.080224215022
     },
     {
       "date": "2024-11-27",
-      "mirror": 11213.621580781764,
-      "spy": 11046.744394051435
+      "mirror": 11213.603359245793,
+      "spy": 11046.745540157493
     },
     {
       "date": "2024-12-04",
-      "mirror": 11317.041210923162,
-      "spy": 11209.63242544924
+      "mirror": 11317.033977440024,
+      "spy": 11209.6335715553
     },
     {
       "date": "2024-12-11",
-      "mirror": 11172.05416546584,
-      "spy": 11205.945402258014
+      "mirror": 11172.038356672163,
+      "spy": 11205.943110045895
     },
     {
       "date": "2024-12-18",
-      "mirror": 10692.684331121905,
+      "mirror": 10692.67560354196,
       "spy": 10815.233262381727
     },
     {
       "date": "2024-12-25",
-      "mirror": 10933.026727082419,
-      "spy": 11129.64339139201
+      "mirror": 10933.016187963647,
+      "spy": 11129.642245285952
     },
     {
       "date": "2025-01-01",
-      "mirror": 10722.911430341832,
+      "mirror": 10722.893635244163,
       "spy": 10847.93166823989
     },
     {
       "date": "2025-01-08",
-      "mirror": 10833.415459396228,
-      "spy": 10911.046582793098
+      "mirror": 10833.392772440839,
+      "spy": 10911.047728899157
     },
     {
       "date": "2025-01-15",
-      "mirror": 10933.138378649723,
+      "mirror": 10933.10730094829,
       "spy": 10971.943782122487
     },
     {
       "date": "2025-01-22",
-      "mirror": 11176.572730541127,
-      "spy": 11224.780509228676
+      "mirror": 11176.546549387642,
+      "spy": 11224.782801440793
     },
     {
       "date": "2025-01-29",
-      "mirror": 11144.912527316455,
-      "spy": 11139.08272089246
+      "mirror": 11144.881608399433,
+      "spy": 11139.081574786402
     },
     {
       "date": "2025-02-05",
-      "mirror": 11206.20998069336,
-      "spy": 11183.68916870177
+      "mirror": 11206.1796093716,
+      "spy": 11183.690314807829
     },
     {
       "date": "2025-02-12",
-      "mirror": 11099.887431536516,
+      "mirror": 11099.85282711922,
       "spy": 11167.770901650805
     },
     {
       "date": "2025-02-19",
-      "mirror": 11256.506134761974,
-      "spy": 11344.906177465813
+      "mirror": 11256.462992018796,
+      "spy": 11344.905031359755
     },
     {
       "date": "2025-02-26",
-      "mirror": 10928.718463259658,
-      "spy": 11004.519554632356
+      "mirror": 10928.672710857403,
+      "spy": 11004.520700738414
     },
     {
       "date": "2025-03-05",
-      "mirror": 10740.959703354967,
+      "mirror": 10740.915917022154,
       "spy": 10792.033783539075
     },
     {
       "date": "2025-03-12",
-      "mirror": 10335.011080867514,
-      "spy": 10344.29255228192
+      "mirror": 10334.96741823454,
+      "spy": 10344.293698387979
     },
     {
       "date": "2025-03-19",
-      "mirror": 10542.539785967907,
-      "spy": 10497.180808316512
+      "mirror": 10542.489972536161,
+      "spy": 10497.179662210454
     },
     {
       "date": "2025-03-26",
-      "mirror": 10601.474137682764,
-      "spy": 10555.863730740262
+      "mirror": 10601.416076058018,
+      "spy": 10555.862584634202
     },
     {
       "date": "2025-04-02",
-      "mirror": 10552.982983916727,
-      "spy": 10480.304396600375
+      "mirror": 10552.919151358647,
+      "spy": 10480.303250494317
     },
     {
       "date": "2025-04-09",
-      "mirror": 10050.282684393018,
-      "spy": 10185.120196726813
+      "mirror": 10050.227846581676,
+      "spy": 10185.119050620755
     },
     {
       "date": "2025-04-16",
-      "mirror": 9803.447148458745,
+      "mirror": 9803.400241153518,
       "spy": 9758.867307966491
     },
     {
       "date": "2025-04-23",
-      "mirror": 10008.313736437134,
-      "spy": 9940.060945335785
+      "mirror": 10008.258835384839,
+      "spy": 9940.062091441843
     },
     {
       "date": "2025-04-30",
-      "mirror": 10340.848584102461,
-      "spy": 10295.023745025328
+      "mirror": 10340.784060689452,
+      "spy": 10295.024891131387
     },
     {
       "date": "2025-05-07",
-      "mirror": 10501.166773735187,
-      "spy": 10417.7396129554
+      "mirror": 10501.100112344599,
+      "spy": 10417.738466849341
     },
     {
       "date": "2025-05-14",
-      "mirror": 10886.634284324638,
+      "mirror": 10886.573992188123,
       "spy": 10908.597354145397
     },
     {
       "date": "2025-05-21",
-      "mirror": 10825.366396812828,
+      "mirror": 10825.309005597135,
       "spy": 10820.785000130656
     },
     {
       "date": "2025-05-28",
-      "mirror": 10882.596965561374,
+      "mirror": 10882.547190035353,
       "spy": 10911.196722686804
     },
     {
       "date": "2025-06-04",
-      "mirror": 11023.356984679165,
+      "mirror": 11023.305825532861,
       "spy": 11063.42940605575
     },
     {
       "date": "2025-06-11",
-      "mirror": 11096.92569772042,
-      "spy": 11164.23745667146
+      "mirror": 11096.86450973229,
+      "spy": 11164.236310565402
     },
     {
       "date": "2025-06-18",
-      "mirror": 11012.841873743524,
-      "spy": 11091.46316025451
+      "mirror": 11012.777101850412,
+      "spy": 11091.46201414845
     },
     {
       "date": "2025-06-25",
-      "mirror": 11166.253713196986,
+      "mirror": 11166.189499133054,
       "spy": 11304.49218561967
     },
     {
       "date": "2025-07-02",
-      "mirror": 11431.015878949314,
-      "spy": 11552.696352036104
+      "mirror": 11430.95139674338,
+      "spy": 11552.695205930046
     },
     {
       "date": "2025-07-09",
-      "mirror": 11497.216558585676,
+      "mirror": 11497.14597182153,
       "spy": 11619.912034067775
     },
     {
       "date": "2025-07-16",
-      "mirror": 11412.677312885451,
+      "mirror": 11412.61146497429,
       "spy": 11622.89076371465
     },
     {
       "date": "2025-07-23",
-      "mirror": 11655.34316495668,
-      "spy": 11808.903777061283
+      "mirror": 11655.27684071135,
+      "spy": 11808.904923167343
     },
     {
       "date": "2025-07-30",
-      "mirror": 11596.738890961939,
+      "mirror": 11596.689185794183,
       "spy": 11813.559259872214
     },
     {
       "date": "2025-08-06",
-      "mirror": 11572.533488229838,
+      "mirror": 11572.480236033734,
       "spy": 11782.277441102757
     },
     {
       "date": "2025-08-13",
-      "mirror": 11800.302113792877,
-      "spy": 12007.7646393273
+      "mirror": 11800.25588514208,
+      "spy": 12007.763493221242
     },
     {
       "date": "2025-08-20",
-      "mirror": 11699.93141254711,
-      "spy": 11881.521056948177
+      "mirror": 11699.880045525748,
+      "spy": 11881.522203054235
     },
     {
       "date": "2025-08-27",
-      "mirror": 11913.762321913582,
+      "mirror": 11913.707461123986,
       "spy": 12040.16276539805
     },
     {
       "date": "2025-09-03",
-      "mirror": 11879.901223942807,
+      "mirror": 11879.846551521136,
       "spy": 11986.35079372429
     },
     {
       "date": "2025-09-10",
-      "mirror": 12011.175212060338,
-      "spy": 12144.060717948343
+      "mirror": 12011.11603262446,
+      "spy": 12144.061864054402
     },
     {
       "date": "2025-09-17",
-      "mirror": 12083.64751712239,
-      "spy": 12273.842329731046
+      "mirror": 12083.584399598198,
+      "spy": 12273.841183624987
     },
     {
       "date": "2025-09-24",
-      "mirror": 12125.128789716518,
+      "mirror": 12125.070698552301,
       "spy": 12343.719270031299
     },
     {
       "date": "2025-10-01",
-      "mirror": 12243.71486778928,
-      "spy": 12480.956301726632
+      "mirror": 12243.679906679123,
+      "spy": 12480.955155620573
     },
     {
       "date": "2025-10-08",
-      "mirror": 12297.47396702505,
+      "mirror": 12297.448479268674,
       "spy": 12567.964089288082
     },
     {
       "date": "2025-10-15",
-      "mirror": 12169.084092485358,
-      "spy": 12419.712978367479
+      "mirror": 12169.05474792938,
+      "spy": 12419.711832261419
     },
     {
       "date": "2025-10-22",
-      "mirror": 12211.45041044854,
+      "mirror": 12211.42864050089,
       "spy": 12468.819038563719
     },
     {
       "date": "2025-10-29",
-      "mirror": 12360.262558331171,
-      "spy": 12834.593056706119
+      "mirror": 12360.263813033605,
+      "spy": 12834.594202812179
     },
     {
       "date": "2025-11-05",
-      "mirror": 12232.190982798267,
+      "mirror": 12232.177740253543,
       "spy": 12651.425824703538
     },
     {
       "date": "2025-11-12",
-      "mirror": 12390.762260595178,
-      "spy": 12759.720240095467
+      "mirror": 12390.748353411418,
+      "spy": 12759.721386201525
     },
     {
       "date": "2025-11-19",
-      "mirror": 11972.645501405303,
-      "spy": 12372.288255759528
+      "mirror": 11972.633738662087,
+      "spy": 12372.287109653469
     },
     {
       "date": "2025-11-26",
-      "mirror": 12363.50336119298,
+      "mirror": 12363.49426227375,
       "spy": 12690.636405187919
     },
     {
       "date": "2025-12-03",
-      "mirror": 12436.143344637541,
+      "mirror": 12436.129763674107,
       "spy": 12769.24323533821
     },
     {
       "date": "2025-12-10",
-      "mirror": 12573.402858607937,
+      "mirror": 12573.393650237387,
       "spy": 12837.95458577664
     },
     {
       "date": "2025-12-17",
-      "mirror": 12371.760501292694,
+      "mirror": 12371.742892901902,
       "spy": 12536.035866701448
     },
     {
       "date": "2025-12-24",
-      "mirror": 12671.482240641688,
+      "mirror": 12671.467734461683,
       "spy": 12928.5107176962
     },
     {
       "date": "2025-12-31",
-      "mirror": 12486.139089693985,
+      "mirror": 12486.120982702578,
       "spy": 12770.083331079326
     },
     {
       "date": "2026-01-07",
-      "mirror": 12779.086937743727,
+      "mirror": 12779.069378732247,
       "spy": 12913.52996540135
     },
     {
       "date": "2026-01-14",
-      "mirror": 12844.09060089525,
+      "mirror": 12844.071164657427,
       "spy": 12928.135941014965
     },
     {
       "date": "2026-01-21",
-      "mirror": 12862.925251169343,
+      "mirror": 12862.9070132997,
       "spy": 12835.252067689942
     },
     {
       "date": "2026-01-28",
-      "mirror": 12896.807378247935,
+      "mirror": 12896.79562560067,
       "spy": 13022.892551640101
     },
     {
       "date": "2026-02-04",
-      "mirror": 12823.951591825251,
+      "mirror": 12823.928055847457,
       "spy": 12850.046004697202
     },
     {
       "date": "2026-02-11",
-      "mirror": 12983.037755804658,
+      "mirror": 12983.044165295225,
       "spy": 12958.09973781678
     },
     {
       "date": "2026-02-18",
-      "mirror": 12951.12984163558,
+      "mirror": 12951.136424832823,
       "spy": 12851.918741997315
     },
     {
       "date": "2026-02-25",
-      "mirror": 12988.970571759197,
+      "mirror": 12988.984384941654,
       "spy": 12980.384624024493
     },
     {
       "date": "2026-03-04",
-      "mirror": 12936.11946839124,
+      "mirror": 12936.121147428894,
       "spy": 12830.195447758424
     },
     {
       "date": "2026-03-11",
-      "mirror": 12612.970262466739,
+      "mirror": 12612.970383443793,
       "spy": 12665.401441984799
     },
     {
       "date": "2026-03-18",
-      "mirror": 12408.352971013006,
+      "mirror": 12408.338369864638,
       "spy": 12386.373899222437
     },
     {
       "date": "2026-03-25",
-      "mirror": 12420.60242575127,
+      "mirror": 12420.567739896725,
       "spy": 12333.635828925791
     },
     {
       "date": "2026-04-01",
-      "mirror": 12447.414862224166,
+      "mirror": 12447.389173716949,
       "spy": 12303.966581381095
     },
     {
       "date": "2026-04-08",
-      "mirror": 12844.633478225735,
+      "mirror": 12844.604380230596,
       "spy": 12693.981888773616
     },
     {
       "date": "2026-04-15",
-      "mirror": 13075.365267201825,
+      "mirror": 13075.338137231907,
       "spy": 13143.334545149473
     },
     {
       "date": "2026-04-22",
-      "mirror": 13308.693728620403,
+      "mirror": 13308.683137238853,
       "spy": 13354.960736698638
     },
     {
       "date": "2026-04-29",
-      "mirror": 13228.262679068239,
+      "mirror": 13228.250641456338,
       "spy": 13361.908431627211
     },
     {
       "date": "2026-05-06",
-      "mirror": 13635.61474983525,
+      "mirror": 13635.62057239711,
       "spy": 13779.714518734021
     },
     {
       "date": "2026-05-13",
-      "mirror": 13588.626184048513,
+      "mirror": 13588.626725177559,
       "spy": 13938.949910122365
     },
     {
       "date": "2026-05-20",
-      "mirror": 13508.199254021103,
-      "spy": 13870.223660305168
+      "mirror": 13508.394455978414,
+      "spy": 13919.045486198822
     },
     {
       "date": "2026-05-27",
-      "mirror": 13508.199254021103,
-      "spy": 13870.223660305168
+      "mirror": 13519.1891217073,
+      "spy": 14091.98945215672
     },
     {
-      "date": "2026-05-28",
-      "mirror": 13508.199254021103,
-      "spy": 13870.223660305168
+      "date": "2026-05-31",
+      "mirror": 13512.495757621733,
+      "spy": 14205.031038844287
     }
   ],
   "pnlSeries": [
@@ -310317,12 +310317,12 @@
   "mappedCusipCount": 3727,
   "unmappedCusipCount": 631,
   "stats": {
-    "mirrorFinal": 13508.199254021103,
-    "spyFinal": 13870.223660305168,
-    "mirrorReturnPct": 35.081992540211026,
-    "spyReturnPct": 38.702236603051674,
-    "alphaPct": -3.6202440628406474,
-    "maxDrawdownPct": -13.37446806329116,
+    "mirrorFinal": 13512.495757621733,
+    "spyFinal": 14205.031038844287,
+    "mirrorReturnPct": 35.12495757621732,
+    "spyReturnPct": 42.05031038844287,
+    "alphaPct": -6.925352812225539,
+    "maxDrawdownPct": -13.374827179134241,
     "realizedPnlUsd": 38236031.94530386,
     "closedTrades": 977,
     "openTrades": 3739,
