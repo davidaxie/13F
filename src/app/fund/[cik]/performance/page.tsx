@@ -96,7 +96,7 @@ export default async function PerformancePage({
     ...result.stats,
     spyFinal: finalPoint.spy,
     spyReturnPct: ((finalPoint.spy - startingCash) / startingCash) * 100,
-    alphaPct:
+    excessReturnPct:
       ((finalPoint.mirror - finalPoint.spy) / startingCash) * 100,
   };
 
@@ -267,8 +267,8 @@ export default async function PerformancePage({
           />
           <Stat
             label={`Excess return vs ${selectedBench}`}
-            value={`${stats.alphaPct >= 0 ? "+" : ""}${formatPct(stats.alphaPct, 1)}`}
-            tone={stats.alphaPct >= 0 ? "up" : "down"}
+            value={`${stats.excessReturnPct >= 0 ? "+" : ""}${formatPct(stats.excessReturnPct, 1)}`}
+            tone={stats.excessReturnPct >= 0 ? "up" : "down"}
             title={`(Mirror final − ${selectedBench} final) ÷ starting cash. Cumulative dollar outperformance vs the benchmark — not factor alpha (see Jensen α / style α below).`}
           />
         </div>

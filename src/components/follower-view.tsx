@@ -54,7 +54,7 @@ export function FollowerView({ base, topGainers, topLosers }: Props) {
       spyFinalUsd: base.stats.spyFinalUsd * k,
       alphaUsd: costVariant.alphaUsd * k,
       followerReturnPct: costVariant.followerReturnPct,
-      alphaPct: costVariant.alphaPct,
+      excessReturnPct: costVariant.excessReturnPct,
       winRate: costVariant.winRate,
       avgReturnPct: costVariant.avgReturnPct,
       medianReturnPct: costVariant.medianReturnPct,
@@ -67,7 +67,7 @@ export function FollowerView({ base, topGainers, topLosers }: Props) {
       const alphaUsdScaled = followerFinalScaled - spyFinalScaled;
       const followerReturnPctAdj =
         f.invested > 0 ? ((followerFinalAdj - f.invested) / f.invested) * 100 : 0;
-      const alphaPctAdj =
+      const excessReturnPctAdj =
         f.invested > 0
           ? ((followerFinalAdj - f.spyFinal) / f.invested) * 100
           : 0;
@@ -78,7 +78,7 @@ export function FollowerView({ base, topGainers, topLosers }: Props) {
         spyFinal: spyFinalScaled,
         alphaUsd: alphaUsdScaled,
         followerReturnPct: followerReturnPctAdj,
-        alphaPct: alphaPctAdj,
+        excessReturnPct: excessReturnPctAdj,
       };
     });
     const realizedSeries: RealizedPoint[] = base.realizedSeries.map((p) => ({
@@ -128,7 +128,7 @@ export function FollowerView({ base, topGainers, topLosers }: Props) {
             label="Alpha vs SPY"
             value={`${view.stats.alphaUsd >= 0 ? "+" : "−"}${formatUSD(Math.abs(view.stats.alphaUsd), { compact: true })}`}
             tone={view.stats.alphaUsd >= 0 ? "up" : "down"}
-            sub={`${view.stats.alphaPct >= 0 ? "+" : ""}${formatPct(view.stats.alphaPct, 1)} of invested capital`}
+            sub={`${view.stats.excessReturnPct >= 0 ? "+" : ""}${formatPct(view.stats.excessReturnPct, 1)} of invested capital`}
           />
         </div>
 

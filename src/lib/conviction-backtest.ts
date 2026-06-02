@@ -28,7 +28,7 @@ export type ConvictionSignal = {
   spyReturnPct: number;
   spyFinalValueUsd: number;
   alphaUsd: number;
-  alphaPct: number;
+  excessReturnPct: number;
   // Fund-exit-mode fields: sell price = fund's own exit price (or today if
   // still open). SPY benchmark matched to the same window.
   fundExitPrice: number;            // sell price under fund-exit mode
@@ -47,7 +47,7 @@ export type ConvictionStats = {
   followerReturnPct: number;
   spyReturnPct: number;
   alphaUsd: number;
-  alphaPct: number;
+  excessReturnPct: number;
   winRate: number;
   avgReturnPct: number;
   medianReturnPct: number;
@@ -71,7 +71,7 @@ export type FundExitStats = {
   followerReturnPct: number;
   spyFinalUsd: number;
   alphaUsd: number;
-  alphaPct: number;
+  excessReturnPct: number;
   winRate: number;
   avgReturnPct: number;
   medianReturnPct: number;
@@ -87,7 +87,7 @@ export type ConvictionPerFund = {
   alphaUsd: number;
   followerReturnPct: number;
   spyReturnPct: number;
-  alphaPct: number;
+  excessReturnPct: number;
 };
 
 /**
@@ -107,7 +107,7 @@ export type CurrentPick = {
   todayPrice: number;
   returnPct: number;
   spyReturnPct: number;
-  alphaPct: number;
+  excessReturnPct: number;
 };
 
 export type ConvictionBucket = {
@@ -179,7 +179,7 @@ function _build(): ConvictionBacktest {
         todayPrice: today,
         returnPct,
         spyReturnPct,
-        alphaPct: returnPct - spyReturnPct,
+        excessReturnPct: returnPct - spyReturnPct,
       });
     }
   }
@@ -270,7 +270,7 @@ function _build(): ConvictionBacktest {
         spyReturnPct,
         spyFinalValueUsd,
         alphaUsd,
-        alphaPct: returnPct - spyReturnPct,
+        excessReturnPct: returnPct - spyReturnPct,
         fundExitPrice,
         fundExitFinalValueUsd,
         fundExitReturnPct,
@@ -335,7 +335,7 @@ function _build(): ConvictionBacktest {
             : 0,
         spyFinalUsd: feSpyFinal,
         alphaUsd: feFollowerFinal - feSpyFinal,
-        alphaPct:
+        excessReturnPct:
           totalInvested > 0
             ? ((feFollowerFinal - feSpyFinal) / totalInvested) * 100
             : 0,
@@ -359,7 +359,7 @@ function _build(): ConvictionBacktest {
           alphaUsd: ff - sf,
           followerReturnPct: inv > 0 ? ((ff - inv) / inv) * 100 : 0,
           spyReturnPct: inv > 0 ? ((sf - inv) / inv) * 100 : 0,
-          alphaPct: inv > 0 ? ((ff - sf) / inv) * 100 : 0,
+          excessReturnPct: inv > 0 ? ((ff - sf) / inv) * 100 : 0,
         };
       })
         .filter((f) => f.signals > 0)
@@ -390,7 +390,7 @@ function _build(): ConvictionBacktest {
               ? ((spyFinal - totalInvested) / totalInvested) * 100
               : 0,
           alphaUsd: followerFinal - spyFinal,
-          alphaPct:
+          excessReturnPct:
             totalInvested > 0
               ? ((followerFinal - spyFinal) / totalInvested) * 100
               : 0,

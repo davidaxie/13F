@@ -46,7 +46,7 @@ export function ConvictionView({ data }: { data: ConvictionBacktest }) {
     hStats?.followerReturnPct ?? feStats?.followerReturnPct ?? 0;
   const spyFinalUsd = hStats?.spyFinalUsd ?? feStats?.spyFinalUsd ?? 0;
   const alphaUsd = hStats?.alphaUsd ?? feStats?.alphaUsd ?? 0;
-  const alphaPct = hStats?.alphaPct ?? feStats?.alphaPct ?? 0;
+  const excessReturnPct = hStats?.excessReturnPct ?? feStats?.excessReturnPct ?? 0;
   const winRate = hStats?.winRate ?? feStats?.winRate ?? 0;
   const avgReturnPct = hStats?.avgReturnPct ?? feStats?.avgReturnPct ?? 0;
   const medianReturnPct =
@@ -92,7 +92,7 @@ export function ConvictionView({ data }: { data: ConvictionBacktest }) {
             label="Alpha vs SPY"
             value={`${alphaUsd >= 0 ? "+" : "−"}${formatUSD(Math.abs(alphaUsd), { compact: true })}`}
             tone={alphaUsd >= 0 ? "up" : "down"}
-            sub={`${alphaPct >= 0 ? "+" : ""}${formatPct(alphaPct, 1)} of invested capital`}
+            sub={`${excessReturnPct >= 0 ? "+" : ""}${formatPct(excessReturnPct, 1)} of invested capital`}
           />
         </div>
 
@@ -394,11 +394,11 @@ function CurrentPicksTable({ picks }: { picks: CurrentPick[] }) {
                   <td
                     className={cn(
                       "py-3 pl-3 text-right tabular text-xs",
-                      p.alphaPct >= 0 ? "text-positive" : "text-negative",
+                      p.excessReturnPct >= 0 ? "text-positive" : "text-negative",
                     )}
                   >
-                    {p.alphaPct >= 0 ? "+" : ""}
-                    {formatPct(p.alphaPct, 0)} vs SPY
+                    {p.excessReturnPct >= 0 ? "+" : ""}
+                    {formatPct(p.excessReturnPct, 0)} vs SPY
                   </td>
                 </tr>
               ))}
@@ -545,14 +545,14 @@ function SweepBars({
 }) {
   const maxAbsAlphaPct = Math.max(
     1,
-    ...buckets.map((b) => Math.abs(b.stats.alphaPct)),
+    ...buckets.map((b) => Math.abs(b.stats.excessReturnPct)),
   );
 
   return (
     <div className="space-y-2">
       {buckets.map((b, i) => {
-        const widthPct = (Math.abs(b.stats.alphaPct) / maxAbsAlphaPct) * 100;
-        const positive = b.stats.alphaPct >= 0;
+        const widthPct = (Math.abs(b.stats.excessReturnPct) / maxAbsAlphaPct) * 100;
+        const positive = b.stats.excessReturnPct >= 0;
         return (
           <div
             key={b.minHoldQuarters}
@@ -581,7 +581,7 @@ function SweepBars({
                 )}
               >
                 {positive ? "+" : ""}
-                {formatPct(b.stats.alphaPct, 1)} alpha
+                {formatPct(b.stats.excessReturnPct, 1)} alpha
               </span>
               <span className="ml-2 text-muted">
                 {b.stats.totalSignals.toLocaleString()} sig

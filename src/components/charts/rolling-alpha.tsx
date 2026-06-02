@@ -31,7 +31,7 @@ export function RollingAlphaChart({ data }: { data: RollingAlphaPoint[] }) {
 
   // Symmetric range around 0 so the zero line sits in the middle.
   const maxAbs = Math.max(
-    ...data.map((p) => Math.abs(p.alphaPct)),
+    ...data.map((p) => Math.abs(p.excessReturnPct)),
     1,
   );
   const yMin = -maxAbs * 1.05;
@@ -44,14 +44,14 @@ export function RollingAlphaChart({ data }: { data: RollingAlphaPoint[] }) {
   // and stripe the zero-line band.
   const points: Array<[number, number]> = data.map((p) => [
     xScale(new Date(p.date + "T00:00:00Z").getTime()),
-    yScale(p.alphaPct),
+    yScale(p.excessReturnPct),
   ]);
 
   const yTicks = niceTicks(yMin, yMax, 4);
   const xTicks = yearTicks(data[0].date, data[data.length - 1].date);
 
   const avgAlpha =
-    data.reduce((s, p) => s + p.alphaPct, 0) / data.length;
+    data.reduce((s, p) => s + p.excessReturnPct, 0) / data.length;
   const latest = data[data.length - 1];
 
   return (
@@ -150,7 +150,7 @@ export function RollingAlphaChart({ data }: { data: RollingAlphaPoint[] }) {
           cx={points[points.length - 1][0]}
           cy={points[points.length - 1][1]}
           r={3}
-          fill={latest.alphaPct >= 0 ? "var(--positive)" : "var(--negative)"}
+          fill={latest.excessReturnPct >= 0 ? "var(--positive)" : "var(--negative)"}
         />
         <text
           x={points[points.length - 1][0] - 6}
@@ -158,10 +158,10 @@ export function RollingAlphaChart({ data }: { data: RollingAlphaPoint[] }) {
           textAnchor="end"
           fontFamily="var(--font-mono), monospace"
           fontSize={10}
-          fill={latest.alphaPct >= 0 ? "var(--positive)" : "var(--negative)"}
+          fill={latest.excessReturnPct >= 0 ? "var(--positive)" : "var(--negative)"}
         >
-          now {latest.alphaPct >= 0 ? "+" : ""}
-          {latest.alphaPct.toFixed(1)}%
+          now {latest.excessReturnPct >= 0 ? "+" : ""}
+          {latest.excessReturnPct.toFixed(1)}%
         </text>
       </g>
 

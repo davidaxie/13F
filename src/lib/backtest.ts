@@ -83,7 +83,7 @@ export type FundBacktest = {
     spyFinal: number;
     mirrorReturnPct: number;
     spyReturnPct: number;
-    alphaPct: number;
+    excessReturnPct: number;
     maxDrawdownPct: number;
     realizedPnlUsd: number;
     closedTrades: number;
@@ -589,7 +589,7 @@ async function _runBacktest(
       spyFinal,
       mirrorReturnPct: (mirrorFinal / startingCash - 1) * 100,
       spyReturnPct: (spyFinal / startingCash - 1) * 100,
-      alphaPct: ((mirrorFinal - spyFinal) / startingCash) * 100,
+      excessReturnPct: ((mirrorFinal - spyFinal) / startingCash) * 100,
       maxDrawdownPct: maxDD * 100,
       realizedPnlUsd: cum,
       closedTrades: closedTrades.length,
@@ -627,7 +627,7 @@ function emptyBacktest(
       spyFinal: startingCash,
       mirrorReturnPct: 0,
       spyReturnPct: 0,
-      alphaPct: 0,
+      excessReturnPct: 0,
       maxDrawdownPct: 0,
       realizedPnlUsd: 0,
       closedTrades: 0,

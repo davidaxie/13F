@@ -28,7 +28,7 @@ export type EnrichedSignal = {
   spyReturnPct: number;
   spyFinalValueUsd: number;   // $10k × (spySell / spyBuy)
   alphaUsd: number;           // finalValueUsd - spyFinalValueUsd
-  alphaPct: number;           // returnPct - spyReturnPct
+  excessReturnPct: number;    // returnPct - spyReturnPct
   holdDays: number;
 };
 
@@ -42,7 +42,7 @@ export type PerFundSummary = {
   alphaUsd: number;
   followerReturnPct: number;
   spyReturnPct: number;
-  alphaPct: number;
+  excessReturnPct: number;
   winRate: number;
 };
 
@@ -58,7 +58,7 @@ export type CostVariant = {
   followerFinalUsd: number;
   followerReturnPct: number;
   alphaUsd: number;
-  alphaPct: number;
+  excessReturnPct: number;
   winRate: number;
   avgReturnPct: number;
   medianReturnPct: number;
@@ -78,7 +78,7 @@ export type FollowerBacktest = {
     followerReturnPct: number;
     spyReturnPct: number;
     alphaUsd: number;
-    alphaPct: number;
+    excessReturnPct: number;
     winRate: number;
     avgReturnPct: number;
     medianReturnPct: number;
@@ -129,7 +129,7 @@ function _compute(): FollowerBacktest {
       const spyReturnPct = (spySell / spyBuy - 1) * 100;
       const spyFinalValueUsd = POSITION_SIZE_USD * (spySell / spyBuy);
       const alphaUsd = finalValueUsd - spyFinalValueUsd;
-      const alphaPct = returnPct - spyReturnPct;
+      const excessReturnPct = returnPct - spyReturnPct;
       const holdDays = daysBetween(sig.buyDate, sellDate);
 
       enriched.push({
@@ -152,7 +152,7 @@ function _compute(): FollowerBacktest {
         spyReturnPct,
         spyFinalValueUsd,
         alphaUsd,
-        alphaPct,
+        excessReturnPct,
         holdDays,
       });
     }
@@ -205,7 +205,7 @@ function _compute(): FollowerBacktest {
       alphaUsd: fAlpha,
       followerReturnPct: fInv > 0 ? ((fFin - fInv) / fInv) * 100 : 0,
       spyReturnPct: fInv > 0 ? ((fSpy - fInv) / fInv) * 100 : 0,
-      alphaPct: fInv > 0 ? (fAlpha / fInv) * 100 : 0,
+      excessReturnPct: fInv > 0 ? (fAlpha / fInv) * 100 : 0,
       winRate: fs.length > 0 ? fWins / fs.length : 0,
     };
   })
@@ -267,7 +267,7 @@ function _compute(): FollowerBacktest {
           ? ((spyFinal - totalInvested) / totalInvested) * 100
           : 0,
       alphaUsd: followerFinal - spyFinal,
-      alphaPct:
+      excessReturnPct:
         totalInvested > 0
           ? ((followerFinal - spyFinal) / totalInvested) * 100
           : 0,
@@ -339,7 +339,7 @@ export function computeCostVariants(
           ? ((followerFinal - totalInvested) / totalInvested) * 100
           : 0,
       alphaUsd: followerFinal - spyFinal,
-      alphaPct:
+      excessReturnPct:
         totalInvested > 0
           ? ((followerFinal - spyFinal) / totalInvested) * 100
           : 0,

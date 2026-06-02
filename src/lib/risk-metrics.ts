@@ -189,7 +189,7 @@ export type RollingAlphaPoint = {
   date: string;
   mirror1yPct: number; // trailing 1y mirror return %
   spy1yPct: number;    // trailing 1y SPY return %
-  alphaPct: number;    // mirror1yPct − spy1yPct
+  excessReturnPct: number;    // mirror1yPct − spy1yPct
 };
 
 /**
@@ -216,7 +216,7 @@ export function computeRollingAlpha(
       date: cur.date,
       mirror1yPct: mirror1y,
       spy1yPct: spy1y,
-      alphaPct: mirror1y - spy1y,
+      excessReturnPct: mirror1y - spy1y,
     });
   }
   return out;

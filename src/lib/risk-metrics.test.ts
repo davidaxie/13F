@@ -127,7 +127,7 @@ describe("computeRollingAlpha", () => {
     // 52 weeks at +0.5% compounded: (1.005)^52 - 1 ≈ 29.5%
     expect(r[0].mirror1yPct).toBeCloseTo((Math.pow(1.005, 52) - 1) * 100, 4);
     expect(r[0].spy1yPct).toBeCloseTo((Math.pow(1.003, 52) - 1) * 100, 4);
-    expect(r[0].alphaPct).toBeCloseTo(
+    expect(r[0].excessReturnPct).toBeCloseTo(
       r[0].mirror1yPct - r[0].spy1yPct,
       6,
     );

@@ -39,7 +39,7 @@ function sig(
     spyReturnPct: 0,
     spyFinalValueUsd: req.spyFinalValueUsd,
     alphaUsd: 0,
-    alphaPct: 0,
+    excessReturnPct: 0,
     holdDays: 365,
     ...extra,
   };
@@ -59,7 +59,7 @@ describe("computeCostVariants", () => {
     expect(gross.followerReturnPct).toBeCloseTo(100, 6);
     // Alpha = 60000 − 45000 = 15000 → 50% of $30k invested.
     expect(gross.alphaUsd).toBe(15000);
-    expect(gross.alphaPct).toBeCloseTo(50, 6);
+    expect(gross.excessReturnPct).toBeCloseTo(50, 6);
     expect(gross.winRate).toBe(1); // all 3 beat SPY
   });
 

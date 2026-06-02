@@ -172,13 +172,13 @@ function RankTable({
                     {" · "}
                     <span
                       className={
-                        bt.stats.alphaPct >= 0
+                        bt.stats.excessReturnPct >= 0
                           ? "text-positive"
                           : "text-negative"
                       }
                     >
-                      α {bt.stats.alphaPct >= 0 ? "+" : ""}
-                      {formatPct(bt.stats.alphaPct, 0)}
+                      α {bt.stats.excessReturnPct >= 0 ? "+" : ""}
+                      {formatPct(bt.stats.excessReturnPct, 0)}
                     </span>
                   </div>
                   <div className="mt-0.5 text-xs text-muted tabular">
