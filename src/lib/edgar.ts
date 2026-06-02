@@ -1,3 +1,4 @@
+import { XMLParser } from "fast-xml-parser";
 import { parseInfoTable, type Holding } from "./parse-13f";
 import { readJson, writeJson } from "./disk-cache";
 
@@ -378,9 +379,120 @@ async function findInfoTableUrl(cik: string, accessionNumber: string): Promise<s
 const holdingsMem = new Map<string, Holding[]>();
 const holdingsInflight = new Map<string, Promise<Holding[]>>();
 
+// Parallel cache for cover-page metadata. We store this separately from the
+// holdings cache (in its own JSON file) so existing caches stay forward-
+// compatible — they just look like a cover-page cache miss.
+const coverMem = new Map<string, CoverPageMeta>();
+const coverInflight = new Map<string, Promise<CoverPageMeta>>();
+
+type CoverPageMeta = {
+  // tableValueTotal as filed (in the filing's NATIVE unit — could be
+  // thousands or whole dollars). null when we couldn't parse it.
+  tableValueTotal: number | null;
+};
+
 function holdingsCacheKey(cik: string, accession: string): string {
   const safe = accession.replace(/[^a-zA-Z0-9-]/g, "_");
   return `holdings/${cik}/${safe}.json`;
+}
+
+function coverPageCacheKey(cik: string, accession: string): string {
+  const safe = accession.replace(/[^a-zA-Z0-9-]/g, "_");
+  return `holdings/${cik}/${safe}.cover.json`;
+}
+
+const coverParser = new XMLParser({
+  removeNSPrefix: true,
+  parseTagValue: true,
+  trimValues: true,
+  numberParseOptions: { hex: false, leadingZeros: false, eNotation: false },
+});
+
+type CoverPageXml = {
+  edgarSubmission?: {
+    formData?: {
+      summaryPage?: {
+        tableValueTotal?: string | number;
+      };
+    };
+  };
+};
+
+/**
+ * Fetch the cover-page primary_doc.xml for a 13F filing and extract the
+ * filer's reported `tableValueTotal`. This is the filer's authoritative
+ * total reported holdings value for the period, used to disambiguate
+ * the units of the holdings table.
+ *
+ * Returns the numeric value in the FILING'S NATIVE UNIT (same unit as
+ * the positions — thousands for pre-cutoff, whole dollars for post-
+ * cutoff). Returns null on any failure (cover doesn't exist, XML can't
+ * be parsed, or `tableValueTotal` isn't a number). Callers MUST treat
+ * null as "unknown" and fall back to row-level heuristics.
+ *
+ * Cached in-memory and on-disk; cover XML is small (~2KB).
+ */
+export async function fetchCoverPageTotal(
+  cik: string,
+  accessionNumber: string,
+): Promise<number | null> {
+  const cleanCik = cik.replace(/^0+/, "");
+  const meta = await loadCoverPageMeta(cleanCik, accessionNumber);
+  return meta.tableValueTotal;
+}
+
+async function loadCoverPageMeta(
+  cleanCik: string,
+  accessionNumber: string,
+): Promise<CoverPageMeta> {
+  const memKey = `${cleanCik}|${accessionNumber}`;
+  const mem = coverMem.get(memKey);
+  if (mem) return mem;
+  const existing = coverInflight.get(memKey);
+  if (existing) return existing;
+
+  const promise = (async () => {
+    const diskKey = coverPageCacheKey(cleanCik, accessionNumber);
+    const fromDisk = await readJson<CoverPageMeta>(diskKey);
+    if (fromDisk) {
+      coverMem.set(memKey, fromDisk);
+      return fromDisk;
+    }
+
+    let meta: CoverPageMeta = { tableValueTotal: null };
+    try {
+      const accDashless = accessionNumber.replace(/-/g, "");
+      const url = `https://www.sec.gov/Archives/edgar/data/${cleanCik}/${accDashless}/primary_doc.xml`;
+      // Skip Next data cache — cover XMLs are small but very numerous; the
+      // on-disk cache below handles persistence without bloating Next's cap.
+      const res = await edgarFetch(url, { noCache: true });
+      const xml = await res.text();
+      const parsed = coverParser.parse(xml) as CoverPageXml;
+      const rawTotal = parsed.edgarSubmission?.formData?.summaryPage?.tableValueTotal;
+      if (rawTotal !== undefined && rawTotal !== null && rawTotal !== "") {
+        const n = Number(rawTotal);
+        if (Number.isFinite(n) && n > 0) {
+          meta = { tableValueTotal: n };
+        }
+      }
+    } catch (err) {
+      console.warn(
+        `edgar: cover-page fetch failed for ${cleanCik}/${accessionNumber}`,
+        err,
+      );
+    }
+    coverMem.set(memKey, meta);
+    await writeJson(diskKey, meta).catch((err) => {
+      console.warn("edgar: failed to persist cover-page cache", err);
+    });
+    return meta;
+  })();
+  coverInflight.set(memKey, promise);
+  try {
+    return await promise;
+  } finally {
+    coverInflight.delete(memKey);
+  }
 }
 
 /**
@@ -396,6 +508,14 @@ function holdingsCacheKey(cik: string, accession: string): string {
  * so the cached file is forward-compatible — the conversion is applied
  * AFTER the cache read.
  *
+ * Pre-cutoff filings (filingDate < 2023-05-25) need their unit
+ * disambiguated: some filers reported in thousands (the historical
+ * default), others switched to whole dollars early. We use the cover-
+ * page `<tableValueTotal>` as the authoritative AUM signal — see
+ * `chooseFilingScale` for the decision rule. If the cover page is
+ * unavailable, each row falls back to the per-share heuristic in
+ * `normalizeHoldingValue`.
+ *
  * `filingDate` is the date the 13F was filed (not the report-period
  * end). Required so we can pick the right unit convention.
  */
@@ -407,10 +527,22 @@ export async function getHoldings(
   const cleanCik = cik.replace(/^0+/, "");
   const memKey = `${cleanCik}|${accessionNumber}`;
   const mem = holdingsMem.get(memKey);
-  if (mem) return applyUnits(mem, filingDate);
+  if (mem) {
+    return applyUnits(
+      mem,
+      filingDate,
+      await loadCoverPageMeta(cleanCik, accessionNumber),
+    );
+  }
 
   const existing = holdingsInflight.get(memKey);
-  if (existing) return applyUnits(await existing, filingDate);
+  if (existing) {
+    return applyUnits(
+      await existing,
+      filingDate,
+      await loadCoverPageMeta(cleanCik, accessionNumber),
+    );
+  }
 
   const promise = (async () => {
     const diskKey = holdingsCacheKey(cleanCik, accessionNumber);
@@ -435,7 +567,13 @@ export async function getHoldings(
   holdingsInflight.set(memKey, promise);
   try {
     const raw = await promise;
-    return applyUnits(raw, filingDate);
+    // Fetch cover-page metadata in parallel with holdings — for post-
+    // cutoff filings we never need it, so don't block on it then.
+    const cover =
+      filingDate >= SEC_WHOLE_DOLLAR_CUTOVER_ISO
+        ? { tableValueTotal: null }
+        : await loadCoverPageMeta(cleanCik, accessionNumber);
+    return applyUnits(raw, filingDate, cover);
   } finally {
     holdingsInflight.delete(memKey);
   }
@@ -458,7 +596,7 @@ export async function getHoldings(
  *   filers' holdings by 1000× — Berkshire's 2023-05-15 COF entry, for
  *   instance, came back as $954B instead of $954M.
  *
- * SANITY CHECK:
+ * SANITY CHECK (row-level, used only as a FALLBACK):
  *   For pre-cutoff filings with shares > 0, compute the per-share price
  *   that the multiplication would imply. If that per-share value exceeds
  *   PER_SHARE_PLAUSIBILITY_CEILING_USD, assume the filer already reports
@@ -472,10 +610,11 @@ export async function getHoldings(
  *     - The bug inflates per-share by exactly 1000×. Real Capital One
  *       at ~$100/share becomes ~$96,000/share when wrongly multiplied —
  *       well above this ceiling, which catches it.
- *   The trade-off: a legitimate pre-cutoff Berkshire-A holding would
- *   false-trigger and be under-reported by 1000×. We accept this for the
- *   ~597 known buggy snapshot trades; correct Berkshire-A holdings in
- *   13F filings are vanishingly rare.
+ *   The trade-off: this row-level check leaks on filings whose ALL
+ *   positions happen to be in low-priced stocks under $50/share — e.g.
+ *   Berkshire's 2023-02-14 NU HLDGS line (107M shares × ~$4/share,
+ *   wrongly multiplied to $4070/share). For these we rely on the
+ *   filing-level cover-page check in `chooseFilingScale` instead.
  *
  * SHARES = 0:
  *   Options/puts/calls/contracts sometimes have no notional share count
@@ -485,6 +624,18 @@ export async function getHoldings(
  */
 const SEC_WHOLE_DOLLAR_CUTOVER_ISO = "2023-05-25";
 const PER_SHARE_PLAUSIBILITY_CEILING_USD = 50_000;
+// Tolerance for the cover-page cross-check: positions sum should equal
+// `tableValueTotal` (both in the filing's native unit) within ~2%.
+const COVER_TOTAL_MATCH_TOLERANCE = 0.02;
+// Portfolio-average per-share ceiling used by `chooseFilingScale`. A real
+// US-equity portfolio's avg per-share is somewhere between ~$1 (a fund of
+// small-caps) and ~$500 (a fund holding NVDA/GOOG/etc. heavily). The 1000×
+// bug pushes this average into the $1k-$500k range, so a threshold of $1k
+// cleanly separates the two regimes regardless of holding mix. This is
+// strictly tighter than the per-ROW $50k ceiling because averages smooth
+// out — a portfolio-wide avg above $1k means at least many holdings are
+// well above any plausible US stock price.
+const PORTFOLIO_AVG_PER_SHARE_CEILING_USD = 1_000;
 
 export function normalizeHoldingValue(
   rawValue: number,
@@ -510,9 +661,101 @@ export function normalizeHoldingValue(
   return candidate;
 }
 
-function applyUnits(holdings: Holding[], filingDate: string): Holding[] {
+/**
+ * Pick a filing-wide multiplier (1 or 1000) using the cover-page
+ * `<tableValueTotal>` as the disambiguator. Returns null if the cover
+ * page is unavailable or can't be reconciled with the positions, in
+ * which case callers should fall back to per-row `normalizeHoldingValue`.
+ *
+ * THE INSIGHT:
+ *   Both `<tableValueTotal>` and the holdings `<value>` column are
+ *   filed in the SAME native unit — so `sum(positions) ≈ tableValueTotal`
+ *   should hold regardless of unit. The DISAMBIGUATING signal is the
+ *   implied per-share price at the PORTFOLIO level. We compute
+ *   `(tableValueTotal × 1000) / sum(shares)` — i.e. the average per-
+ *   share dollar value if we were to apply the ×1000 multiplier:
+ *     • A real thousands filing has an average raw per-share of ~$0.04
+ *       (real stocks divided by 1000). Multiplied: ~$40/share. Below
+ *       ceiling → multiplier is correct → return 1000.
+ *     • A whole-dollar filing has an average raw per-share of ~$40
+ *       directly. Multiplied: ~$40,000/share. Above the $50k ceiling
+ *       for portfolios with any mix of higher-priced stocks → return 1.
+ *
+ *   The portfolio-level check is more robust than the per-row check
+ *   because it averages across many holdings — a single $4/share stock
+ *   like NU can't drag the portfolio average below $50/share when the
+ *   rest of the book has BRK-B, AAPL, KO, etc.
+ *
+ * THE GUARD-RAILS:
+ *   - If `sum(positions)` and `tableValueTotal` differ by > 2%, we
+ *     don't trust the cross-check — possibly an amendment that didn't
+ *     update the cover, or a parser glitch. Return null to fall back.
+ *   - If `sum(shares)` is 0 (all options/puts/calls), no per-share
+ *     check is possible. Return null.
+ *   - Post-cutoff: short-circuit to 1 (date rule already authoritative).
+ */
+export function chooseFilingScale(
+  sumPositions: number,
+  totalShares: number,
+  coverTotal: number | null,
+  filingDateIso: string,
+): 1 | 1000 | null {
+  // Post-cutoff: always whole dollars, no work needed.
+  if (filingDateIso >= SEC_WHOLE_DOLLAR_CUTOVER_ISO) return 1;
+
+  // Need a positive cover total to disambiguate.
+  if (coverTotal === null || coverTotal <= 0) return null;
+
+  // The positions sum must approximately match the cover total in the
+  // filing's native unit. If they're far apart, our model of the filing
+  // is wrong — bail and let row-level fallback take over.
+  if (sumPositions <= 0) return null;
+  const drift = Math.abs(sumPositions - coverTotal) / coverTotal;
+  if (drift > COVER_TOTAL_MATCH_TOLERANCE) return null;
+
+  // Need positive share count to compute the per-share signal.
+  if (totalShares <= 0) return null;
+
+  // The decisive test: what would the average per-share price be if we
+  // applied the historical ×1000 multiplier?
+  const avgPerShareIfMultiplied = (coverTotal * 1000) / totalShares;
+  if (avgPerShareIfMultiplied > PORTFOLIO_AVG_PER_SHARE_CEILING_USD) {
+    // Multiplying would imply an absurd portfolio-average per-share.
+    // Filer is already in whole dollars.
+    return 1;
+  }
+  return 1000;
+}
+
+function applyUnits(
+  holdings: Holding[],
+  filingDate: string,
+  cover: CoverPageMeta,
+): Holding[] {
   // Return a NEW array so we don't mutate the in-memory / disk cache
   // (which stores raw values for forward compatibility).
+
+  // First, try the filing-wide scale decision via the cover-page total.
+  let sumPositions = 0;
+  let totalShares = 0;
+  for (const h of holdings) {
+    sumPositions += h.value || 0;
+    totalShares += h.shares || 0;
+  }
+  const scale = chooseFilingScale(
+    sumPositions,
+    totalShares,
+    cover.tableValueTotal,
+    filingDate,
+  );
+
+  if (scale !== null) {
+    return holdings.map((h) => ({ ...h, value: h.value * scale }));
+  }
+
+  // Fallback: cover page missing or untrustworthy. Apply the per-row
+  // heuristic, which preserves the prior behavior for filings where the
+  // cover-page approach can't make a confident call.
   return holdings.map((h) => ({
     ...h,
     value: normalizeHoldingValue(h.value, h.shares, filingDate),

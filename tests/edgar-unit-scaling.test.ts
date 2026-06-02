@@ -1,15 +1,25 @@
 import { describe, it, expect } from "vitest";
-import { normalizeHoldingValue } from "@/lib/edgar";
+import { chooseFilingScale, normalizeHoldingValue } from "@/lib/edgar";
 
 // These tests pin down the SEC 13F value-scaling fix (the "1000× inflation
 // bug"). Pre-2023-05-25 filings historically reported `value` in $1000s, but
-// some filers reported in whole dollars before the deadline. Our normalizer
-// uses a date check PLUS a per-share plausibility ceiling to detect the
-// already-whole-dollars filers and avoid inflating them by 1000×.
+// some filers reported in whole dollars before the deadline. We have two
+// layered defenses:
+//
+//   1. PORTFOLIO-LEVEL (`chooseFilingScale`): cross-checks the holdings
+//      sum against the cover page's `<tableValueTotal>` and uses the
+//      portfolio-average per-share at ×1000 multiplication to pick the
+//      filing's native unit. Deterministic when a cover page exists.
+//
+//   2. ROW-LEVEL (`normalizeHoldingValue`): fallback used when no cover
+//      page is available. Uses a per-row $50k/share ceiling. Catches
+//      most cases but leaks on filings dominated by low-priced stocks
+//      (e.g. Berkshire's NU HLDGS line at ~$4/share).
 //
 // Strict boundary: a filing dated exactly 2023-05-25 is post-cutover.
-// Per-share ceiling: $50,000/share — well above any common US equity yet
-// well below the ~1000× inflation the bug produces on real-world examples.
+// Per-share ceilings: $50,000/share at the row level; $1,000/share at
+// the portfolio-average level (averages smooth out so a much tighter
+// threshold cleanly separates the two regimes).
 
 describe("normalizeHoldingValue — date boundary", () => {
   it("post-cutover (2024-01-15) returns rawValue unchanged: 1234567 stays 1234567", () => {
@@ -87,5 +97,95 @@ describe("normalizeHoldingValue — shares=0 (options/puts/calls, date-based fal
 
   it("post-cutoff with shares=0 returns rawValue unchanged: 1000 stays 1000", () => {
     expect(normalizeHoldingValue(1000, 0, "2024-01-15")).toBe(1000);
+  });
+});
+
+describe("chooseFilingScale — cover-page-anchored filing-level decision", () => {
+  it("post-cutoff filing short-circuits to 1 regardless of cover total", () => {
+    // Date rule is authoritative after the cutover, so we don't even need
+    // a cover total. Returns 1 for any non-null/null cover.
+    expect(chooseFilingScale(123, 456, 999, "2024-01-15")).toBe(1);
+    expect(chooseFilingScale(123, 456, null, "2024-01-15")).toBe(1);
+    expect(chooseFilingScale(123, 456, 999, "2023-05-25")).toBe(1);
+  });
+
+  it("pre-2023 thousands filing — sum ≈ cover ≈ $128.8M raw → multiply ×1000 (Berkshire 2016Q3 shape)", () => {
+    // Real Berkshire 2016Q3: cover=$128,787,110 in thousands, total_shares=
+    // 2,090,899,991. avg×1000 = $61.59 — far below the $1k portfolio
+    // ceiling — confirming the filer is in thousands.
+    expect(
+      chooseFilingScale(128_787_110, 2_090_899_991, 128_787_110, "2016-11-14"),
+    ).toBe(1000);
+  });
+
+  it("pre-2023 whole-dollar filing (the BUG case) — sum ≈ cover ≈ $299B raw → NO multiplier (Berkshire 2023-02-14 shape)", () => {
+    // Real Berkshire 2023-02-14: cover=299,007,622,119 in whole dollars,
+    // total_shares=3,960,392,807. avg×1000 = $75,499 — way above $1k
+    // ceiling — the filer is already in whole dollars. This is the case
+    // the per-share row-level heuristic missed (NU HLDGS at ~$4/share).
+    expect(
+      chooseFilingScale(
+        299_007_622_119,
+        3_960_392_807,
+        299_007_622_119,
+        "2023-02-14",
+      ),
+    ).toBe(1);
+  });
+
+  it("pre-2023 whole-dollar filing dominated by low-priced stocks still triggers — Tiger Global 2023-02-14 shape", () => {
+    // Tiger Global avg ~$32/share REAL. avg×1000 = $32,146 — well above
+    // $1k ceiling. This is the case where row-level missed because no
+    // individual position had per-share > $50k after multiplication.
+    expect(
+      chooseFilingScale(
+        8_163_347_431,
+        253_940_796,
+        8_163_347_431,
+        "2023-02-14",
+      ),
+    ).toBe(1);
+  });
+
+  it("missing cover (null) → returns null so caller falls back to per-share row heuristic", () => {
+    expect(chooseFilingScale(123_000, 4_000, null, "2023-01-15")).toBeNull();
+  });
+
+  it("zero / negative cover → returns null", () => {
+    expect(chooseFilingScale(123_000, 4_000, 0, "2023-01-15")).toBeNull();
+    expect(chooseFilingScale(123_000, 4_000, -5, "2023-01-15")).toBeNull();
+  });
+
+  it("zero total shares (all options/puts/calls) → returns null", () => {
+    expect(
+      chooseFilingScale(1_000_000, 0, 1_000_000, "2023-01-15"),
+    ).toBeNull();
+  });
+
+  it("sum drifts > 2% from cover_total → returns null (untrustworthy cross-check)", () => {
+    // sum 10% off cover — likely an amendment whose cover didn't update.
+    // Bail out so the row-level fallback handles it.
+    expect(
+      chooseFilingScale(110_000_000, 1_000_000, 100_000_000, "2023-01-15"),
+    ).toBeNull();
+  });
+
+  it("sum drifts just under 2% from cover_total → still trusted (tolerance edge)", () => {
+    // 1.5% under tolerance. avg×1000 = $99 — under $1k → multiply ×1000.
+    expect(
+      chooseFilingScale(98_500_000, 1_000_000_000, 100_000_000, "2023-01-15"),
+    ).toBe(1000);
+  });
+
+  it("portfolio avg×1000 exactly at $1k threshold (NOT strictly greater) → multiply ×1000", () => {
+    // cover=1000, total_shares=1000 → avg×1000 = (1000 × 1000) / 1000 = $1000.
+    // NOT strictly > $1000, so the multiplier should still apply.
+    expect(chooseFilingScale(1_000, 1_000, 1_000, "2023-01-15")).toBe(1000);
+  });
+
+  it("portfolio avg×1000 just above $1k threshold → returns 1 (no multiplier)", () => {
+    // cover=1001, total_shares=1000 → avg×1000 = (1001 × 1000) / 1000 = $1001.
+    // Just over the $1k threshold → filer is already in whole dollars.
+    expect(chooseFilingScale(1_001, 1_000, 1_001, "2023-01-15")).toBe(1);
   });
 });
