@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import Link from "next/link";
 import { ClerkProvider } from "@clerk/nextjs";
 import { AuthButtons } from "@/components/auth-buttons";
+import { MobileNav } from "@/components/mobile-nav";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -55,8 +56,8 @@ export default function RootLayout({
           >
             Skip to content
           </a>
-          <header className="border-b border-hairline">
-            <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-6">
+          <header className="relative border-b border-hairline">
+            <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
               <Link
                 href="/"
                 className="font-serif text-2xl tracking-tight text-foreground"
@@ -64,86 +65,85 @@ export default function RootLayout({
               >
                 13F<span className="text-accent">.</span>
               </Link>
+              {/* Desktop nav — hidden below xl (1280px). Below that, the
+                  links go into MobileNav (hamburger) on the right so the
+                  logo + auth controls never get word-wrapped. */}
               <nav
-                className="flex items-center gap-6 text-sm text-muted"
+                className="hidden items-center gap-5 text-sm text-muted xl:flex"
                 aria-label="Primary"
               >
                 <Link
                   href="/"
-                  className="transition-colors hover:text-foreground"
+                  className="whitespace-nowrap transition-colors hover:text-foreground"
                 >
                   Search
                 </Link>
                 <Link
                   href="/dashboard"
-                  className="transition-colors hover:text-foreground"
+                  className="whitespace-nowrap transition-colors hover:text-foreground"
                 >
                   Dashboard
                 </Link>
                 <Link
-                  href="/universe"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Universe
-                </Link>
-                <Link
-                  href="/consensus"
-                  className="transition-colors hover:text-foreground"
-                >
-                  Consensus
-                </Link>
-                <Link
                   href="/entries"
-                  className="transition-colors hover:text-foreground"
+                  className="whitespace-nowrap transition-colors hover:text-foreground"
                 >
                   Entries
                 </Link>
                 <Link
-                  href="/compare"
-                  className="transition-colors hover:text-foreground"
+                  href="/consensus"
+                  className="whitespace-nowrap transition-colors hover:text-foreground"
                 >
-                  Compare
+                  Consensus
+                </Link>
+                <Link
+                  href="/universe"
+                  className="whitespace-nowrap transition-colors hover:text-foreground"
+                >
+                  Universe
                 </Link>
                 <Link
                   href="/leaderboard"
-                  className="transition-colors hover:text-foreground"
+                  className="whitespace-nowrap transition-colors hover:text-foreground"
                 >
                   Leaderboard
                 </Link>
                 <Link
+                  href="/compare"
+                  className="whitespace-nowrap transition-colors hover:text-foreground"
+                >
+                  Compare
+                </Link>
+                <Link
                   href="/backtest/follower"
-                  className="transition-colors hover:text-foreground"
+                  className="whitespace-nowrap transition-colors hover:text-foreground"
                 >
                   Follower
                 </Link>
                 <Link
                   href="/backtest/conviction"
-                  className="transition-colors hover:text-foreground"
+                  className="whitespace-nowrap transition-colors hover:text-foreground"
                 >
                   Conviction
                 </Link>
                 <Link
                   href="/watchlist"
-                  className="transition-colors hover:text-foreground"
+                  className="whitespace-nowrap transition-colors hover:text-foreground"
                   aria-label="My watchlist"
                 >
                   Following
                 </Link>
-                <a
-                  href="https://www.sec.gov/divisions/investment/13ffaq"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-colors hover:text-foreground"
-                >
-                  About 13F
-                </a>
-                {/* Auth controls — moved into a client component so static-
-                    prerendered routes don't crash on Clerk's server-side
-                    auth() call. See src/components/auth-buttons.tsx. */}
-                <span className="flex items-center gap-2 border-l border-hairline pl-4">
+              </nav>
+              {/* Right cluster: auth (always visible) + mobile hamburger
+                  (visible below xl). whitespace-nowrap on the auth wrapper
+                  prevents the Sign in / Sign up buttons from word-breaking
+                  when the row is tight. */}
+              <div className="flex items-center gap-2 whitespace-nowrap sm:gap-3">
+                <span className="flex items-center gap-2 xl:border-l xl:border-hairline xl:pl-4">
                   <AuthButtons />
                 </span>
-              </nav>
+                <MobileNav />
+              </div>
             </div>
           </header>
           <main id="main" className="flex flex-1 flex-col">

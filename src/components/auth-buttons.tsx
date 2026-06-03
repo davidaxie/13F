@@ -33,7 +33,7 @@ export function AuthButtons() {
       <SignInButton mode="modal">
         <button
           type="button"
-          className="text-sm text-muted transition-colors hover:text-foreground"
+          className="whitespace-nowrap text-sm text-muted transition-colors hover:text-foreground"
         >
           Sign in
         </button>
@@ -41,7 +41,7 @@ export function AuthButtons() {
       <SignUpButton mode="modal">
         <button
           type="button"
-          className="rounded border border-hairline px-2 py-1 text-xs uppercase tracking-widest text-muted transition-colors hover:border-foreground hover:text-foreground"
+          className="whitespace-nowrap rounded border border-hairline px-2.5 py-1 text-[11px] uppercase tracking-widest text-muted transition-colors hover:border-foreground hover:text-foreground"
         >
           Sign up
         </button>
