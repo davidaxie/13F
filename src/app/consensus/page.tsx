@@ -2,14 +2,68 @@ import Link from "next/link";
 import {
   computeConsensusView,
   type ConsensusName,
+  type FundActivity,
 } from "@/lib/consensus";
-import { formatDate, formatUSD } from "@/lib/format";
-import { cn } from "@/lib/utils";
+import { formatDate } from "@/lib/format";
+import {
+  PaginatedConsensusList,
+  type ConsensusRow,
+  type Tone,
+} from "@/components/paginated-consensus-list";
 
 export const dynamic = "force-static";
 
 export default function ConsensusPage() {
   const view = computeConsensusView();
+
+  // Pre-compute serializable row data for each section so the client
+  // pagination component only needs plain props (no function callbacks
+  // across the RSC boundary).
+  const mostOwnedRows: ConsensusRow[] = view.mostOwned
+    .slice(0, 25)
+    .map((n) =>
+      toRow(n, {
+        metric: {
+          label: `${n.totalHolders} of ${view.fundsCovered}`,
+          tone: "neutral",
+        },
+        activity: { kind: "single", text: fundNames(n.holders) },
+      }),
+    );
+
+  const newBuysRows: ConsensusRow[] = view.consensusNewBuys.map((n) =>
+    toRow(n, {
+      metric: {
+        label: `${n.newThisQuarter.length} new`,
+        tone: "positive",
+      },
+      activity: { kind: "single", text: fundNames(n.newThisQuarter) },
+    }),
+  );
+
+  const exitsRows: ConsensusRow[] = view.consensusExits.map((n) =>
+    toRow(n, {
+      metric: {
+        label: `${n.exitedThisQuarter.length} out`,
+        tone: "negative",
+      },
+      activity: { kind: "single", text: fundNames(n.exitedThisQuarter) },
+    }),
+  );
+
+  const disagreementRows: ConsensusRow[] = view.disagreement.map((n) =>
+    toRow(n, {
+      metric: {
+        label: `${n.newThisQuarter.length} in / ${n.exitedThisQuarter.length} out`,
+        tone: "neutral",
+      },
+      activity: {
+        kind: "split",
+        newText: fundNames(n.newThisQuarter),
+        exitedText: fundNames(n.exitedThisQuarter),
+      },
+    }),
+  );
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -25,7 +79,7 @@ export default function ConsensusPage() {
           Cross-fund
         </div>
         <h1 className="mt-2 font-serif text-5xl leading-tight tracking-tight text-foreground">
-          Consensus & crowding
+          Consensus &amp; crowding
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
           Which names {view.fundsCovered}{" "}marquee funds collectively hold,
@@ -45,56 +99,54 @@ export default function ConsensusPage() {
         </div>
       </div>
 
-      {/* Most owned */}
+      {/* Most-owned — capped at 25, no Show more button. */}
       <Section
         title="Most-owned stocks"
         subtitle="Held by the most marquee funds · ties broken by combined capital"
-        items={view.mostOwned.slice(0, 25)}
-        emptyText="Not enough overlap to compute."
-        primaryMetric={(n) => ({
-          label: `${n.totalHolders} of ${view.fundsCovered}`,
-          tone: "neutral",
-        })}
-      />
+        count={mostOwnedRows.length}
+      >
+        <PaginatedConsensusList
+          rows={mostOwnedRows}
+          initialVisible={mostOwnedRows.length}
+          emptyText="Not enough overlap to compute."
+        />
+      </Section>
 
-      {/* New consensus buys */}
+      {/* New consensus buys — paginated 30 at a time. */}
       <Section
         title="New consensus buys"
-        subtitle={`≥${3} funds newly opened a position this quarter — fresh smart-money interest`}
-        items={view.consensusNewBuys}
-        emptyText="No name has ≥3 funds newly opening it in the latest quarter."
-        primaryMetric={(n) => ({
-          label: `${n.newThisQuarter.length} new`,
-          tone: "positive",
-        })}
-        showActivity="new"
-      />
+        subtitle="≥3 funds newly opened a position this quarter — fresh smart-money interest"
+        count={newBuysRows.length}
+      >
+        <PaginatedConsensusList
+          rows={newBuysRows}
+          emptyText="No name has ≥3 funds newly opening it in the latest quarter."
+        />
+      </Section>
 
-      {/* Consensus exits */}
+      {/* Consensus exits — paginated 30 at a time. */}
       <Section
         title="Consensus exits"
         subtitle="≥3 funds fully sold this quarter — names smart money is walking away from"
-        items={view.consensusExits}
-        emptyText="No name has ≥3 funds exiting in the latest quarter."
-        primaryMetric={(n) => ({
-          label: `${n.exitedThisQuarter.length} out`,
-          tone: "negative",
-        })}
-        showActivity="exited"
-      />
+        count={exitsRows.length}
+      >
+        <PaginatedConsensusList
+          rows={exitsRows}
+          emptyText="No name has ≥3 funds exiting in the latest quarter."
+        />
+      </Section>
 
-      {/* Disagreement */}
+      {/* High disagreement — paginated 30 at a time. */}
       <Section
         title="High disagreement"
         subtitle="≥2 funds buying AND ≥2 funds exiting the same name this quarter"
-        items={view.disagreement}
-        emptyText="No two-sided splits this quarter — funds are aligned."
-        primaryMetric={(n) => ({
-          label: `${n.newThisQuarter.length} in / ${n.exitedThisQuarter.length} out`,
-          tone: "neutral",
-        })}
-        showActivity="both"
-      />
+        count={disagreementRows.length}
+      >
+        <PaginatedConsensusList
+          rows={disagreementRows}
+          emptyText="No two-sided splits this quarter — funds are aligned."
+        />
+      </Section>
 
       <section className="mt-20 rounded border-l-2 border-accent/40 bg-subtle/30 px-6 py-5 text-xs leading-relaxed text-muted">
         <div className="mb-2 text-[10px] uppercase tracking-widest text-foreground/70">
@@ -130,23 +182,39 @@ export default function ConsensusPage() {
   );
 }
 
+/** Server-only helper: lift the shared row fields off ConsensusName and
+ *  attach the per-section metric + activity. */
+function toRow(
+  n: ConsensusName,
+  overlay: { metric: { label: string; tone: Tone }; activity: ConsensusRow["activity"] },
+): ConsensusRow {
+  return {
+    cusip: n.cusip,
+    ticker: n.ticker,
+    issuer: n.issuer,
+    totalEntryValueUsd: n.totalEntryValueUsd,
+    metric: overlay.metric,
+    activity: overlay.activity,
+  };
+}
+
+function fundNames(activities: FundActivity[]): string {
+  if (activities.length === 0) return "—";
+  return activities.map((a) => a.fund.displayName).join(", ");
+}
+
+/** Section header (title + subtitle + count) — server-rendered. The
+ *  body is a PaginatedConsensusList passed in as children. */
 function Section({
   title,
   subtitle,
-  items,
-  emptyText,
-  primaryMetric,
-  showActivity = "holders",
+  count,
+  children,
 }: {
   title: string;
   subtitle: string;
-  items: ConsensusName[];
-  emptyText: string;
-  primaryMetric: (n: ConsensusName) => {
-    label: string;
-    tone: "positive" | "negative" | "neutral";
-  };
-  showActivity?: "holders" | "new" | "exited" | "both";
+  count: number;
+  children: React.ReactNode;
 }) {
   return (
     <section className="mt-16">
@@ -162,90 +230,11 @@ function Section({
             count
           </div>
           <div className="font-mono text-sm tabular text-foreground">
-            {items.length.toLocaleString()}
+            {count.toLocaleString()}
           </div>
         </div>
       </div>
-
-      {items.length === 0 ? (
-        <p className="mt-6 text-sm text-muted">{emptyText}</p>
-      ) : (
-        <ul className="mt-2 divide-y divide-hairline/60">
-          {items.map((n) => {
-            const metric = primaryMetric(n);
-            const activityList =
-              showActivity === "new"
-                ? n.newThisQuarter
-                : showActivity === "exited"
-                  ? n.exitedThisQuarter
-                  : showActivity === "both"
-                    ? [...n.newThisQuarter, ...n.exitedThisQuarter]
-                    : n.holders;
-            return (
-              <li key={n.cusip}>
-                <div className="group block py-4 transition-colors hover:bg-subtle/40">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-baseline gap-3">
-                        {n.ticker ? (
-                          <Link
-                            href={`/stock/${n.ticker}`}
-                            className="font-mono text-base font-medium text-foreground transition-colors hover:text-accent"
-                          >
-                            {n.ticker}
-                          </Link>
-                        ) : (
-                          <span className="font-mono text-xs text-muted">
-                            {n.cusip}
-                          </span>
-                        )}
-                        <span className="truncate font-serif text-base text-foreground/85">
-                          {n.issuer}
-                        </span>
-                      </div>
-                      <div className="mt-1 truncate text-xs text-muted">
-                        {showActivity === "both" ? (
-                          <>
-                            <span className="text-positive">
-                              ↑ {fundNames(n.newThisQuarter)}
-                            </span>
-                            <span className="mx-2">·</span>
-                            <span className="text-negative">
-                              ↓ {fundNames(n.exitedThisQuarter)}
-                            </span>
-                          </>
-                        ) : (
-                          <span>{fundNames(activityList)}</span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="shrink-0 text-right">
-                      <div
-                        className={cn(
-                          "tabular text-sm",
-                          metric.tone === "positive" && "text-positive",
-                          metric.tone === "negative" && "text-negative",
-                          metric.tone === "neutral" && "text-foreground",
-                        )}
-                      >
-                        {metric.label}
-                      </div>
-                      <div className="mt-0.5 text-xs text-muted tabular">
-                        {formatUSD(n.totalEntryValueUsd, { compact: true })} at entry
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      {children}
     </section>
   );
-}
-
-function fundNames(activities: { fund: { displayName: string } }[]): string {
-  if (activities.length === 0) return "—";
-  return activities.map((a) => a.fund.displayName).join(", ");
 }
