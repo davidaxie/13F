@@ -9,6 +9,7 @@ import {
 import { FundCard } from "@/components/fund-card";
 import { computeConsensusView } from "@/lib/consensus";
 import { MARQUEE_FUNDS } from "@/lib/dashboard";
+import { formatDate } from "@/lib/format";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -33,6 +34,17 @@ export default function DashboardPage() {
           same quarter. The highest-conviction cross-fund signal, front and
           center.
         </p>
+        <div className="mt-4 text-xs text-muted">
+          Data as-of:{" "}
+          <span className="tabular text-foreground/80">
+            {formatDate(consensus.asOfDate)}
+          </span>{" "}
+          ·{" "}
+          <span className="tabular text-foreground/80">
+            {consensus.fundsCovered}
+          </span>{" "}
+          of 27 funds tracked
+        </div>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
             href="/consensus"

@@ -130,27 +130,53 @@ export default function RootLayout({
             {children}
           </main>
           <footer className="border-t border-hairline">
-            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-6 text-xs text-muted sm:px-6">
-              <span>Data sourced directly from SEC EDGAR.</span>
-              <span className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                <Link
-                  href="/about"
-                  className="transition-colors hover:text-foreground"
-                >
-                  About &amp; methodology
-                </Link>
-                <a
-                  href="https://www.sec.gov/divisions/investment/13ffaq"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-colors hover:text-foreground"
-                >
-                  About 13F (SEC)
-                </a>
-                <span>
-                  Built for personal research. Not investment advice.
+            <div className="mx-auto max-w-6xl px-4 py-6 text-xs text-muted sm:px-6">
+              <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-3">
+                <span>Data sourced directly from SEC EDGAR.</span>
+                <span className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                  <Link
+                    href="/about"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    About
+                  </Link>
+                  <Link
+                    href="/status"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    Status
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    Contact
+                  </Link>
+                  <Link
+                    href="/terms"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    Terms
+                  </Link>
+                  <Link
+                    href="/privacy"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    Privacy
+                  </Link>
+                  <a
+                    href="https://www.sec.gov/divisions/investment/13ffaq"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    About 13F (SEC) ↗
+                  </a>
                 </span>
-              </span>
+              </div>
+              <div className="mt-3 text-muted/70">
+                Built for personal research. Not investment advice.
+              </div>
             </div>
           </footer>
         </ClerkProvider>
