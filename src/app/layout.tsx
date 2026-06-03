@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ClerkProvider } from "@clerk/nextjs";
 import { AuthButtons } from "@/components/auth-buttons";
 import { MobileNav } from "@/components/mobile-nav";
+import { NavDropdown } from "@/components/nav-dropdown";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -65,30 +66,20 @@ export default function RootLayout({
               >
                 13F<span className="text-accent">.</span>
               </Link>
-              {/* Desktop nav — hidden below xl (1280px). Below that, the
-                  links go into MobileNav (hamburger) on the right so the
-                  logo + auth controls never get word-wrapped. */}
+              {/* Desktop nav — hidden below lg (1024px). 5 primary text
+                  items + 2 grouping dropdowns (Funds / Backtest) + a
+                  compact Watchlist star. Below lg the links collapse
+                  into MobileNav (hamburger) on the right so the logo +
+                  auth controls always have room. */}
               <nav
-                className="hidden items-center gap-5 text-sm text-muted xl:flex"
+                className="hidden items-center gap-5 text-sm text-muted lg:flex"
                 aria-label="Primary"
               >
-                <Link
-                  href="/"
-                  className="whitespace-nowrap transition-colors hover:text-foreground"
-                >
-                  Search
-                </Link>
                 <Link
                   href="/dashboard"
                   className="whitespace-nowrap transition-colors hover:text-foreground"
                 >
                   Dashboard
-                </Link>
-                <Link
-                  href="/entries"
-                  className="whitespace-nowrap transition-colors hover:text-foreground"
-                >
-                  Entries
                 </Link>
                 <Link
                   href="/consensus"
@@ -97,49 +88,51 @@ export default function RootLayout({
                   Consensus
                 </Link>
                 <Link
-                  href="/universe"
+                  href="/entries"
                   className="whitespace-nowrap transition-colors hover:text-foreground"
                 >
-                  Universe
+                  Entries
                 </Link>
-                <Link
-                  href="/leaderboard"
-                  className="whitespace-nowrap transition-colors hover:text-foreground"
-                >
-                  Leaderboard
-                </Link>
-                <Link
-                  href="/compare"
-                  className="whitespace-nowrap transition-colors hover:text-foreground"
-                >
-                  Compare
-                </Link>
-                <Link
-                  href="/backtest/follower"
-                  className="whitespace-nowrap transition-colors hover:text-foreground"
-                >
-                  Follower
-                </Link>
-                <Link
-                  href="/backtest/conviction"
-                  className="whitespace-nowrap transition-colors hover:text-foreground"
-                >
-                  Conviction
-                </Link>
+                <NavDropdown
+                  label="Funds"
+                  items={[
+                    { href: "/universe", label: "Universe", sub: "All 27 tracked funds" },
+                    { href: "/leaderboard", label: "Leaderboard", sub: "Ranked by mirror return" },
+                    { href: "/compare", label: "Compare", sub: "Two-fund overlay" },
+                  ]}
+                />
+                <NavDropdown
+                  label="Backtest"
+                  items={[
+                    { href: "/backtest/follower", label: "Follower", sub: "Trade alongside the fund" },
+                    { href: "/backtest/conviction", label: "Conviction", sub: "Buy & hold filtered" },
+                  ]}
+                />
+              </nav>
+              {/* Right cluster: Watchlist star (desktop) + auth (always)
+                  + mobile hamburger (below lg). whitespace-nowrap on
+                  the auth wrapper prevents Sign in / Sign up word-breaks. */}
+              <div className="flex items-center gap-2 whitespace-nowrap sm:gap-3">
                 <Link
                   href="/watchlist"
-                  className="whitespace-nowrap transition-colors hover:text-foreground"
-                  aria-label="My watchlist"
+                  aria-label="Watchlist"
+                  className="hidden h-8 w-8 items-center justify-center rounded text-muted transition-colors hover:text-foreground lg:inline-flex"
                 >
-                  Following
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5" />
+                  </svg>
                 </Link>
-              </nav>
-              {/* Right cluster: auth (always visible) + mobile hamburger
-                  (visible below xl). whitespace-nowrap on the auth wrapper
-                  prevents the Sign in / Sign up buttons from word-breaking
-                  when the row is tight. */}
-              <div className="flex items-center gap-2 whitespace-nowrap sm:gap-3">
-                <span className="flex items-center gap-2 xl:border-l xl:border-hairline xl:pl-4">
+                <span className="flex items-center gap-2 lg:border-l lg:border-hairline lg:pl-4">
                   <AuthButtons />
                 </span>
                 <MobileNav />
@@ -150,15 +143,23 @@ export default function RootLayout({
             {children}
           </main>
           <footer className="border-t border-hairline">
-            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-xs text-muted">
+            <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-6 text-xs text-muted sm:px-6">
               <span>Data sourced directly from SEC EDGAR.</span>
-              <span className="flex items-center gap-5">
+              <span className="flex flex-wrap items-center gap-x-5 gap-y-2">
                 <Link
                   href="/about"
                   className="transition-colors hover:text-foreground"
                 >
                   About &amp; methodology
                 </Link>
+                <a
+                  href="https://www.sec.gov/divisions/investment/13ffaq"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-foreground"
+                >
+                  About 13F (SEC)
+                </a>
                 <span>
                   Built for personal research. Not investment advice.
                 </span>

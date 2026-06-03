@@ -6,24 +6,47 @@ import { useEffect, useRef, useState } from "react";
 /**
  * Mobile / split-screen primary nav.
  *
- * Hidden on `xl` and above — the desktop nav inside layout.tsx takes over
- * there. At narrower widths (split-screen on a 13" laptop, iPad portrait,
- * any phone) this hamburger menu surfaces the same 11 links a stacked
- * panel. The button itself remains in the header's right cluster so the
- * 13F logo + auth controls never get word-wrapped.
+ * Hidden on `lg` and above — the desktop nav (5 items + 2 dropdowns +
+ * watchlist star) inside layout.tsx takes over there. Below lg
+ * (split-screen on a 13" Mac, iPad portrait, any phone) this hamburger
+ * surfaces every route in a flat stacked panel — one tap from menu to
+ * destination, no nested groupings. The button itself stays in the
+ * header's right cluster so the 13F logo + auth controls always have
+ * room.
  */
-const PRIMARY_LINKS: Array<{ href: string; label: string }> = [
-  { href: "/", label: "Search" },
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/entries", label: "Entries" },
-  { href: "/consensus", label: "Consensus" },
-  { href: "/universe", label: "Universe" },
-  { href: "/leaderboard", label: "Leaderboard" },
-  { href: "/compare", label: "Compare" },
-  { href: "/backtest/follower", label: "Follower" },
-  { href: "/backtest/conviction", label: "Conviction" },
-  { href: "/watchlist", label: "Following" },
-  { href: "/about", label: "About & methodology" },
+type Section = { header: string; items: Array<{ href: string; label: string }> };
+const SECTIONS: Section[] = [
+  {
+    header: "Discover",
+    items: [
+      { href: "/dashboard", label: "Dashboard" },
+      { href: "/consensus", label: "Consensus" },
+      { href: "/entries", label: "Entries" },
+      { href: "/", label: "Search" },
+    ],
+  },
+  {
+    header: "Funds",
+    items: [
+      { href: "/universe", label: "Universe" },
+      { href: "/leaderboard", label: "Leaderboard" },
+      { href: "/compare", label: "Compare" },
+    ],
+  },
+  {
+    header: "Backtest",
+    items: [
+      { href: "/backtest/follower", label: "Follower" },
+      { href: "/backtest/conviction", label: "Conviction" },
+    ],
+  },
+  {
+    header: "You",
+    items: [
+      { href: "/watchlist", label: "Watchlist" },
+      { href: "/about", label: "About & methodology" },
+    ],
+  },
 ];
 
 export function MobileNav() {
@@ -53,7 +76,7 @@ export function MobileNav() {
   }, [open]);
 
   return (
-    <div className="relative xl:hidden" ref={wrapRef}>
+    <div className="relative lg:hidden" ref={wrapRef}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -90,17 +113,25 @@ export function MobileNav() {
         <nav
           id="primary-mobile-nav"
           aria-label="Primary"
-          className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded border border-hairline bg-background py-1 shadow-lg"
+          className="absolute right-0 top-full z-50 mt-2 w-60 overflow-hidden rounded border border-hairline bg-background py-2 shadow-lg"
         >
-          {PRIMARY_LINKS.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm text-muted transition-colors hover:bg-subtle/40 hover:text-foreground"
-            >
-              {l.label}
-            </Link>
+          {SECTIONS.map((section, idx) => (
+            <div key={section.header}>
+              {idx > 0 && <div className="my-1 border-t border-hairline" />}
+              <div className="px-4 py-1 text-[10px] uppercase tracking-widest text-muted/60">
+                {section.header}
+              </div>
+              {section.items.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className="block px-4 py-2 text-sm text-muted transition-colors hover:bg-subtle/40 hover:text-foreground"
+                >
+                  {l.label}
+                </Link>
+              ))}
+            </div>
           ))}
           <div className="my-1 border-t border-hairline" />
           <a
@@ -110,7 +141,7 @@ export function MobileNav() {
             onClick={() => setOpen(false)}
             className="block px-4 py-2 text-sm text-muted transition-colors hover:bg-subtle/40 hover:text-foreground"
           >
-            About 13F (SEC)
+            About 13F (SEC) ↗
           </a>
         </nav>
       )}
