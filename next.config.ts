@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 // Permissive starter CSP. We rely on inline styles in a handful of places
 // (font-loading helpers, the global-error fallback), and Next's RSC payload
@@ -51,4 +52,19 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Sentry source-map upload is keyed off `SENTRY_AUTH_TOKEN` + `SENTRY_ORG` +
+// `SENTRY_PROJECT`. Without them the build still succeeds; the plugin just
+// skips uploading source maps and prints a one-line notice. `silent: true`
+// and `disableLogger: true` keep the build output clean in that case.
+//
+// Note: the `hideSourceMaps` option that older Sentry SDKs took was removed
+// in @sentry/nextjs v10. The same effect — keep uploaded source maps out of
+// the public build output — is now the default behaviour of
+// `sourcemaps.deleteSourcemapsAfterUpload: true`, so we don't need a flag.
+export default withSentryConfig(nextConfig, {
+  silent: true,
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  widenClientFileUpload: true,
+  disableLogger: true,
+});
