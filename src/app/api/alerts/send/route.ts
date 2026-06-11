@@ -2,16 +2,36 @@ import { NextRequest, NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
 import { Resend } from "resend";
 import crypto from "crypto";
-import { detectMaterialMoves, type MaterialMove } from "@/lib/alerts";
-import type { FundBacktest } from "@/lib/backtest";
-import { getFundInfo } from "@/lib/edgar";
-import path from "path";
-import fs from "fs";
+import {
+  detectMaterialMovesFromHoldings,
+  type MaterialMove,
+} from "@/lib/alerts";
+import { getFundInfo, getHoldings, type Holding } from "@/lib/edgar";
+import { MARQUEE_FUNDS } from "@/lib/funds";
 
 export const dynamic = "force-dynamic";
-// Allow up to 5 minutes for the digest run (Vercel Pro/hobby capped at 60s,
-// but we keep processing as many subs as possible within the limit)
+// Each hourly run polls EDGAR for every subscribed CIK. In steady state that's
+// one cheap submissions fetch per fund; only when a fund's latest filing
+// actually changes do we pull the (larger) holdings tables. 60s is the Vercel
+// cap; any CIKs not reached this run are simply picked up next hour (their
+// per-CIK marker isn't advanced until they're processed).
 export const maxDuration = 60;
+
+// Don't alert on filings older than this. The hourly poll detects genuinely
+// new filings within ~an hour, so a "new to us" filing that's already several
+// days old means the cron was down for a stretch — we advance the marker but
+// suppress the (stale) email rather than blast late news. Also belt-and-braces
+// against a cold start landing mid-filing-season.
+const ALERT_FILING_MAX_AGE_DAYS = 4;
+
+// Per-user-per-filing de-dup TTL. Quarterly cadence means 90 days comfortably
+// covers "already emailed this filing" without growing KV unbounded.
+const PER_USER_DEDUP_TTL_SECONDS = 90 * 24 * 60 * 60;
+
+// Curated CIK → display name (nicer than EDGAR's ALL-CAPS legal name).
+const DISPLAY_NAME_BY_CIK = new Map(
+  MARQUEE_FUNDS.map((f) => [f.cik, f.displayName]),
+);
 
 // Lazily construct the Resend client. Module-scope `new Resend(key)` throws
 // "Missing API key" at import time, which crashes `next build`'s page-data
@@ -29,7 +49,6 @@ function getResend(): Resend | null {
 const FROM_EMAIL =
   process.env.RESEND_FROM_EMAIL ?? "alerts@13f.mapperlab.co";
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://13f.mapperlab.co";
-const SNAPSHOT_DIR = path.join(process.cwd(), "src", "data", "backtest");
 
 // ---------------------------------------------------------------------------
 // Secret header guard — prevents unauthorized cron triggers.
@@ -55,20 +74,6 @@ function isAuthorized(req: NextRequest): boolean {
   if (customHeader === cronSecret) return true;
 
   return false;
-}
-
-// ---------------------------------------------------------------------------
-// Load a snapshot JSON from disk (works in Node.js route handler).
-// ---------------------------------------------------------------------------
-function loadSnapshot(cik: string): FundBacktest | null {
-  const cleanCik = cik.replace(/^0+/, "");
-  const filePath = path.join(SNAPSHOT_DIR, `${cleanCik}.json`);
-  try {
-    const raw = fs.readFileSync(filePath, "utf-8");
-    return JSON.parse(raw) as FundBacktest;
-  } catch {
-    return null;
-  }
 }
 
 // ---------------------------------------------------------------------------
@@ -188,10 +193,187 @@ function buildEmailHtml(
 </html>`;
 }
 
+type Subscriber = { userId: string; email: string };
+type ResultRow = {
+  cik: string;
+  userId?: string;
+  status: "filing" | "sent" | "skipped" | "error";
+  reason?: string;
+};
+
+// Scan every KV key matching a pattern (cursor-paged).
+async function scanKeys(match: string): Promise<string[]> {
+  let cursor = 0;
+  const keys: string[] = [];
+  do {
+    const [next, batch] = await kv.scan(cursor, { match, count: 100 });
+    cursor = next as unknown as number;
+    keys.push(...(batch as string[]));
+  } while (cursor !== 0);
+  return keys;
+}
+
+// Build cik → subscribers from all alerts:subscriptions:* sets, so we do the
+// (rate-limited) EDGAR work ONCE per fund and fan the result out to everyone
+// watching it, rather than re-fetching per user.
+async function loadSubscribersByCik(): Promise<Map<string, Subscriber[]>> {
+  const subKeys = await scanKeys("alerts:subscriptions:*");
+  const byCik = new Map<string, Subscriber[]>();
+  for (const key of subKeys) {
+    const userId = key.replace("alerts:subscriptions:", "");
+    const [ciks, email] = await Promise.all([
+      kv.smembers(key) as Promise<string[]>,
+      kv.get<string>(`alerts:email:${userId}`),
+    ]);
+    if (!email || !ciks || ciks.length === 0) continue;
+    for (const raw of ciks) {
+      const cik = raw.replace(/^0+/, "");
+      const arr = byCik.get(cik) ?? [];
+      arr.push({ userId, email });
+      byCik.set(cik, arr);
+    }
+  }
+  return byCik;
+}
+
+// ---------------------------------------------------------------------------
+// Process a single fund: poll EDGAR for its latest 13F, and if that filing is
+// new since we last looked (and genuinely fresh), diff it against the prior
+// quarter and email every subscriber.
+//
+// De-dup is two-tiered:
+//   • alerts:filing-seen:{cik}              → accession we last processed. The
+//     hourly run is a no-op until this changes. Seeded silently on first sight
+//     of a fund so we never alert on filings that predate the subscription.
+//   • alerts:last-sent:{userId}:{cik}:{acc} → per-user guard so a partially
+//     failed run doesn't double-send on retry.
+// ---------------------------------------------------------------------------
+async function processFund(
+  cik: string,
+  subs: Subscriber[],
+  resend: Resend,
+  results: ResultRow[],
+): Promise<void> {
+  const seenKey = `alerts:filing-seen:${cik}`;
+
+  const info = await getFundInfo(cik, "recent");
+  const filings = info.filings;
+  if (filings.length === 0) {
+    results.push({ cik, status: "skipped", reason: "no 13F filings" });
+    return;
+  }
+
+  // "Latest" = most recently FILED 13F (by filingDate, accession as tiebreak),
+  // so a fresh amendment of an earlier quarter still registers as a new event.
+  const latest = [...filings].sort(
+    (a, b) =>
+      b.filingDate.localeCompare(a.filingDate) ||
+      b.accessionNumber.localeCompare(a.accessionNumber),
+  )[0];
+
+  const seen = await kv.get<string>(seenKey);
+
+  // Steady state — nothing new since last hour. This is the common path.
+  if (seen === latest.accessionNumber) {
+    results.push({ cik, status: "skipped", reason: "no new filing" });
+    return;
+  }
+
+  // First time we've ever polled this fund → seed the marker silently. Without
+  // this, the first run would alert on whatever the fund last filed (possibly
+  // weeks ago). Subscribers get FUTURE filings, not back-history.
+  if (seen == null) {
+    await kv.set(seenKey, latest.accessionNumber);
+    results.push({ cik, status: "skipped", reason: "seeded (first run)" });
+    return;
+  }
+
+  // New accession. Suppress stale catch-up (e.g. cron outage): advance the
+  // marker but don't email if the filing is already older than the window.
+  const ageDays =
+    (Date.now() - new Date(latest.filingDate).getTime()) / 86_400_000;
+  if (ageDays > ALERT_FILING_MAX_AGE_DAYS) {
+    await kv.set(seenKey, latest.accessionNumber);
+    results.push({
+      cik,
+      status: "skipped",
+      reason: `new filing ${latest.filingDate} is ${ageDays.toFixed(1)}d old (stale)`,
+    });
+    return;
+  }
+
+  const fundName = DISPLAY_NAME_BY_CIK.get(cik) || info.name || `CIK ${cik}`;
+
+  // Diff the latest quarter against the most recent EARLIER quarter (skip
+  // same-period amendments so we compare period-over-period, not vs a restated
+  // copy of the same quarter).
+  const prior =
+    filings
+      .filter((f) => f.reportDate < latest.reportDate)
+      .sort((a, b) => b.reportDate.localeCompare(a.reportDate))[0] ?? null;
+
+  const [latestHoldings, priorHoldings] = await Promise.all([
+    getHoldings(cik, latest.accessionNumber, latest.filingDate),
+    prior
+      ? getHoldings(cik, prior.accessionNumber, prior.filingDate)
+      : Promise.resolve<Holding[]>([]),
+  ]);
+
+  const moves = detectMaterialMovesFromHoldings(latestHoldings, priorHoldings, {
+    cik,
+    fundName,
+    filingDate: latest.filingDate,
+  });
+
+  if (moves.length === 0) {
+    await kv.set(seenKey, latest.accessionNumber);
+    results.push({ cik, status: "skipped", reason: "new filing, no material moves" });
+    return;
+  }
+
+  results.push({
+    cik,
+    status: "filing",
+    reason: `${moves.length} material move(s) in ${latest.accessionNumber} (${latest.filingDate})`,
+  });
+
+  // Fan out to subscribers. One bad address doesn't abort the rest.
+  for (const { userId, email } of subs) {
+    const dedupKey = `alerts:last-sent:${userId}:${cik}:${latest.accessionNumber}`;
+    if (await kv.get(dedupKey)) {
+      results.push({ cik, userId, status: "skipped", reason: "already sent this filing" });
+      continue;
+    }
+    try {
+      const token = buildUnsubscribeToken(userId, cik);
+      await resend.emails.send({
+        from: FROM_EMAIL,
+        to: email,
+        subject: `[13F Alert] ${fundName} filed new moves (${latest.filingDate})`,
+        html: buildEmailHtml(fundName, cik, moves, latest.filingDate, token),
+      });
+      await kv.set(dedupKey, latest.filingDate, { ex: PER_USER_DEDUP_TTL_SECONDS });
+      results.push({ cik, userId, status: "sent" });
+    } catch (err) {
+      results.push({
+        cik,
+        userId,
+        status: "error",
+        reason: err instanceof Error ? err.message : String(err),
+      });
+    }
+  }
+
+  // Advance the per-fund marker so next hour is a no-op until the NEXT filing.
+  // Per-user dedup keys above protect against double-sends if this run was
+  // partial when it errored.
+  await kv.set(seenKey, latest.accessionNumber);
+}
+
 // ---------------------------------------------------------------------------
 // POST /api/alerts/send
-// Called by the Vercel cron or manually. Sends digest emails for all subs
-// where the latest filing is recent and hasn't been emailed already.
+// Called hourly by the Vercel cron (or manually). Polls EDGAR live for every
+// subscribed fund and emails subscribers within ~an hour of a new 13F filing.
 // ---------------------------------------------------------------------------
 export async function POST(req: NextRequest): Promise<NextResponse> {
   if (!isAuthorized(req)) {
@@ -206,143 +388,43 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const results: Array<{
-    userId: string;
-    cik: string;
-    status: "sent" | "skipped" | "error";
-    reason?: string;
-  }> = [];
+  const results: ResultRow[] = [];
+  const subscribersByCik = await loadSubscribersByCik();
 
-  // 1. Scan all alert subscription keys from KV.
-  //    Pattern: alerts:subscriptions:* → each is a Set of CIKs.
-  let cursor = 0;
-  const subKeys: string[] = [];
-  do {
-    const [nextCursor, keys] = await kv.scan(cursor, {
-      match: "alerts:subscriptions:*",
-      count: 100,
-    });
-    cursor = nextCursor as unknown as number;
-    subKeys.push(...(keys as string[]));
-  } while (cursor !== 0);
-
-  // 2. For each userId, get their CIKs and email, then process.
-  for (const key of subKeys) {
-    const userId = key.replace("alerts:subscriptions:", "");
-    const [ciks, userEmail] = await Promise.all([
-      kv.smembers(key) as Promise<string[]>,
-      kv.get<string>(`alerts:email:${userId}`),
-    ]);
-
-    if (!userEmail || !ciks || ciks.length === 0) continue;
-
-    for (const cik of ciks) {
-      const sentKey = `alerts:last-sent:${userId}:${cik}`;
-
-      // 3. Check last-sent guard (TTL-based dedup — 7 days).
-      const alreadySent = await kv.get(sentKey);
-      if (alreadySent) {
-        results.push({ userId, cik, status: "skipped", reason: "already sent within 7 days" });
-        continue;
-      }
-
-      // 4. Load snapshot.
-      const snapshot = loadSnapshot(cik);
-      if (!snapshot) {
-        results.push({ userId, cik, status: "skipped", reason: "no snapshot" });
-        continue;
-      }
-
-      // 5. Check that the latest entry is < 7 days old.
-      const allDates = Array.from(
-        new Set(snapshot.trades.map((t) => t.entryDate)),
-      ).sort();
-      const latestEntryDate = allDates[allDates.length - 1];
-      if (!latestEntryDate) {
-        results.push({ userId, cik, status: "skipped", reason: "no filings" });
-        continue;
-      }
-
-      const daysSinceFiling =
-        (Date.now() - new Date(latestEntryDate).getTime()) /
-        (1000 * 60 * 60 * 24);
-      if (daysSinceFiling > 7) {
-        results.push({
-          userId,
-          cik,
-          status: "skipped",
-          reason: `latest filing ${latestEntryDate} is ${daysSinceFiling.toFixed(1)} days old`,
-        });
-        continue;
-      }
-
-      // 5b. Resolve the actual SEC filingDate via EDGAR. Match the filing whose
-      // reportDate === latestEntryDate (i.e. treat the snapshot's entryDate
-      // as period-end). If the lookup fails — network blip, no matching
-      // reportDate, snapshot entryDate already being the filingDate, etc. —
-      // fall back to the snapshot entryDate so we still send the email.
-      let displayFilingDate = latestEntryDate;
-      try {
-        const info = await getFundInfo(cik, "recent");
-        const match = info.filings.find((f) => f.reportDate === latestEntryDate);
-        if (match?.filingDate) displayFilingDate = match.filingDate;
-      } catch {
-        // network/parse failure → keep displayFilingDate = latestEntryDate
-      }
-
-      // 6. Detect material moves.
-      const moves = detectMaterialMoves(snapshot);
-      if (moves.length === 0) {
-        results.push({ userId, cik, status: "skipped", reason: "no material moves" });
-        continue;
-      }
-
-      // 7. Send email.
-      try {
-        const unsubscribeToken = buildUnsubscribeToken(userId, cik);
-        await resend.emails.send({
-          from: FROM_EMAIL,
-          to: userEmail,
-          subject: `[13F Alert] ${snapshot.fundName} filed new moves (${displayFilingDate})`,
-          html: buildEmailHtml(
-            snapshot.fundName,
-            cik,
-            moves,
-            displayFilingDate,
-            unsubscribeToken,
-          ),
-        });
-
-        // 8. Set last-sent guard with 7-day TTL (604800 seconds).
-        await kv.set(sentKey, latestEntryDate, { ex: 604800 });
-
-        results.push({ userId, cik, status: "sent" });
-      } catch (err) {
-        results.push({
-          userId,
-          cik,
-          status: "error",
-          reason: err instanceof Error ? err.message : String(err),
-        });
-      }
+  // Process funds sequentially — getFundInfo/getHoldings already share a
+  // process-wide ~9.5 req/s SEC rate limiter, so parallelizing here wouldn't
+  // go faster and only risks tripping 429s.
+  for (const [cik, subs] of subscribersByCik) {
+    try {
+      await processFund(cik, subs, resend, results);
+    } catch (err) {
+      results.push({
+        cik,
+        status: "error",
+        reason: err instanceof Error ? err.message : String(err),
+      });
     }
   }
 
-  const sent = results.filter((r) => r.status === "sent").length;
-  const skipped = results.filter((r) => r.status === "skipped").length;
-  const errors = results.filter((r) => r.status === "error").length;
+  const tally = (s: ResultRow["status"]) =>
+    results.filter((r) => r.status === s).length;
 
   return NextResponse.json({
     ok: true,
-    summary: { sent, skipped, errors },
+    summary: {
+      fundsPolled: subscribersByCik.size,
+      newFilings: tally("filing"),
+      sent: tally("sent"),
+      skipped: tally("skipped"),
+      errors: tally("error"),
+    },
     results,
   });
 }
 
 // ---------------------------------------------------------------------------
 // GET /api/alerts/send
-// Vercel cron sends GET by default — alias to POST so the cron triggers
-// the digest run.
+// Vercel cron sends GET by default — alias to POST so the cron triggers the run.
 // ---------------------------------------------------------------------------
 export async function GET(req: NextRequest): Promise<NextResponse> {
   return POST(req);

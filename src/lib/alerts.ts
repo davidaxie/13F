@@ -1,4 +1,6 @@
 import type { FundBacktest } from "./backtest";
+import type { Holding } from "./parse-13f";
+import { tickerForCusip } from "./cusip-lookup";
 
 export type MaterialMove = {
   ticker: string;
@@ -137,5 +139,128 @@ export function detectMaterialMoves(
     );
   }
 
+  return moves;
+}
+
+// ---------------------------------------------------------------------------
+// Live variant — diff two 13F information tables fetched straight from EDGAR.
+// ---------------------------------------------------------------------------
+
+type HoldingAgg = { issuer: string; shares: number; value: number };
+
+/**
+ * Collapse an information table into one row per CUSIP.
+ *
+ * Filers routinely split a single economic position across multiple rows
+ * (different lots, sub-managers, or investment-discretion buckets), so we sum
+ * shares + value per CUSIP. Option rows (`putCall` set) are skipped so a stock
+ * and a put/call on the same issuer don't land in the same bucket — this
+ * detector is about equity positions, matching the snapshot detector's scope.
+ */
+function aggregateByCusip(holdings: Holding[]): Map<string, HoldingAgg> {
+  const map = new Map<string, HoldingAgg>();
+  for (const h of holdings) {
+    if (h.putCall) continue;
+    const cusip = h.cusip;
+    if (!cusip) continue;
+    const cur = map.get(cusip);
+    if (cur) {
+      cur.shares += h.shares || 0;
+      cur.value += h.value || 0;
+    } else {
+      map.set(cusip, {
+        issuer: h.issuer,
+        shares: h.shares || 0,
+        value: h.value || 0,
+      });
+    }
+  }
+  return map;
+}
+
+/**
+ * Detect material moves by diffing the latest 13F information table against
+ * the prior quarter's — computed LIVE from EDGAR holdings (`getHoldings`)
+ * rather than from a pre-built backtest snapshot. This is what powers the
+ * near-real-time alert cron: poll EDGAR hourly, and the moment a fund's latest
+ * filing changes, diff it here and email subscribers.
+ *
+ * `latestHoldings` / `previousHoldings` must already be unit-normalized to
+ * whole dollars (which `getHoldings` does at the data boundary).
+ *
+ * Moves returned, each gated at >= `minValueUsd`:
+ *   • "new"  — CUSIP in latest, absent in previous. valueUsd = latest value.
+ *   • "exit" — CUSIP in previous, absent in latest. valueUsd = previous value.
+ *   • "add"  — CUSIP in both with MORE shares now. valueUsd = the dollar value
+ *              of the ADDED shares at the latest price; changePercent = the
+ *              share-count increase %.
+ *
+ * Trims (share decreases) are intentionally omitted to mirror the snapshot
+ * detector. Results are sorted by descending dollar value so the biggest
+ * moves lead the email. If `previousHoldings` is empty (no prior filing),
+ * every position above threshold surfaces as "new".
+ */
+export function detectMaterialMovesFromHoldings(
+  latestHoldings: Holding[],
+  previousHoldings: Holding[],
+  meta: { cik: string; fundName: string; filingDate: string },
+  minValueUsd = 50_000_000,
+): MaterialMove[] {
+  const latest = aggregateByCusip(latestHoldings);
+  const previous = aggregateByCusip(previousHoldings);
+  const { cik, fundName, filingDate } = meta;
+
+  const moves: MaterialMove[] = [];
+
+  // NEW + ADD: walk the latest book.
+  for (const [cusip, cur] of latest) {
+    const prev = previous.get(cusip);
+    if (!prev) {
+      if (cur.value < minValueUsd) continue;
+      moves.push({
+        ticker: tickerForCusip(cusip) ?? cur.issuer,
+        issuer: cur.issuer,
+        changeType: "new",
+        valueUsd: cur.value,
+        fundName,
+        cik,
+        filingDate,
+      });
+      continue;
+    }
+    if (cur.shares > prev.shares && prev.shares > 0) {
+      const addedShares = cur.shares - prev.shares;
+      const pricePerShare = cur.shares > 0 ? cur.value / cur.shares : 0;
+      const addedValue = addedShares * pricePerShare;
+      if (addedValue < minValueUsd) continue;
+      moves.push({
+        ticker: tickerForCusip(cusip) ?? cur.issuer,
+        issuer: cur.issuer,
+        changeType: "add",
+        valueUsd: addedValue,
+        changePercent: (addedShares / prev.shares) * 100,
+        fundName,
+        cik,
+        filingDate,
+      });
+    }
+  }
+
+  // EXIT: CUSIPs that were held last quarter and are gone now.
+  for (const [cusip, prev] of previous) {
+    if (latest.has(cusip)) continue;
+    if (prev.value < minValueUsd) continue;
+    moves.push({
+      ticker: tickerForCusip(cusip) ?? prev.issuer,
+      issuer: prev.issuer,
+      changeType: "exit",
+      valueUsd: prev.value,
+      fundName,
+      cik,
+      filingDate,
+    });
+  }
+
+  moves.sort((a, b) => b.valueUsd - a.valueUsd);
   return moves;
 }

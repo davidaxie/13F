@@ -49,3 +49,6 @@ next-env.d.ts
 # committing them would create a repo-inside-a-repo). launch.json IS tracked.
 .claude/worktrees/
 
+
+# clerk configuration (can include secrets)
+/.clerk/
