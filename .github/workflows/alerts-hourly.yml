@@ -1,9 +1,10 @@
 # Hourly trigger for the 13F filing-alerts endpoint.
 #
 # Why GitHub Actions instead of Vercel cron: hourly Vercel crons require the
-# Pro plan; this is the free equivalent. The vercel.json cron stays in place
-# (on Hobby it degrades to ~daily) — a harmless duplicate, since the endpoint
-# is idempotent (per-fund filing-seen markers + per-user/per-filing dedup).
+# Pro plan — Hobby hard-REJECTS any deploy whose vercel.json cron runs more
+# than daily. vercel.json keeps a daily cron as backup; the duplicate trigger
+# is harmless since the endpoint is idempotent (per-fund filing-seen markers
+# + per-user/per-filing dedup).
 #
 # Auth: the endpoint requires "Authorization: Bearer $CRON_SECRET". Set the
 # repo secret with:  gh secret set CRON_SECRET
