@@ -1,0 +1,61 @@
+# Hourly trigger for the 13F filing-alerts endpoint.
+#
+# Why GitHub Actions instead of Vercel cron: hourly Vercel crons require the
+# Pro plan; this is the free equivalent. The vercel.json cron stays in place
+# (on Hobby it degrades to ~daily) — a harmless duplicate, since the endpoint
+# is idempotent (per-fund filing-seen markers + per-user/per-filing dedup).
+#
+# Auth: the endpoint requires "Authorization: Bearer $CRON_SECRET". Set the
+# repo secret with:  gh secret set CRON_SECRET
+#
+# GH Actions cron reliability notes (the usual reasons "it didn't work"):
+#   • Schedules ONLY run from the DEFAULT branch — this file must be on main.
+#   • Minute 7, not 0: top-of-hour queues are congested on shared runners and
+#     get delayed or occasionally skipped. Expect ±few minutes of jitter.
+#   • GitHub pauses schedules after ~60 days with no repo activity (and on
+#     public repos, may email to confirm). Any push re-enables them.
+#   • workflow_dispatch lets you test manually:  gh workflow run alerts-hourly
+name: alerts-hourly
+
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch:
+
+# Never let two runs overlap (e.g. a delayed run colliding with the next).
+concurrency:
+  group: alerts-send
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: POST /api/alerts/send
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "${CRON_SECRET:-}" ]; then
+            echo "::error::CRON_SECRET repository secret is not set (gh secret set CRON_SECRET)"
+            exit 1
+          fi
+          # Retries cover transient network errors / 5xx. Safe to retry the
+          # POST: the endpoint dedups per user+filing, so it can't double-send.
+          status=$(curl -sS -o /tmp/body.json -w '%{http_code}' \
+            --max-time 120 --retry 3 --retry-delay 15 --retry-all-errors \
+            -X POST -H "Authorization: Bearer ${CRON_SECRET}" \
+            https://13f.mapperlab.co/api/alerts/send) || {
+              echo "::error::curl failed — network error or all retries exhausted"
+              exit 1
+            }
+          echo "HTTP ${status}"
+          cat /tmp/body.json || true
+          echo
+          if [ "${status}" != "200" ]; then
+            echo "::error::alerts endpoint returned HTTP ${status} (expected 200)"
+            exit 1
+          fi
