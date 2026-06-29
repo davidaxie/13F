@@ -2,7 +2,7 @@
   "cik": "1336528",
   "fundName": "Pershing Square",
   "startDate": "2013-08-14",
-  "endDate": "2026-06-22",
+  "endDate": "2026-06-29",
   "startingCash": 10000,
   "trades": [
     {
@@ -13,12 +13,12 @@
       "entryDate": "2013-08-14",
       "exitAccession": "0001172661-13-001539",
       "exitDate": "2013-11-14",
-      "entrySharePrice": 22.35315704345703,
+      "entrySharePrice": 22.353166580200195,
       "exitSharePrice": 19.6865177154541,
       "entryValueUsd": 5073000,
       "shares": 202913,
-      "returnPct": -11.929587050360201,
-      "pnlUsd": -605187.951064773,
+      "returnPct": -11.929624624674595,
+      "pnlUsd": -605189.8572097422,
       "status": "closed"
     },
     {
@@ -61,12 +61,12 @@
       "entryDate": "2013-08-14",
       "exitAccession": "0001172661-14-001128",
       "exitDate": "2014-05-15",
-      "entrySharePrice": 56.648494720458984,
-      "exitSharePrice": 57.469058990478516,
+      "entrySharePrice": 56.64851379394531,
+      "exitSharePrice": 57.46906661987305,
       "entryValueUsd": 688301000,
       "shares": 8940133,
-      "returnPct": 1.4485191072926673,
-      "pnlUsd": 9970171.500686502,
+      "returnPct": 1.4484984176503346,
+      "pnlUsd": 9970029.09367143,
       "status": "closed"
     },
     {
@@ -189,12 +189,12 @@
       "entryDate": "2014-11-14",
       "exitAccession": "0001172661-17-000770",
       "exitDate": "2017-02-14",
-      "entrySharePrice": 39.25556564331055,
-      "exitSharePrice": 50.95455551147461,
+      "entrySharePrice": 39.25554656982422,
+      "exitSharePrice": 50.954551696777344,
       "entryValueUsd": 204587000,
       "shares": 5536862,
-      "returnPct": 29.802117677949337,
-      "pnlUsd": 60971258.49378621,
+      "returnPct": 29.802171028606097,
+      "pnlUsd": 60971367.642294355,
       "status": "closed"
     },
     {
@@ -221,12 +221,12 @@
       "entryDate": "2013-08-14",
       "exitAccession": "0001172661-17-001635",
       "exitDate": "2017-08-14",
-      "entrySharePrice": 69.68303680419922,
-      "exitSharePrice": 118.52494049072266,
+      "entrySharePrice": 69.6830062866211,
+      "exitSharePrice": 118.52494812011719,
       "entryValueUsd": 924464000,
       "shares": 10095708,
-      "returnPct": 70.09152575219015,
-      "pnlUsd": 647970922.6297271,
+      "returnPct": 70.09161119225935,
+      "pnlUsd": 647971712.4924085,
       "status": "closed"
     },
     {
@@ -237,12 +237,12 @@
       "entryDate": "2016-05-16",
       "exitAccession": "0001172661-17-002144",
       "exitDate": "2017-11-14",
-      "entrySharePrice": 7.421838760375977,
-      "exitSharePrice": 13.138538360595703,
+      "entrySharePrice": 7.421839237213135,
+      "exitSharePrice": 13.138537406921387,
       "entryValueUsd": 300333000,
       "shares": 33333334,
-      "returnPct": 77.02538124029697,
-      "pnlUsd": 231332638.2404211,
+      "returnPct": 77.02535701722965,
+      "pnlUsd": 231332565.49055633,
       "status": "closed"
     },
     {
@@ -253,12 +253,12 @@
       "entryDate": "2018-02-14",
       "exitAccession": "0001172661-18-001246",
       "exitDate": "2018-05-15",
-      "entrySharePrice": 60.394195556640625,
-      "exitSharePrice": 61.94957733154297,
+      "entrySharePrice": 60.39420700073242,
+      "exitSharePrice": 61.9495849609375,
       "entryValueUsd": 365043000,
       "shares": 5836020,
-      "returnPct": 2.5753828833494863,
-      "pnlUsd": 9401254.938865466,
+      "returnPct": 2.575376079010727,
+      "pnlUsd": 9401230.100103129,
       "status": "closed"
     },
     {
@@ -269,12 +269,12 @@
       "entryDate": "2015-11-16",
       "exitAccession": "0001172661-18-002178",
       "exitDate": "2018-11-14",
-      "entrySharePrice": 34.63268280029297,
+      "entrySharePrice": 34.6326904296875,
       "exitSharePrice": 36.410247802734375,
       "entryValueUsd": 1815749000,
       "shares": 43366342,
-      "returnPct": 5.132622883106164,
-      "pnlUsd": 93195548.67377134,
+      "returnPct": 5.13259972295752,
+      "pnlUsd": 93195128.14360395,
       "status": "closed"
     },
     {
@@ -317,12 +317,12 @@
       "entryDate": "2017-08-14",
       "exitAccession": "0001172661-19-002370",
       "exitDate": "2019-11-14",
-      "entrySharePrice": 90.19852447509766,
-      "exitSharePrice": 146.57833862304688,
+      "entrySharePrice": 90.1985092163086,
+      "exitSharePrice": 146.57830810546875,
       "entryValueUsd": 179394000,
       "shares": 1750867,
-      "returnPct": 62.50635969495795,
-      "pnlUsd": 112132658.91117287,
+      "returnPct": 62.506353352197365,
+      "pnlUsd": 112132647.53264093,
       "status": "closed"
     },
     {
@@ -349,12 +349,12 @@
       "entryDate": "2020-05-15",
       "exitAccession": "0001172661-20-001845",
       "exitDate": "2020-08-14",
-      "entrySharePrice": 41.41059494018555,
+      "entrySharePrice": 41.41059112548828,
       "exitSharePrice": 43.05613327026367,
       "entryValueUsd": 24996000,
       "shares": 548526,
-      "returnPct": 3.9737133273621827,
-      "pnlUsd": 993269.3833074511,
+      "returnPct": 3.973722905304178,
+      "pnlUsd": 993271.7774098323,
       "status": "closed"
     },
     {
@@ -365,12 +365,12 @@
       "entryDate": "2020-05-15",
       "exitAccession": "0001172661-20-001845",
       "exitDate": "2020-08-14",
-      "entrySharePrice": 5.022753715515137,
-      "exitSharePrice": 6.500032901763916,
+      "entrySharePrice": 5.022752285003662,
+      "exitSharePrice": 6.500033378601074,
       "entryValueUsd": 5362000,
       "shares": 677888,
-      "returnPct": 29.411738459035085,
-      "pnlUsd": 1577057.4161734614,
+      "returnPct": 29.4117848098562,
+      "pnlUsd": 1577059.9015044896,
       "status": "closed"
     },
     {
@@ -381,12 +381,12 @@
       "entryDate": "2019-02-14",
       "exitAccession": "0001172661-21-001367",
       "exitDate": "2021-05-17",
-      "entrySharePrice": 60.445350646972656,
-      "exitSharePrice": 98.760498046875,
+      "entrySharePrice": 60.44534683227539,
+      "exitSharePrice": 98.76049041748047,
       "entryValueUsd": 756986000,
       "shares": 11754441,
-      "returnPct": 63.38808029037602,
-      "pnlUsd": 479838893.4669058,
+      "returnPct": 63.38807797980295,
+      "pnlUsd": 479838875.97619116,
       "status": "closed"
     },
     {
@@ -397,12 +397,12 @@
       "entryDate": "2020-02-14",
       "exitAccession": "0001172661-21-002355",
       "exitDate": "2021-11-15",
-      "entrySharePrice": 82.08612060546875,
-      "exitSharePrice": 152.76126098632812,
+      "entrySharePrice": 82.08609008789062,
+      "exitSharePrice": 152.76121520996094,
       "entryValueUsd": 277097000,
       "shares": 3248114,
-      "returnPct": 86.09877024222637,
-      "pnlUsd": 238577109.37810197,
+      "returnPct": 86.09878366285635,
+      "pnlUsd": 238577146.56626505,
       "status": "closed"
     },
     {
@@ -429,12 +429,12 @@
       "entryDate": "2021-05-17",
       "exitAccession": "0001172661-22-002568",
       "exitDate": "2022-11-14",
-      "entrySharePrice": 402.82818603515625,
+      "entrySharePrice": 402.8282470703125,
       "exitSharePrice": 349.5963134765625,
       "entryValueUsd": 748712000,
       "shares": 2035704,
-      "returnPct": -13.214535229654468,
-      "pnlUsd": -98938811.00865056,
+      "returnPct": -13.214548379090829,
+      "pnlUsd": -98938909.46005853,
       "status": "closed"
     },
     {
@@ -477,12 +477,12 @@
       "entryDate": "2018-08-14",
       "exitAccession": "0001172661-24-002519",
       "exitDate": "2024-05-15",
-      "entrySharePrice": 85.25869750976562,
-      "exitSharePrice": 227.23806762695312,
+      "entrySharePrice": 85.25868225097656,
+      "exitSharePrice": 227.23805236816406,
       "entryValueUsd": 737370000,
       "shares": 7715501,
-      "returnPct": 166.52772592605584,
-      "pnlUsd": 1227925492.660958,
+      "returnPct": 166.52775572960635,
+      "pnlUsd": 1227925712.4233985,
       "status": "closed"
     },
     {
@@ -509,12 +509,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": "0001172661-25-002315",
       "exitDate": "2025-05-15",
-      "entrySharePrice": 74.81871032714844,
+      "entrySharePrice": 74.8187255859375,
       "exitSharePrice": 60.33246994018555,
       "entryValueUsd": 229134749,
       "shares": 3040132,
-      "returnPct": -19.361788413113644,
-      "pnlUsd": -44364585.28229903,
+      "returnPct": -19.361804858748766,
+      "pnlUsd": -44364622.96496379,
       "status": "closed"
     },
     {
@@ -525,12 +525,12 @@
       "entryDate": "2023-08-14",
       "exitAccession": "0001172661-25-003509",
       "exitDate": "2025-08-14",
-      "entrySharePrice": 78.89157104492188,
-      "exitSharePrice": 73.56291961669922,
+      "entrySharePrice": 78.72026824951172,
+      "exitSharePrice": 73.40318298339844,
       "entryValueUsd": 1219265797,
       "shares": 15095528,
-      "returnPct": -6.75439892709001,
-      "pnlUsd": -82354075.91094346,
+      "returnPct": -6.7544044047973095,
+      "pnlUsd": -82354142.69875503,
       "status": "closed"
     },
     {
@@ -557,12 +557,12 @@
       "entryDate": "2019-02-14",
       "exitAccession": "0001172661-26-002336",
       "exitDate": "2026-05-15",
-      "entrySharePrice": 78.45919036865234,
+      "entrySharePrice": 78.45919799804688,
       "exitSharePrice": 316.0230712890625,
       "entryValueUsd": 786029000,
       "shares": 10947479,
-      "returnPct": 302.78655668530405,
-      "pnlUsd": 2379990143.647928,
+      "returnPct": 302.78651751822576,
+      "pnlUsd": 2379989835.7833347,
       "status": "closed"
     },
     {
@@ -573,12 +573,12 @@
       "entryDate": "2015-02-17",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 30.523826599121094,
-      "exitSharePrice": 73.44000244140625,
+      "entrySharePrice": 30.247697830200195,
+      "exitSharePrice": 74.33999633789062,
       "entryValueUsd": 1483676000,
       "shares": 38003984,
-      "returnPct": 140.598937367574,
-      "pnlUsd": 2086032689.9777274,
+      "returnPct": 145.77075834071368,
+      "pnlUsd": 2162765756.5191674,
       "status": "open"
     },
     {
@@ -589,12 +589,12 @@
       "entryDate": "2023-05-15",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 115.93780517578125,
-      "exitSharePrice": 367.4599914550781,
+      "entrySharePrice": 115.93779754638672,
+      "exitSharePrice": 334.69000244140625,
       "entryValueUsd": 839256080,
       "shares": 8069770,
-      "returnPct": 216.94578907884866,
-      "pnlUsd": 1820730725.1482134,
+      "returnPct": 188.6806628420699,
+      "pnlUsd": 1583513934.6863725,
       "status": "open"
     },
     {
@@ -605,12 +605,12 @@
       "entryDate": "2023-05-15",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 115.48594665527344,
-      "exitSharePrice": 368.0299987792969,
+      "entrySharePrice": 115.48595428466797,
+      "exitSharePrice": 337.3900146484375,
       "entryValueUsd": 226650050,
       "shares": 2185000,
-      "returnPct": 218.67946658295114,
-      "pnlUsd": 495637120.34999204,
+      "returnPct": 192.14809431871296,
+      "pnlUsd": 435503751.8474101,
       "status": "open"
     },
     {
@@ -622,11 +622,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 71.0009536743164,
-      "exitSharePrice": 66.86000061035156,
+      "exitSharePrice": 72.37000274658203,
       "entryValueUsd": 1245896090,
       "shares": 16806908,
-      "returnPct": -5.832249920134203,
-      "pnlUsd": -72663773.71398015,
+      "returnPct": 1.9282122301419902,
+      "pnlUsd": 24023520.782240856,
       "status": "open"
     },
     {
@@ -638,11 +638,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 30.50023651123047,
-      "exitSharePrice": 44.439998626708984,
+      "exitSharePrice": 42.869998931884766,
       "entryValueUsd": 284736345,
       "shares": 6854510,
-      "returnPct": 45.70378367507335,
-      "pnlUsd": 130135283.16311054,
+      "returnPct": 40.55628360816033,
+      "pnlUsd": 115478479.61370984,
       "status": "open"
     },
     {
@@ -654,11 +654,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 27.8799991607666,
-      "exitSharePrice": 24.809999465942383,
+      "exitSharePrice": 27.06999969482422,
       "entryValueUsd": 57435934,
       "shares": 2094673,
-      "returnPct": -11.011476998695159,
-      "pnlUsd": -6324544.661395732,
+      "returnPct": -2.9053066367456526,
+      "pnlUsd": -1668690.0023788528,
       "status": "open"
     },
     {
@@ -670,11 +670,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 6.309999942779541,
-      "exitSharePrice": 5.050000190734863,
+      "exitSharePrice": 2.640000104904175,
       "entryValueUsd": 59100000,
       "shares": 15000000,
-      "returnPct": -19.968300530437887,
-      "pnlUsd": -11801265.613488792,
+      "returnPct": -58.16164613558996,
+      "pnlUsd": -34373532.86613367,
       "status": "open"
     },
     {
@@ -686,11 +686,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 90.16000366210938,
-      "exitSharePrice": 71.63999938964844,
+      "exitSharePrice": 76.19999694824219,
       "entryValueUsd": 2207742590,
       "shares": 30301161,
-      "returnPct": -20.541263886665252,
-      "pnlUsd": -453498231.3501981,
+      "returnPct": -15.48359155594624,
+      "pnlUsd": -341837845.24226886,
       "status": "open"
     },
     {
@@ -702,11 +702,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 230.97999572753906,
-      "exitSharePrice": 244.38999938964844,
+      "exitSharePrice": 232.69000244140625,
       "entryValueUsd": 1277577297,
       "shares": 5823316,
-      "returnPct": 5.80569915583844,
-      "pnlUsd": 74172294.34711255,
+      "returnPct": 0.740326757943266,
+      "pnlUsd": 9458246.58309931,
       "status": "open"
     },
     {
@@ -717,12 +717,12 @@
       "entryDate": "2026-02-17",
       "exitAccession": null,
       "exitDate": null,
-      "entrySharePrice": 638.151611328125,
-      "exitSharePrice": 577.219970703125,
+      "entrySharePrice": 638.1516723632812,
+      "exitSharePrice": 550.25,
       "entryValueUsd": 1764796161,
       "shares": 2673569,
-      "returnPct": -9.548144914683942,
-      "pnlUsd": -168505294.9010589,
+      "returnPct": -13.774416987383741,
+      "pnlUsd": -243090382.19348013,
       "status": "open"
     },
     {
@@ -734,11 +734,11 @@
       "exitAccession": null,
       "exitDate": null,
       "entrySharePrice": 421.0081481933594,
-      "exitSharePrice": 379.3999938964844,
+      "exitSharePrice": 372.9700012207031,
       "entryValueUsd": 2092970053,
       "shares": 5654078,
-      "returnPct": -9.88298076306241,
-      "pnlUsd": -206847827.7146471,
+      "returnPct": -11.410265378187745,
+      "pnlUsd": -238813437.3332967,
       "status": "open"
     }
   ],
@@ -749,12 +749,12 @@
       "issuer": "MATSON INC",
       "buyAccession": "0001172661-13-001220",
       "buyDate": "2013-08-14",
-      "buyPrice": 22.35315704345703,
+      "buyPrice": 22.353166580200195,
       "sharesAdded": 202913,
       "sellAccession": "0001172661-13-001539",
       "sellDate": "2013-11-14",
       "sellPrice": 19.6865177154541,
-      "returnPct": -11.929587050360201,
+      "returnPct": -11.929624624674595,
       "status": "closed"
     },
     {
@@ -763,12 +763,12 @@
       "issuer": "PROCTER & GAMBLE CO",
       "buyAccession": "0001172661-13-001220",
       "buyDate": "2013-08-14",
-      "buyPrice": 56.648494720458984,
+      "buyPrice": 56.64851379394531,
       "sharesAdded": 8940133,
       "sellAccession": "0001172661-14-001128",
       "sellDate": "2014-05-15",
-      "sellPrice": 57.469058990478516,
-      "returnPct": 1.4485191072926673,
+      "sellPrice": 57.46906661987305,
+      "returnPct": 1.4484984176503346,
       "status": "closed"
     },
     {
@@ -777,12 +777,12 @@
       "issuer": "ZOETIS INC",
       "buyAccession": "0001172661-14-001862",
       "buyDate": "2014-11-14",
-      "buyPrice": 39.25556564331055,
+      "buyPrice": 39.25554656982422,
       "sharesAdded": 5536862,
       "sellAccession": "0001172661-17-000770",
       "sellDate": "2017-02-14",
-      "sellPrice": 50.95455551147461,
-      "returnPct": 29.802117677949337,
+      "sellPrice": 50.954551696777344,
+      "returnPct": 29.802171028606097,
       "status": "closed"
     },
     {
@@ -791,12 +791,12 @@
       "issuer": "ZOETIS INC",
       "buyAccession": "0001172661-15-000727",
       "buyDate": "2015-02-17",
-      "buyPrice": 42.119075775146484,
+      "buyPrice": 42.11908721923828,
       "sharesAdded": 36032784,
       "sellAccession": "0001172661-17-000770",
       "sellDate": "2017-02-14",
-      "sellPrice": 50.95455551147461,
-      "returnPct": 20.97738275050598,
+      "sellPrice": 50.954551696777344,
+      "returnPct": 20.977340823054156,
       "status": "closed"
     },
     {
@@ -805,12 +805,12 @@
       "issuer": "ZOETIS INC",
       "buyAccession": "0001172661-15-001225",
       "buyDate": "2015-05-15",
-      "buyPrice": 42.45953369140625,
+      "buyPrice": 42.459529876708984,
       "sharesAdded": 253499,
       "sellAccession": "0001172661-17-000770",
       "sellDate": "2017-02-14",
-      "sellPrice": 50.95455551147461,
-      "returnPct": 20.007336589727398,
+      "sellPrice": 50.954551696777344,
+      "returnPct": 20.00733838724924,
       "status": "closed"
     },
     {
@@ -819,12 +819,12 @@
       "issuer": "AIR PRODS & CHEMS INC",
       "buyAccession": "0001172661-13-001220",
       "buyDate": "2013-08-14",
-      "buyPrice": 69.68303680419922,
+      "buyPrice": 69.6830062866211,
       "sharesAdded": 10095708,
       "sellAccession": "0001172661-17-001635",
       "sellDate": "2017-08-14",
-      "sellPrice": 118.52494049072266,
-      "returnPct": 70.09152575219015,
+      "sellPrice": 118.52494812011719,
+      "returnPct": 70.09161119225935,
       "status": "closed"
     },
     {
@@ -833,12 +833,12 @@
       "issuer": "AIR PRODS & CHEMS INC",
       "buyAccession": "0001172661-13-001539",
       "buyDate": "2013-11-14",
-      "buyPrice": 74.15594482421875,
+      "buyPrice": 74.15592193603516,
       "sharesAdded": 10449576,
       "sellAccession": "0001172661-17-001635",
       "sellDate": "2017-08-14",
-      "sellPrice": 118.52494049072266,
-      "returnPct": 59.83201450898827,
+      "sellPrice": 118.52494812011719,
+      "returnPct": 59.832074129364244,
       "status": "closed"
     },
     {
@@ -847,12 +847,12 @@
       "issuer": "AIR PRODS & CHEMS INC",
       "buyAccession": "0001172661-14-000750",
       "buyDate": "2014-02-14",
-      "buyPrice": 80.60413360595703,
+      "buyPrice": 80.6041259765625,
       "sharesAdded": 3792,
       "sellAccession": "0001172661-17-001635",
       "sellDate": "2017-08-14",
-      "sellPrice": 118.52494049072266,
-      "returnPct": 47.04573473879891,
+      "sellPrice": 118.52494812011719,
+      "returnPct": 47.04575812233362,
       "status": "closed"
     },
     {
@@ -861,12 +861,12 @@
       "issuer": "NOMAD HLDGS LTD",
       "buyAccession": "0001172661-16-003442",
       "buyDate": "2016-05-16",
-      "buyPrice": 7.421838760375977,
+      "buyPrice": 7.421839237213135,
       "sharesAdded": 33333334,
       "sellAccession": "0001172661-17-002144",
       "sellDate": "2017-11-14",
-      "sellPrice": 13.138538360595703,
-      "returnPct": 77.02538124029697,
+      "sellPrice": 13.138537406921387,
+      "returnPct": 77.02535701722965,
       "status": "closed"
     },
     {
@@ -875,12 +875,12 @@
       "issuer": "NIKE INC",
       "buyAccession": "0001172661-18-000802",
       "buyDate": "2018-02-14",
-      "buyPrice": 60.394195556640625,
+      "buyPrice": 60.39420700073242,
       "sharesAdded": 5836020,
       "sellAccession": "0001172661-18-001246",
       "sellDate": "2018-05-15",
-      "sellPrice": 61.94957733154297,
-      "returnPct": 2.5753828833494863,
+      "sellPrice": 61.9495849609375,
+      "returnPct": 2.575376079010727,
       "status": "closed"
     },
     {
@@ -889,12 +889,12 @@
       "issuer": "MONDELEZ INTL INC",
       "buyAccession": "0001172661-15-002091",
       "buyDate": "2015-11-16",
-      "buyPrice": 34.63268280029297,
+      "buyPrice": 34.6326904296875,
       "sharesAdded": 43366342,
       "sellAccession": "0001172661-18-002178",
       "sellDate": "2018-11-14",
       "sellPrice": 36.410247802734375,
-      "returnPct": 5.132622883106164,
+      "returnPct": 5.13259972295752,
       "status": "closed"
     },
     {
@@ -903,12 +903,12 @@
       "issuer": "MONDELEZ INTL INC",
       "buyAccession": "0001172661-18-000802",
       "buyDate": "2018-02-14",
-      "buyPrice": 35.1489372253418,
+      "buyPrice": 35.14893341064453,
       "sharesAdded": 9328957,
       "sellAccession": "0001172661-18-002178",
       "sellDate": "2018-11-14",
       "sellPrice": 36.410247802734375,
-      "returnPct": 3.5884742952717152,
+      "returnPct": 3.5884855376802527,
       "status": "closed"
     },
     {
@@ -917,12 +917,12 @@
       "issuer": "MONDELEZ INTL INC",
       "buyAccession": "0001172661-18-001700",
       "buyDate": "2018-08-14",
-      "buyPrice": 34.62820053100586,
+      "buyPrice": 34.628204345703125,
       "sharesAdded": 215122,
       "sellAccession": "0001172661-18-002178",
       "sellDate": "2018-11-14",
       "sellPrice": 36.410247802734375,
-      "returnPct": 5.146231234663445,
+      "returnPct": 5.146219651589812,
       "status": "closed"
     },
     {
@@ -931,12 +931,12 @@
       "issuer": "AUTOMATIC DATA PROCESSING IN",
       "buyAccession": "0001172661-17-001635",
       "buyDate": "2017-08-14",
-      "buyPrice": 90.19852447509766,
+      "buyPrice": 90.1985092163086,
       "sharesAdded": 1750867,
       "sellAccession": "0001172661-19-002370",
       "sellDate": "2019-11-14",
-      "sellPrice": 146.57833862304688,
-      "returnPct": 62.50635969495795,
+      "sellPrice": 146.57830810546875,
+      "returnPct": 62.506353352197365,
       "status": "closed"
     },
     {
@@ -945,12 +945,12 @@
       "issuer": "AUTOMATIC DATA PROCESSING IN",
       "buyAccession": "0001172661-17-002144",
       "buyDate": "2017-11-14",
-      "buyPrice": 92.65258026123047,
+      "buyPrice": 92.652587890625,
       "sharesAdded": 7047575,
       "sellAccession": "0001172661-19-002370",
       "sellDate": "2019-11-14",
-      "sellPrice": 146.57833862304688,
-      "returnPct": 58.20211181358874,
+      "sellPrice": 146.57830810546875,
+      "returnPct": 58.202065848934794,
       "status": "closed"
     },
     {
@@ -959,12 +959,12 @@
       "issuer": "AUTOMATIC DATA PROCESSING IN",
       "buyAccession": "0001172661-19-000851",
       "buyDate": "2019-02-14",
-      "buyPrice": 125.74588775634766,
+      "buyPrice": 125.74593353271484,
       "sharesAdded": 40699,
       "sellAccession": "0001172661-19-002370",
       "sellDate": "2019-11-14",
-      "sellPrice": 146.57833862304688,
-      "returnPct": 16.567103098484903,
+      "sellPrice": 146.57830810546875,
+      "returnPct": 16.567036394329214,
       "status": "closed"
     },
     {
@@ -973,12 +973,12 @@
       "issuer": "BLACKSTONE GROUP INC",
       "buyAccession": "0001172661-20-001409",
       "buyDate": "2020-05-15",
-      "buyPrice": 41.41059494018555,
+      "buyPrice": 41.41059112548828,
       "sharesAdded": 548526,
       "sellAccession": "0001172661-20-001845",
       "sellDate": "2020-08-14",
       "sellPrice": 43.05613327026367,
-      "returnPct": 3.9737133273621827,
+      "returnPct": 3.973722905304178,
       "status": "closed"
     },
     {
@@ -987,12 +987,12 @@
       "issuer": "PARK HOTELS RESORTS INC",
       "buyAccession": "0001172661-20-001409",
       "buyDate": "2020-05-15",
-      "buyPrice": 5.022753715515137,
+      "buyPrice": 5.022752285003662,
       "sharesAdded": 677888,
       "sellAccession": "0001172661-20-001845",
       "sellDate": "2020-08-14",
-      "sellPrice": 6.500032901763916,
-      "returnPct": 29.411738459035085,
+      "sellPrice": 6.500033378601074,
+      "returnPct": 29.4117848098562,
       "status": "closed"
     },
     {
@@ -1001,12 +1001,12 @@
       "issuer": "STARBUCKS CORP",
       "buyAccession": "0001172661-19-000851",
       "buyDate": "2019-02-14",
-      "buyPrice": 60.445350646972656,
+      "buyPrice": 60.44534683227539,
       "sharesAdded": 11754441,
       "sellAccession": "0001172661-21-001367",
       "sellDate": "2021-05-17",
-      "sellPrice": 98.760498046875,
-      "returnPct": 63.38808029037602,
+      "sellPrice": 98.76049041748047,
+      "returnPct": 63.38807797980295,
       "status": "closed"
     },
     {
@@ -1015,12 +1015,12 @@
       "issuer": "STARBUCKS CORP",
       "buyAccession": "0001172661-20-001409",
       "buyDate": "2020-05-15",
-      "buyPrice": 64.79473114013672,
+      "buyPrice": 64.79471588134766,
       "sharesAdded": 4673054,
       "sellAccession": "0001172661-21-001367",
       "sellDate": "2021-05-17",
-      "sellPrice": 98.760498046875,
-      "returnPct": 52.420569248567176,
+      "sellPrice": 98.76049041748047,
+      "returnPct": 52.42059336803187,
       "status": "closed"
     },
     {
@@ -1029,12 +1029,12 @@
       "issuer": "AGILENT TECHNOLOGIES INC",
       "buyAccession": "0001172661-20-000821",
       "buyDate": "2020-02-14",
-      "buyPrice": 82.08612060546875,
+      "buyPrice": 82.08609008789062,
       "sharesAdded": 3248114,
       "sellAccession": "0001172661-21-002355",
       "sellDate": "2021-11-15",
-      "sellPrice": 152.76126098632812,
-      "returnPct": 86.09877024222637,
+      "sellPrice": 152.76121520996094,
+      "returnPct": 86.09878366285635,
       "status": "closed"
     },
     {
@@ -1043,12 +1043,12 @@
       "issuer": "AGILENT TECHNOLOGIES INC",
       "buyAccession": "0001172661-20-001409",
       "buyDate": "2020-05-15",
-      "buyPrice": 78.23876953125,
+      "buyPrice": 78.2387466430664,
       "sharesAdded": 9378479,
       "sellAccession": "0001172661-21-002355",
       "sellDate": "2021-11-15",
-      "sellPrice": 152.76126098632812,
-      "returnPct": 95.25008113185174,
+      "sellPrice": 152.76121520996094,
+      "returnPct": 95.25007974229709,
       "status": "closed"
     },
     {
@@ -1071,12 +1071,12 @@
       "issuer": "DOMINOS PIZZA INC",
       "buyAccession": "0001172661-21-001367",
       "buyDate": "2021-05-17",
-      "buyPrice": 402.82818603515625,
+      "buyPrice": 402.8282470703125,
       "sharesAdded": 2035704,
       "sellAccession": "0001172661-22-002568",
       "sellDate": "2022-11-14",
       "sellPrice": 349.5963134765625,
-      "returnPct": -13.214535229654468,
+      "returnPct": -13.214548379090829,
       "status": "closed"
     },
     {
@@ -1085,12 +1085,12 @@
       "issuer": "DOMINOS PIZZA INC",
       "buyAccession": "0001172661-21-001865",
       "buyDate": "2021-08-16",
-      "buyPrice": 478.57818603515625,
+      "buyPrice": 478.5782165527344,
       "sharesAdded": 3466,
       "sellAccession": "0001172661-22-002568",
       "sellDate": "2022-11-14",
       "sellPrice": 349.5963134765625,
-      "returnPct": -26.951055506136,
+      "returnPct": -26.951060164260397,
       "status": "closed"
     },
     {
@@ -1099,12 +1099,12 @@
       "issuer": "DOMINOS PIZZA INC",
       "buyAccession": "0001172661-21-002355",
       "buyDate": "2021-11-15",
-      "buyPrice": 483.31854248046875,
+      "buyPrice": 483.3185729980469,
       "sharesAdded": 53032,
       "sellAccession": "0001172661-22-002568",
       "sellDate": "2022-11-14",
       "sellPrice": 349.5963134765625,
-      "returnPct": -27.667514744545528,
+      "returnPct": -27.667519311744883,
       "status": "closed"
     },
     {
@@ -1113,12 +1113,12 @@
       "issuer": "LOWES COS INC",
       "buyAccession": "0001172661-18-001700",
       "buyDate": "2018-08-14",
-      "buyPrice": 85.25869750976562,
+      "buyPrice": 85.25868225097656,
       "sharesAdded": 7715501,
       "sellAccession": "0001172661-24-002519",
       "sellDate": "2024-05-15",
-      "sellPrice": 227.23806762695312,
-      "returnPct": 166.52772592605584,
+      "sellPrice": 227.23805236816406,
+      "returnPct": 166.52775572960635,
       "status": "closed"
     },
     {
@@ -1127,12 +1127,12 @@
       "issuer": "LOWES COS INC",
       "buyAccession": "0001172661-18-002178",
       "buyDate": "2018-11-14",
-      "buyPrice": 82.63793182373047,
+      "buyPrice": 82.637939453125,
       "sharesAdded": 723300,
       "sellAccession": "0001172661-24-002519",
       "sellDate": "2024-05-15",
-      "sellPrice": 227.23806762695312,
-      "returnPct": 174.9803420923695,
+      "sellPrice": 227.23805236816406,
+      "returnPct": 174.98029824069016,
       "status": "closed"
     },
     {
@@ -1141,12 +1141,12 @@
       "issuer": "LOWES COS INC",
       "buyAccession": "0001172661-19-000851",
       "buyDate": "2019-02-14",
-      "buyPrice": 88.83349609375,
+      "buyPrice": 88.8334732055664,
       "sharesAdded": 1097790,
       "sellAccession": "0001172661-24-002519",
       "sellDate": "2024-05-15",
-      "sellPrice": 227.23806762695312,
-      "returnPct": 155.80223408874792,
+      "sellPrice": 227.23805236816406,
+      "returnPct": 155.8022828200362,
       "status": "closed"
     },
     {
@@ -1155,12 +1155,12 @@
       "issuer": "LOWES COS INC",
       "buyAccession": "0001172661-20-001409",
       "buyDate": "2020-05-15",
-      "buyPrice": 102.07621765136719,
+      "buyPrice": 102.07624053955078,
       "sharesAdded": 3639202,
       "sellAccession": "0001172661-24-002519",
       "sellDate": "2024-05-15",
-      "sellPrice": 227.23806762695312,
-      "returnPct": 122.61607341591146,
+      "sellPrice": 227.23805236816406,
+      "returnPct": 122.61600855109637,
       "status": "closed"
     },
     {
@@ -1169,12 +1169,12 @@
       "issuer": "LOWES COS INC",
       "buyAccession": "0001172661-20-001845",
       "buyDate": "2020-08-14",
-      "buyPrice": 138.9945831298828,
+      "buyPrice": 138.99461364746094,
       "sharesAdded": 456439,
       "sellAccession": "0001172661-24-002519",
       "sellDate": "2024-05-15",
-      "sellPrice": 227.23806762695312,
-      "returnPct": 63.48699532744497,
+      "sellPrice": 227.23805236816406,
+      "returnPct": 63.486948454362,
       "status": "closed"
     },
     {
@@ -1183,12 +1183,12 @@
       "issuer": "LOWES COS INC",
       "buyAccession": "0001172661-21-002355",
       "buyDate": "2021-11-15",
-      "buyPrice": 215.33120727539062,
+      "buyPrice": 215.33123779296875,
       "sharesAdded": 95951,
       "sellAccession": "0001172661-24-002519",
       "sellDate": "2024-05-15",
-      "sellPrice": 227.23806762695312,
-      "returnPct": 5.529556306408767,
+      "sellPrice": 227.23805236816406,
+      "returnPct": 5.529534264156877,
       "status": "closed"
     },
     {
@@ -1197,12 +1197,12 @@
       "issuer": "LOWES COS INC",
       "buyAccession": "0001172661-22-002568",
       "buyDate": "2022-11-14",
-      "buyPrice": 191.08242797851562,
+      "buyPrice": 191.08241271972656,
       "sharesAdded": 167495,
       "sellAccession": "0001172661-24-002519",
       "sellDate": "2024-05-15",
-      "sellPrice": 227.23806762695312,
-      "returnPct": 18.92148850678339,
+      "sellPrice": 227.23805236816406,
+      "returnPct": 18.921490017749253,
       "status": "closed"
     },
     {
@@ -1211,12 +1211,12 @@
       "issuer": "NIKE INC",
       "buyAccession": "0001172661-24-003511",
       "buyDate": "2024-08-14",
-      "buyPrice": 74.81871032714844,
+      "buyPrice": 74.8187255859375,
       "sharesAdded": 3040132,
       "sellAccession": "0001172661-25-002315",
       "sellDate": "2025-05-15",
       "sellPrice": 60.33246994018555,
-      "returnPct": -19.361788413113644,
+      "returnPct": -19.361804858748766,
       "status": "closed"
     },
     {
@@ -1239,12 +1239,12 @@
       "issuer": "NIKE INC",
       "buyAccession": "0001172661-25-001119",
       "buyDate": "2025-02-14",
-      "buyPrice": 70.26429748535156,
+      "buyPrice": 70.26428985595703,
       "sharesAdded": 2488608,
       "sellAccession": "0001172661-25-002315",
       "sellDate": "2025-05-15",
       "sellPrice": 60.33246994018555,
-      "returnPct": -14.13495601693956,
+      "returnPct": -14.13494669359341,
       "status": "closed"
     },
     {
@@ -1253,12 +1253,12 @@
       "issuer": "CANADIAN PACIFIC KANSAS CITY",
       "buyAccession": "0001172661-23-003137",
       "buyDate": "2023-08-14",
-      "buyPrice": 78.89157104492188,
+      "buyPrice": 78.72026824951172,
       "sharesAdded": 15095528,
       "sellAccession": "0001172661-25-003509",
       "sellDate": "2025-08-14",
-      "sellPrice": 73.56291961669922,
-      "returnPct": -6.75439892709001,
+      "sellPrice": 73.40318298339844,
+      "returnPct": -6.7544044047973095,
       "status": "closed"
     },
     {
@@ -1323,12 +1323,12 @@
       "issuer": "HILTON WORLDWIDE HLDGS INC",
       "buyAccession": "0001172661-19-000851",
       "buyDate": "2019-02-14",
-      "buyPrice": 78.45919036865234,
+      "buyPrice": 78.45919799804688,
       "sharesAdded": 10947479,
       "sellAccession": "0001172661-26-002336",
       "sellDate": "2026-05-15",
       "sellPrice": 316.0230712890625,
-      "returnPct": 302.78655668530405,
+      "returnPct": 302.78651751822576,
       "status": "closed"
     },
     {
@@ -1337,12 +1337,12 @@
       "issuer": "HILTON WORLDWIDE HLDGS INC",
       "buyAccession": "0001172661-19-001365",
       "buyDate": "2019-05-15",
-      "buyPrice": 91.82794189453125,
+      "buyPrice": 91.82794952392578,
       "sharesAdded": 18772,
       "sellAccession": "0001172661-26-002336",
       "sellDate": "2026-05-15",
       "sellPrice": 316.0230712890625,
-      "returnPct": 244.14696090219468,
+      "returnPct": 244.1469323092341,
       "status": "closed"
     },
     {
@@ -1351,12 +1351,12 @@
       "issuer": "HILTON WORLDWIDE HLDGS INC",
       "buyAccession": "0001172661-20-001409",
       "buyDate": "2020-05-15",
-      "buyPrice": 67.62791442871094,
+      "buyPrice": 67.62794494628906,
       "sharesAdded": 3232784,
       "sellAccession": "0001172661-26-002336",
       "sellDate": "2026-05-15",
       "sellPrice": 316.0230712890625,
-      "returnPct": 367.2967870718444,
+      "returnPct": 367.29657620093565,
       "status": "closed"
     },
     {
@@ -1365,12 +1365,12 @@
       "issuer": "HILTON WORLDWIDE HLDGS INC",
       "buyAccession": "0001172661-21-002355",
       "buyDate": "2021-11-15",
-      "buyPrice": 141.00830078125,
+      "buyPrice": 141.00827026367188,
       "sharesAdded": 125307,
       "sellAccession": "0001172661-26-002336",
       "sellDate": "2026-05-15",
       "sellPrice": 316.0230712890625,
-      "returnPct": 124.11664387000711,
+      "returnPct": 124.11669237423438,
       "status": "closed"
     },
     {
@@ -1379,12 +1379,12 @@
       "issuer": "HILTON WORLDWIDE HLDGS INC",
       "buyAccession": "0001172661-22-002568",
       "buyDate": "2022-11-14",
-      "buyPrice": 137.38153076171875,
+      "buyPrice": 137.38150024414062,
       "sharesAdded": 122978,
       "sellAccession": "0001172661-26-002336",
       "sellDate": "2026-05-15",
       "sellPrice": 316.0230712890625,
-      "returnPct": 130.03315623057685,
+      "returnPct": 130.03320732955893,
       "status": "closed"
     },
     {
@@ -1393,12 +1393,12 @@
       "issuer": "HILTON WORLDWIDE HLDGS INC",
       "buyAccession": "0001172661-23-003137",
       "buyDate": "2023-08-14",
-      "buyPrice": 154.09678649902344,
+      "buyPrice": 154.0967559814453,
       "sharesAdded": 33812,
       "sellAccession": "0001172661-26-002336",
       "sellDate": "2026-05-15",
       "sellPrice": 316.0230712890625,
-      "returnPct": 105.08089653840074,
+      "returnPct": 105.08093715296295,
       "status": "closed"
     },
     {
@@ -1407,12 +1407,12 @@
       "issuer": "HILTON WORLDWIDE HLDGS INC",
       "buyAccession": "0001172661-23-004016",
       "buyDate": "2023-11-14",
-      "buyPrice": 165.8805389404297,
+      "buyPrice": 165.88055419921875,
       "sharesAdded": 972647,
       "sellAccession": "0001172661-26-002336",
       "sellDate": "2026-05-15",
       "sellPrice": 316.0230712890625,
-      "returnPct": 90.51244546688588,
+      "returnPct": 90.51242794229275,
       "status": "closed"
     },
     {
@@ -1435,12 +1435,12 @@
       "issuer": "RESTAURANT BRANDS INTL INC",
       "buyAccession": "0001172661-15-000727",
       "buyDate": "2015-02-17",
-      "buyPrice": 30.523826599121094,
+      "buyPrice": 30.247697830200195,
       "sharesAdded": 38003984,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 73.44000244140625,
-      "returnPct": 140.598937367574,
+      "sellPrice": 74.33999633789062,
+      "returnPct": 145.77075834071368,
       "status": "open"
     },
     {
@@ -1449,12 +1449,12 @@
       "issuer": "RESTAURANT BRANDS INTL INC",
       "buyAccession": "0001172661-16-003442",
       "buyDate": "2016-05-16",
-      "buyPrice": 29.728713989257812,
+      "buyPrice": 29.459768295288086,
       "sharesAdded": 1146567,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 73.44000244140625,
-      "returnPct": 147.03390287229746,
+      "sellPrice": 74.33999633789062,
+      "returnPct": 152.34413113079665,
       "status": "open"
     },
     {
@@ -1463,12 +1463,12 @@
       "issuer": "RESTAURANT BRANDS INTL INC",
       "buyAccession": "0001172661-20-001845",
       "buyDate": "2020-08-14",
-      "buyPrice": 44.573158264160156,
+      "buyPrice": 44.169918060302734,
       "sharesAdded": 10034712,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 73.44000244140625,
-      "returnPct": 64.76284226073562,
+      "sellPrice": 74.33999633789062,
+      "returnPct": 68.30458285296876,
       "status": "open"
     },
     {
@@ -1477,12 +1477,12 @@
       "issuer": "RESTAURANT BRANDS INTL INC",
       "buyAccession": "0001172661-21-002355",
       "buyDate": "2021-11-15",
-      "buyPrice": 49.90199279785156,
+      "buyPrice": 49.45054626464844,
       "sharesAdded": 240331,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 73.44000244140625,
-      "returnPct": 47.16847629493481,
+      "sellPrice": 74.33999633789062,
+      "returnPct": 50.33200227969037,
       "status": "open"
     },
     {
@@ -1491,12 +1491,12 @@
       "issuer": "RESTAURANT BRANDS INTL INC",
       "buyAccession": "0001172661-22-002568",
       "buyDate": "2022-11-14",
-      "buyPrice": 53.18001937866211,
+      "buyPrice": 52.698917388916016,
       "sharesAdded": 371525,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 73.44000244140625,
-      "returnPct": 38.09698322688697,
+      "sellPrice": 74.33999633789062,
+      "returnPct": 41.06550954218711,
       "status": "open"
     },
     {
@@ -1505,12 +1505,12 @@
       "issuer": "ALPHABET INC",
       "buyAccession": "0001172661-23-002303",
       "buyDate": "2023-05-15",
-      "buyPrice": 115.93780517578125,
+      "buyPrice": 115.93779754638672,
       "sharesAdded": 8069770,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 367.4599914550781,
-      "returnPct": 216.94578907884866,
+      "sellPrice": 334.69000244140625,
+      "returnPct": 188.6806628420699,
       "status": "open"
     },
     {
@@ -1519,12 +1519,12 @@
       "issuer": "ALPHABET INC",
       "buyAccession": "0001172661-23-003137",
       "buyDate": "2023-08-14",
-      "buyPrice": 130.6778564453125,
+      "buyPrice": 130.67787170410156,
       "sharesAdded": 1307425,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 367.4599914550781,
-      "returnPct": 181.19530075767415,
+      "sellPrice": 334.69000244140625,
+      "returnPct": 156.11834511603954,
       "status": "open"
     },
     {
@@ -1533,12 +1533,12 @@
       "issuer": "ALPHABET INC",
       "buyAccession": "0001172661-23-002303",
       "buyDate": "2023-05-15",
-      "buyPrice": 115.48594665527344,
+      "buyPrice": 115.48595428466797,
       "sharesAdded": 2185000,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 368.0299987792969,
-      "returnPct": 218.67946658295114,
+      "sellPrice": 337.3900146484375,
+      "returnPct": 192.14809431871296,
       "status": "open"
     },
     {
@@ -1551,8 +1551,8 @@
       "sharesAdded": 2169824,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 368.0299987792969,
-      "returnPct": 177.8726336421407,
+      "sellPrice": 337.3900146484375,
+      "returnPct": 154.7386143680732,
       "status": "open"
     },
     {
@@ -1561,12 +1561,12 @@
       "issuer": "ALPHABET INC",
       "buyAccession": "0001172661-25-002315",
       "buyDate": "2025-05-15",
-      "buyPrice": 163.2958984375,
+      "buyPrice": 163.29591369628906,
       "sharesAdded": 451492,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 368.0299987792969,
-      "returnPct": 125.37614373710491,
+      "sellPrice": 337.3900146484375,
+      "returnPct": 106.61265001152613,
       "status": "open"
     },
     {
@@ -1579,8 +1579,8 @@
       "sharesAdded": 925000,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 368.0299987792969,
-      "returnPct": 81.86651799172404,
+      "sellPrice": 337.3900146484375,
+      "returnPct": 66.72539568190177,
       "status": "open"
     },
     {
@@ -1593,8 +1593,8 @@
       "sharesAdded": 16806908,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 66.86000061035156,
-      "returnPct": -5.832249920134203,
+      "sellPrice": 72.37000274658203,
+      "returnPct": 1.9282122301419902,
       "status": "open"
     },
     {
@@ -1607,8 +1607,8 @@
       "sharesAdded": 2045156,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 66.86000061035156,
-      "returnPct": -8.114585598539815,
+      "sellPrice": 72.37000274658203,
+      "returnPct": -0.5422131034955702,
       "status": "open"
     },
     {
@@ -1621,8 +1621,8 @@
       "sharesAdded": 6854510,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 44.439998626708984,
-      "returnPct": 45.70378367507335,
+      "sellPrice": 42.869998931884766,
+      "returnPct": 40.55628360816033,
       "status": "open"
     },
     {
@@ -1635,8 +1635,8 @@
       "sharesAdded": 25881373,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 44.439998626708984,
-      "returnPct": 16.570450867903432,
+      "sellPrice": 42.869998931884766,
+      "returnPct": 12.452188537937126,
       "status": "open"
     },
     {
@@ -1649,8 +1649,8 @@
       "sharesAdded": 2157181,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 44.439998626708984,
-      "returnPct": 10.449534406831251,
+      "sellPrice": 42.869998931884766,
+      "returnPct": 6.547515039801333,
       "status": "open"
     },
     {
@@ -1659,12 +1659,12 @@
       "issuer": "BROOKFIELD CORP",
       "buyAccession": "0001172661-25-002315",
       "buyDate": "2025-05-15",
-      "buyPrice": 39.51612091064453,
+      "buyPrice": 39.51613235473633,
       "sharesAdded": 6111593,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 44.439998626708984,
-      "returnPct": 12.460427801601593,
+      "sellPrice": 42.869998931884766,
+      "returnPct": 8.487335114278839,
       "status": "open"
     },
     {
@@ -1673,12 +1673,12 @@
       "issuer": "BROOKFIELD CORP",
       "buyAccession": "0001172661-25-003509",
       "buyDate": "2025-08-14",
-      "buyPrice": 43.47291564941406,
+      "buyPrice": 43.4729118347168,
       "sharesAdded": 155740,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 44.439998626708984,
-      "returnPct": 2.2245643358589806,
+      "sellPrice": 42.869998931884766,
+      "returnPct": -1.3868703001176819,
       "status": "open"
     },
     {
@@ -1687,12 +1687,12 @@
       "issuer": "BROOKFIELD CORP",
       "buyAccession": "0001172661-26-001091",
       "buyDate": "2026-02-17",
-      "buyPrice": 47.620697021484375,
+      "buyPrice": 47.62070083618164,
       "sharesAdded": 20382858,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 44.439998626708984,
-      "returnPct": -6.679235277342532,
+      "sellPrice": 42.869998931884766,
+      "returnPct": -9.97612765221495,
       "status": "open"
     },
     {
@@ -1705,8 +1705,8 @@
       "sharesAdded": 2094673,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 24.809999465942383,
-      "returnPct": -11.011476998695159,
+      "sellPrice": 27.06999969482422,
+      "returnPct": -2.9053066367456526,
       "status": "open"
     },
     {
@@ -1719,8 +1719,8 @@
       "sharesAdded": 2929107,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 24.809999465942383,
-      "returnPct": -4.39306845271914,
+      "sellPrice": 27.06999969482422,
+      "returnPct": 4.315988049928277,
       "status": "open"
     },
     {
@@ -1733,8 +1733,8 @@
       "sharesAdded": 15000000,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 5.050000190734863,
-      "returnPct": -19.968300530437887,
+      "sellPrice": 2.640000104904175,
+      "returnPct": -58.16164613558996,
       "status": "open"
     },
     {
@@ -1747,8 +1747,8 @@
       "sharesAdded": 241127,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 5.050000190734863,
-      "returnPct": -3.6259463489013988,
+      "sellPrice": 2.640000104904175,
+      "returnPct": -49.61831640804013,
       "status": "open"
     },
     {
@@ -1761,8 +1761,8 @@
       "sharesAdded": 30301161,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 71.63999938964844,
-      "returnPct": -20.541263886665252,
+      "sellPrice": 76.19999694824219,
+      "returnPct": -15.48359155594624,
       "status": "open"
     },
     {
@@ -1775,8 +1775,8 @@
       "sharesAdded": 5823316,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 244.38999938964844,
-      "returnPct": 5.80569915583844,
+      "sellPrice": 232.69000244140625,
+      "returnPct": 0.740326757943266,
       "status": "open"
     },
     {
@@ -1789,8 +1789,8 @@
       "sharesAdded": 3784508,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 244.38999938964844,
-      "returnPct": 21.496399107730625,
+      "sellPrice": 232.69000244140625,
+      "returnPct": 15.679845638550184,
       "status": "open"
     },
     {
@@ -1803,8 +1803,8 @@
       "sharesAdded": 1844157,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 244.38999938964844,
-      "returnPct": -7.477100841792462,
+      "sellPrice": 232.69000244140625,
+      "returnPct": -11.906568661658579,
       "status": "open"
     },
     {
@@ -1813,12 +1813,12 @@
       "issuer": "META PLATFORMS INC",
       "buyAccession": "0001172661-26-001091",
       "buyDate": "2026-02-17",
-      "buyPrice": 638.151611328125,
+      "buyPrice": 638.1516723632812,
       "sharesAdded": 2673569,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 577.219970703125,
-      "returnPct": -9.548144914683942,
+      "sellPrice": 550.25,
+      "returnPct": -13.774416987383741,
       "status": "open"
     },
     {
@@ -1831,41 +1831,41 @@
       "sharesAdded": 5654078,
       "sellAccession": null,
       "sellDate": null,
-      "sellPrice": 379.3999938964844,
-      "returnPct": -9.88298076306241,
+      "sellPrice": 372.9700012207031,
+      "returnPct": -11.410265378187745,
       "status": "open"
     }
   ],
   "latestPriceByTicker": {
-    "MATX": 191.24000549316406,
-    "PG": 150.3800048828125,
-    "ZTS": 78.70999908447266,
-    "APD": 280.2099914550781,
-    "NOMD": 10.020000457763672,
-    "NKE": 45.20000076293945,
-    "MDLZ": 60.119998931884766,
-    "ADP": 218.41000366210938,
-    "BX": 123.79000091552734,
-    "PK": 14.720000267028809,
-    "SBUX": 100.6500015258789,
-    "A": 127.05999755859375,
-    "NFLX": 77.37999725341797,
-    "DPZ": 312.4700012207031,
-    "LOW": 222.1999969482422,
-    "CP": 86.02999877929688,
-    "CMG": 32.4900016784668,
-    "HLT": 348.8399963378906,
-    "QSR": 73.44000244140625,
-    "GOOG": 367.4599914550781,
-    "GOOGL": 368.0299987792969,
-    "HHH": 66.86000061035156,
-    "BN": 44.439998626708984,
-    "SEG": 24.809999465942383,
-    "HTZ": 5.050000190734863,
-    "UBER": 71.63999938964844,
-    "AMZN": 244.38999938964844,
-    "META": 577.219970703125,
-    "MSFT": 379.3999938964844
+    "MATX": 194.49000549316406,
+    "PG": 149.02000427246094,
+    "ZTS": 76.08999633789062,
+    "APD": 277.7900085449219,
+    "NOMD": 11.119999885559082,
+    "NKE": 40.75,
+    "MDLZ": 60.790000915527344,
+    "ADP": 223.5500030517578,
+    "BX": 115.4000015258789,
+    "PK": 14.779999732971191,
+    "SBUX": 104.5999984741211,
+    "A": 136.00999450683594,
+    "NFLX": 73.80999755859375,
+    "DPZ": 298.17999267578125,
+    "LOW": 222.47999572753906,
+    "CP": 87.7300033569336,
+    "CMG": 33.34000015258789,
+    "HLT": 332.8599853515625,
+    "QSR": 74.33999633789062,
+    "GOOG": 334.69000244140625,
+    "GOOGL": 337.3900146484375,
+    "HHH": 72.37000274658203,
+    "BN": 42.869998931884766,
+    "SEG": 27.06999969482422,
+    "HTZ": 2.640000104904175,
+    "UBER": 76.19999694824219,
+    "AMZN": 232.69000244140625,
+    "META": 550.25,
+    "MSFT": 372.9700012207031
   },
   "equityCurve": [
     {
@@ -1875,3364 +1875,3369 @@
     },
     {
       "date": "2013-08-21",
-      "mirror": 9843.064496133444,
-      "spy": 9752.274315495117
+      "mirror": 9843.065043416895,
+      "spy": 9752.279870047125
     },
     {
       "date": "2013-08-28",
-      "mirror": 9699.696903660066,
-      "spy": 9713.756449856464
+      "mirror": 9699.697362340754,
+      "spy": 9713.759736034632
     },
     {
       "date": "2013-09-04",
-      "mirror": 9867.028963922505,
-      "spy": 9822.80000085703
+      "mirror": 9867.030144910545,
+      "spy": 9822.799940910008
     },
     {
       "date": "2013-09-11",
-      "mirror": 10044.102199417819,
-      "spy": 10039.107637683299
+      "mirror": 10044.104100617475,
+      "spy": 10039.111033928255
     },
     {
       "date": "2013-09-18",
-      "mirror": 10322.371785013345,
-      "spy": 10255.419785194421
+      "mirror": 10322.375392595835,
+      "spy": 10255.423254618096
     },
     {
       "date": "2013-09-25",
-      "mirror": 10072.072507086541,
-      "spy": 10066.601389539022
+      "mirror": 10072.071167742512,
+      "spy": 10066.604795085155
     },
     {
       "date": "2013-10-02",
-      "mirror": 10011.184428832248,
-      "spy": 10074.940518162668
+      "mirror": 10011.184433271228,
+      "spy": 10074.943926529939
     },
     {
       "date": "2013-10-09",
-      "mirror": 9882.81464714331,
-      "spy": 9861.747509228016
+      "mirror": 9882.815592993338,
+      "spy": 9861.747462456993
     },
     {
       "date": "2013-10-16",
-      "mirror": 10276.161866269324,
-      "spy": 10247.044571091947
+      "mirror": 10276.162944578515,
+      "spy": 10247.049165353868
     },
     {
       "date": "2013-10-23",
-      "mirror": 10498.391375245534,
-      "spy": 10395.926490722142
+      "mirror": 10498.39473442355,
+      "spy": 10395.927752336253
     },
     {
       "date": "2013-10-30",
-      "mirror": 10333.15939712866,
-      "spy": 10498.351739370826
+      "mirror": 10333.158361381838,
+      "spy": 10498.354163307144
     },
     {
       "date": "2013-11-06",
-      "mirror": 10554.491462305654,
-      "spy": 10550.760259017057
+      "mirror": 10554.493404572399,
+      "spy": 10550.760445340065
     },
     {
       "date": "2013-11-13",
-      "mirror": 10480.855815427876,
-      "spy": 10622.818449558083
+      "mirror": 10480.853745527718,
+      "spy": 10622.819787930079
     },
     {
       "date": "2013-11-20",
-      "mirror": 10645.771781108866,
-      "spy": 10628.174887822088
+      "mirror": 10645.774030161634,
+      "spy": 10628.17735567777
     },
     {
       "date": "2013-11-27",
-      "mirror": 10598.774131042686,
-      "spy": 10785.98683579179
+      "mirror": 10598.777679456565,
+      "spy": 10785.993867721865
     },
     {
       "date": "2013-12-04",
-      "mirror": 10440.003365104938,
-      "spy": 10703.213513380328
+      "mirror": 10440.006498855742,
+      "spy": 10703.214878950092
     },
     {
       "date": "2013-12-11",
-      "mirror": 10390.759585323067,
-      "spy": 10643.060147839951
+      "mirror": 10390.759640882632,
+      "spy": 10643.066003746124
     },
     {
       "date": "2013-12-18",
-      "mirror": 10415.47817858029,
-      "spy": 10820.528532731729
+      "mirror": 10415.48336310662,
+      "spy": 10820.531065660933
     },
     {
       "date": "2013-12-25",
-      "mirror": 10899.782660128742,
-      "spy": 10952.921643878499
+      "mirror": 10899.79052759729,
+      "spy": 10952.923093924894
     },
     {
       "date": "2014-01-01",
-      "mirror": 10873.277944991081,
-      "spy": 11058.300263435272
+      "mirror": 10873.28665168791,
+      "spy": 11058.307387489385
     },
     {
       "date": "2014-01-08",
-      "mirror": 10709.468880031276,
-      "spy": 10988.24594464059
+      "mirror": 10709.470405675394,
+      "spy": 10988.250789652033
     },
     {
       "date": "2014-01-15",
-      "mirror": 10819.48882094224,
-      "spy": 11056.50501086342
+      "mirror": 10819.492441090071,
+      "spy": 11056.507623623816
     },
     {
       "date": "2014-01-22",
-      "mirror": 10905.144198898548,
-      "spy": 11034.949575617855
+      "mirror": 10905.14874659345,
+      "spy": 11034.952181086015
     },
     {
       "date": "2014-01-29",
-      "mirror": 10320.850477152091,
-      "spy": 10618.819727435102
+      "mirror": 10320.854783081188,
+      "spy": 10618.82444746911
     },
     {
       "date": "2014-02-05",
-      "mirror": 10152.244003363747,
-      "spy": 10488.289529132991
+      "mirror": 10152.246299479884,
+      "spy": 10488.29420500844
     },
     {
       "date": "2014-02-12",
-      "mirror": 10849.56423555168,
-      "spy": 10901.427665586396
+      "mirror": 10849.563592383725,
+      "spy": 10901.433608898682
     },
     {
       "date": "2014-02-19",
-      "mirror": 11332.83200716083,
-      "spy": 10958.311912278908
+      "mirror": 11332.839868279614,
+      "spy": 10958.313364148838
     },
     {
       "date": "2014-02-26",
-      "mirror": 11368.689067148303,
-      "spy": 11067.87983039374
+      "mirror": 11368.693885963821,
+      "spy": 11067.886957688634
     },
     {
       "date": "2014-03-05",
-      "mirror": 11756.763309615058,
-      "spy": 11241.517516173342
+      "mirror": 11756.7681594471,
+      "spy": 11241.522446866933
     },
     {
       "date": "2014-03-12",
-      "mirror": 11588.889287377031,
-      "spy": 11213.376481041085
+      "mirror": 11588.890896848767,
+      "spy": 11213.380274542926
     },
     {
       "date": "2014-03-19",
-      "mirror": 11709.12430608162,
-      "spy": 11176.253544693502
+      "mirror": 11709.124942750068,
+      "spy": 11176.253942621814
     },
     {
       "date": "2014-03-26",
-      "mirror": 11558.627940390785,
-      "spy": 11123.946515456482
+      "mirror": 11558.635912270056,
+      "spy": 11123.946895689249
     },
     {
       "date": "2014-04-02",
-      "mirror": 11857.12157367404,
-      "spy": 11359.089644561418
+      "mirror": 11857.127562045516,
+      "spy": 11359.091232015047
     },
     {
       "date": "2014-04-09",
-      "mirror": 11547.195843858428,
-      "spy": 11251.438767509493
+      "mirror": 11547.196428183262,
+      "spy": 11251.443701559456
     },
     {
       "date": "2014-04-16",
-      "mirror": 11569.621679515765,
-      "spy": 11193.706512064447
+      "mirror": 11569.625570499418,
+      "spy": 11193.711426583504
     },
     {
       "date": "2014-04-23",
-      "mirror": 11547.38808713101,
-      "spy": 11273.087799465779
+      "mirror": 11547.388747061224,
+      "spy": 11273.091613168046
     },
     {
       "date": "2014-04-30",
-      "mirror": 11464.799075556231,
-      "spy": 11324.809567343003
+      "mirror": 11464.808047660426,
+      "spy": 11324.811143199631
     },
     {
       "date": "2014-05-07",
-      "mirror": 11691.356938389747,
-      "spy": 11298.94530039075
+      "mirror": 11691.357550429057,
+      "spy": 11298.954761198624
     },
     {
       "date": "2014-05-14",
-      "mirror": 11667.190099970501,
-      "spy": 11369.91416053956
+      "mirror": 11667.195894745686,
+      "spy": 11369.918006998329
     },
     {
       "date": "2014-05-21",
-      "mirror": 11555.514199274334,
-      "spy": 11374.126012521887
+      "mirror": 11555.515901894976,
+      "spy": 11374.125349719152
     },
     {
       "date": "2014-05-28",
-      "mirror": 11536.008641357654,
-      "spy": 11509.43753676913
+      "mirror": 11536.01141375861,
+      "spy": 11509.441430428864
     },
     {
       "date": "2014-06-04",
-      "mirror": 11744.673875650895,
-      "spy": 11618.289383663405
+      "mirror": 11744.676717667571,
+      "spy": 11618.296697162665
     },
     {
       "date": "2014-06-11",
-      "mirror": 11894.834275356325,
-      "spy": 11722.330585160998
+      "mirror": 11894.83824375794,
+      "spy": 11722.333423171169
     },
     {
       "date": "2014-06-18",
-      "mirror": 12746.065734500553,
-      "spy": 11802.913970075891
+      "mirror": 12746.075368332546,
+      "spy": 11802.921346033922
     },
     {
       "date": "2014-06-25",
-      "mirror": 12631.008450805306,
-      "spy": 11818.382236111123
+      "mirror": 12631.011588524425,
+      "spy": 11818.38285127252
     },
     {
       "date": "2014-07-02",
-      "mirror": 12617.690469584702,
-      "spy": 11918.089797135332
+      "mirror": 12617.696831724128,
+      "spy": 11918.09382904273
     },
     {
       "date": "2014-07-09",
-      "mirror": 12681.450815914894,
-      "spy": 11911.441047660686
+      "mirror": 12681.45289417496,
+      "spy": 11911.446204990398
     },
     {
       "date": "2014-07-16",
-      "mirror": 12732.458231949067,
-      "spy": 11962.200911992817
+      "mirror": 12732.462479802098,
+      "spy": 11962.203831151475
     },
     {
       "date": "2014-07-23",
-      "mirror": 13349.464781834247,
-      "spy": 12003.287612655764
+      "mirror": 13349.471388111111,
+      "spy": 12003.295056400493
     },
     {
       "date": "2014-07-30",
-      "mirror": 13275.895151453256,
-      "spy": 11902.979002874772
+      "mirror": 13275.898504322025,
+      "spy": 11902.986412684952
     },
     {
       "date": "2014-08-06",
-      "mirror": 12979.653481574165,
-      "spy": 11606.28306825354
+      "mirror": 12979.659964473121,
+      "spy": 11606.286994676262
     },
     {
       "date": "2014-08-13",
-      "mirror": 12991.42699026757,
-      "spy": 11773.666689483214
+      "mirror": 12991.432400806616,
+      "spy": 11773.667289517276
     },
     {
       "date": "2014-08-20",
-      "mirror": 13125.812244446055,
-      "spy": 12020.207191542737
+      "mirror": 13125.816623531407,
+      "spy": 12020.21576868298
     },
     {
       "date": "2014-08-27",
-      "mirror": 13046.355321574625,
-      "spy": 12100.578574269499
+      "mirror": 13046.35859786341,
+      "spy": 12100.581540241525
     },
     {
       "date": "2014-09-03",
-      "mirror": 13034.58181288122,
-      "spy": 12115.684857845205
+      "mirror": 13034.591542969089,
+      "spy": 12115.687828927707
     },
     {
       "date": "2014-09-10",
-      "mirror": 12910.007995328484,
-      "spy": 12089.704440757963
+      "mirror": 12910.011226128534,
+      "spy": 12089.701764693278
     },
     {
       "date": "2014-09-17",
-      "mirror": 12842.322428575508,
-      "spy": 12130.793396763336
+      "mirror": 12842.329941945369,
+      "spy": 12130.79862830027
     },
     {
       "date": "2014-09-24",
-      "mirror": 13309.244995166011,
-      "spy": 12115.250704428016
+      "mirror": 13309.249435448923,
+      "spy": 12115.253675363645
     },
     {
       "date": "2014-10-01",
-      "mirror": 12478.084144863047,
-      "spy": 11798.951333431742
+      "mirror": 12478.091536714295,
+      "spy": 11798.955325034422
     },
     {
       "date": "2014-10-08",
-      "mirror": 12499.786405517021,
-      "spy": 11937.976278984957
+      "mirror": 12499.79380460866,
+      "spy": 11937.98031761998
     },
     {
       "date": "2014-10-15",
-      "mirror": 12457.364534674116,
-      "spy": 11318.133753759234
+      "mirror": 12457.368690749301,
+      "spy": 11318.133072014234
     },
     {
       "date": "2014-10-22",
-      "mirror": 12785.895905102694,
-      "spy": 11698.175867768372
+      "mirror": 12785.895865632474,
+      "spy": 11698.180952950157
     },
     {
       "date": "2014-10-29",
-      "mirror": 12711.90114116892,
-      "spy": 12027.222434161762
+      "mirror": 12711.90215330011,
+      "spy": 12027.224247645703
     },
     {
       "date": "2014-11-05",
-      "mirror": 13217.022226548857,
-      "spy": 12284.02361659269
+      "mirror": 13217.024483488374,
+      "spy": 12284.02551695285
     },
     {
       "date": "2014-11-12",
-      "mirror": 13297.9224509248,
-      "spy": 12382.37458914709
+      "mirror": 13297.923658566735,
+      "spy": 12382.377650451124
     },
     {
       "date": "2014-11-19",
-      "mirror": 13957.1397877012,
-      "spy": 12458.871293584352
+      "mirror": 13957.146226685078,
+      "spy": 12458.874380767335
     },
     {
       "date": "2014-11-26",
-      "mirror": 14268.934997995686,
-      "spy": 12605.78655461825
+      "mirror": 14268.9376857139,
+      "spy": 12605.788563831286
     },
     {
       "date": "2014-12-03",
-      "mirror": 14290.54302577555,
-      "spy": 12620.963881480402
+      "mirror": 14290.551918724712,
+      "spy": 12620.968151171142
     },
     {
       "date": "2014-12-10",
-      "mirror": 13926.018117193407,
-      "spy": 12333.806917653952
+      "mirror": 13926.021510968832,
+      "spy": 12333.813345542258
     },
     {
       "date": "2014-12-17",
-      "mirror": 13781.887048587223,
-      "spy": 12250.636654975347
+      "mirror": 13781.890517571994,
+      "spy": 12250.63403335427
     },
     {
       "date": "2014-12-24",
-      "mirror": 14542.03853541211,
-      "spy": 12683.29590780521
+      "mirror": 14542.04190419201,
+      "spy": 12683.302453926157
     },
     {
       "date": "2014-12-31",
-      "mirror": 14197.763371584193,
-      "spy": 12547.162311243344
+      "mirror": 14197.769511555602,
+      "spy": 12547.171066653284
     },
     {
       "date": "2015-01-07",
-      "mirror": 14036.151265120967,
-      "spy": 12349.99125490974
+      "mirror": 14036.158310893377,
+      "spy": 12349.996560601634
     },
     {
       "date": "2015-01-14",
-      "mirror": 13814.374803127379,
-      "spy": 12261.478086021692
+      "mirror": 13814.379828742525,
+      "spy": 12261.479978754665
     },
     {
       "date": "2015-01-21",
-      "mirror": 14137.537778062244,
-      "spy": 12396.997101772215
+      "mirror": 14137.54164387167,
+      "spy": 12397.003551037851
     },
     {
       "date": "2015-01-28",
-      "mirror": 13721.305690438207,
-      "spy": 12217.524845134094
+      "mirror": 13721.310234249335,
+      "spy": 12217.530106012406
     },
     {
       "date": "2015-02-04",
-      "mirror": 14587.259925812436,
-      "spy": 12456.817804304615
+      "mirror": 14587.26647556027,
+      "spy": 12456.823146136088
     },
     {
       "date": "2015-02-11",
-      "mirror": 14800.991337181144,
-      "spy": 12632.020697728522
+      "mirror": 14801.00210002566,
+      "spy": 12632.022715816607
     },
     {
       "date": "2015-02-18",
-      "mirror": 15006.946360961763,
-      "spy": 12827.36267135387
+      "mirror": 15007.559341772245,
+      "spy": 12827.36588319803
     },
     {
       "date": "2015-02-25",
-      "mirror": 15267.588455522793,
-      "spy": 12918.928446216794
+      "mirror": 15267.468152153528,
+      "spy": 12918.93619972417
     },
     {
       "date": "2015-03-04",
-      "mirror": 15221.159665388854,
-      "spy": 12833.463372618768
+      "mirror": 15220.990203072595,
+      "spy": 12833.471097213183
     },
     {
       "date": "2015-03-11",
-      "mirror": 14788.767843874739,
-      "spy": 12483.680060280793
+      "mirror": 14790.08039833595,
+      "spy": 12483.687666542997
     },
     {
       "date": "2015-03-18",
-      "mirror": 15126.445688225907,
-      "spy": 12847.50738991138
+      "mirror": 15128.21424215243,
+      "spy": 12847.511736242124
     },
     {
       "date": "2015-03-25",
-      "mirror": 14744.16868851115,
-      "spy": 12616.665198814639
+      "mirror": 14745.811891880108,
+      "spy": 12616.670594722722
     },
     {
       "date": "2015-04-01",
-      "mirror": 14723.046155524606,
-      "spy": 12612.98560764507
+      "mirror": 14724.925934859346,
+      "spy": 12612.986491621963
     },
     {
       "date": "2015-04-08",
-      "mirror": 14803.988351851285,
-      "spy": 12752.792029349223
+      "mirror": 14805.66803838826,
+      "spy": 12752.79183295124
     },
     {
       "date": "2015-04-15",
-      "mirror": 14960.498797817127,
-      "spy": 12903.015877723454
+      "mirror": 14962.416084715309,
+      "spy": 12903.019115161205
     },
     {
       "date": "2015-04-22",
-      "mirror": 14956.279345244064,
-      "spy": 12915.281557512417
+      "mirror": 14957.916220674015,
+      "spy": 12915.284799099665
     },
     {
       "date": "2015-04-29",
-      "mirror": 15006.78430229435,
-      "spy": 12911.598583329209
+      "mirror": 15006.385416952675,
+      "spy": 12911.607462028478
     },
     {
       "date": "2015-05-06",
-      "mirror": 14616.98168015889,
-      "spy": 12756.469365176363
+      "mirror": 14616.933127563028,
+      "spy": 12756.471425365618
     },
     {
       "date": "2015-05-13",
-      "mirror": 14648.579991802344,
-      "spy": 12877.874448019038
+      "mirror": 14648.411367347646,
+      "spy": 12877.879932294596
     },
     {
       "date": "2015-05-20",
-      "mirror": 14937.803181792853,
-      "spy": 13053.247619796179
+      "mirror": 14938.132920466367,
+      "spy": 13053.248652714361
     },
     {
       "date": "2015-05-27",
-      "mirror": 15017.742686832404,
-      "spy": 13042.203207931409
+      "mirror": 15019.889266561348,
+      "spy": 13042.209875471224
     },
     {
       "date": "2015-06-03",
-      "mirror": 15064.803369095402,
-      "spy": 12994.376416425524
+      "mirror": 15067.031248995316,
+      "spy": 12994.378557099086
     },
     {
       "date": "2015-06-10",
-      "mirror": 14916.08660824559,
-      "spy": 12934.90190895566
+      "mirror": 14918.569553091842,
+      "spy": 12934.908540195289
     },
     {
       "date": "2015-06-17",
-      "mirror": 14936.716007292303,
-      "spy": 12912.826617280682
+      "mirror": 14939.63136177122,
+      "spy": 12912.828730365827
     },
     {
       "date": "2015-06-24",
-      "mirror": 14794.955304437528,
-      "spy": 12970.096527528203
+      "mirror": 14797.449456742013,
+      "spy": 12970.096404644653
     },
     {
       "date": "2015-07-01",
-      "mirror": 14617.489576817337,
-      "spy": 12785.245279201808
+      "mirror": 14618.220482381148,
+      "spy": 12785.249604469187
     },
     {
       "date": "2015-07-08",
-      "mirror": 14093.01452804877,
-      "spy": 12602.246794679151
+      "mirror": 14093.284374455983,
+      "spy": 12602.249930366277
     },
     {
       "date": "2015-07-15",
-      "mirror": 14443.181019086926,
-      "spy": 12976.868193165117
+      "mirror": 14443.391206254943,
+      "spy": 12976.878221616787
     },
     {
       "date": "2015-07-22",
-      "mirror": 14585.370283061095,
-      "spy": 13023.69812331829
+      "mirror": 14585.712410739581,
+      "spy": 13023.701401583025
     },
     {
       "date": "2015-07-29",
-      "mirror": 14695.372117729969,
-      "spy": 12986.729677926953
+      "mirror": 14693.81725669254,
+      "spy": 12986.731816013613
     },
     {
       "date": "2015-08-05",
-      "mirror": 15377.389159193419,
-      "spy": 12943.600764696404
+      "mirror": 15376.45005985504,
+      "spy": 12943.600632849299
     },
     {
       "date": "2015-08-12",
-      "mirror": 15065.159074566647,
-      "spy": 12872.739033312875
+      "mirror": 15064.92246702195,
+      "spy": 12872.74113283633
     },
     {
       "date": "2015-08-19",
-      "mirror": 15081.753035266302,
-      "spy": 12835.772843263963
+      "mirror": 15081.169912236222,
+      "spy": 12835.776057953297
     },
     {
       "date": "2015-08-26",
-      "mirror": 14072.336757509032,
-      "spy": 11981.780667272376
+      "mirror": 14072.427091163085,
+      "spy": 11981.77795469692
     },
     {
       "date": "2015-09-02",
-      "mirror": 14109.062334543774,
-      "spy": 12040.31018626535
+      "mirror": 14110.232882333908,
+      "spy": 12040.316514863274
     },
     {
       "date": "2015-09-09",
-      "mirror": 13965.85937936881,
-      "spy": 12002.112579251323
+      "mirror": 13966.166526111909,
+      "spy": 12002.113256568968
     },
     {
       "date": "2015-09-16",
-      "mirror": 13997.727170179282,
-      "spy": 12334.217389975658
+      "mirror": 13998.952471413626,
+      "spy": 12334.219307316445
     },
     {
       "date": "2015-09-23",
-      "mirror": 13671.254741438977,
-      "spy": 11990.8042923226
+      "mirror": 13671.380121619426,
+      "spy": 11990.80383814304
     },
     {
       "date": "2015-09-30",
-      "mirror": 13090.675600069811,
-      "spy": 11868.791394695863
+      "mirror": 13090.866334236447,
+      "spy": 11868.793154582349
     },
     {
       "date": "2015-10-07",
-      "mirror": 13538.652102120646,
-      "spy": 12350.652070240836
+      "mirror": 13539.80160454684,
+      "spy": 12350.65850382788
     },
     {
       "date": "2015-10-14",
-      "mirror": 13707.692159820104,
-      "spy": 12343.213950916757
+      "mirror": 13709.072394605782,
+      "spy": 12343.224892673856
     },
     {
       "date": "2015-10-21",
-      "mirror": 13559.348855017837,
-      "spy": 12501.773544900992
+      "mirror": 13559.859972412334,
+      "spy": 12501.780029612655
     },
     {
       "date": "2015-10-28",
-      "mirror": 14357.928691234833,
-      "spy": 12941.52246664997
+      "mirror": 14357.13619061867,
+      "spy": 12941.523461771369
     },
     {
       "date": "2015-11-04",
-      "mirror": 14339.842478678795,
-      "spy": 13028.849325421443
+      "mirror": 14341.00087059585,
+      "spy": 13028.85373310043
     },
     {
       "date": "2015-11-11",
-      "mirror": 14006.042211733728,
-      "spy": 12866.579693144877
+      "mirror": 14007.493769473751,
+      "spy": 12866.579535241428
     },
     {
       "date": "2015-11-18",
-      "mirror": 14321.0238070763,
-      "spy": 12927.896815377557
+      "mirror": 14323.266734953417,
+      "spy": 12927.900061232567
     },
     {
       "date": "2015-11-25",
-      "mirror": 14234.570131571345,
-      "spy": 12964.437873378987
+      "mirror": 14236.591903433957,
+      "spy": 12964.442259267485
     },
     {
       "date": "2015-12-02",
-      "mirror": 14174.503871364619,
-      "spy": 12915.505964083897
+      "mirror": 14176.502604014446,
+      "spy": 12915.512588761849
     },
     {
       "date": "2015-12-09",
-      "mirror": 13791.992111799831,
-      "spy": 12717.930073784655
+      "mirror": 13794.40669337129,
+      "spy": 12717.935503950797
     },
     {
       "date": "2015-12-16",
-      "mirror": 14130.975826493823,
-      "spy": 12884.538984890673
+      "mirror": 14132.665921600974,
+      "spy": 12884.54559909245
     },
     {
       "date": "2015-12-23",
-      "mirror": 14299.528990512134,
-      "spy": 12835.991611479378
+      "mirror": 14301.45002976158,
+      "spy": 12835.993698571127
     },
     {
       "date": "2015-12-30",
-      "mirror": 14337.735570521652,
-      "spy": 12830.381447192342
+      "mirror": 14339.627216456685,
+      "spy": 12830.382404714568
     },
     {
       "date": "2016-01-06",
-      "mirror": 13671.348761783316,
-      "spy": 12387.39498138948
+      "mirror": 13674.42756279312,
+      "spy": 12387.402555078299
     },
     {
       "date": "2016-01-13",
-      "mirror": 12740.377932575127,
-      "spy": 11764.977982783394
+      "mirror": 12742.756929503685,
+      "spy": 11764.980835221242
     },
     {
       "date": "2016-01-20",
-      "mirror": 12822.654068483307,
-      "spy": 11566.843895233482
+      "mirror": 12824.672789080518,
+      "spy": 11566.846680642277
     },
     {
       "date": "2016-01-27",
-      "mirror": 12832.697881086144,
-      "spy": 11721.359660246197
+      "mirror": 12834.605713214549,
+      "spy": 11721.364753271093
     },
     {
       "date": "2016-02-03",
-      "mirror": 13013.11390323475,
-      "spy": 11918.866762601416
+      "mirror": 13015.526811604537,
+      "spy": 11918.868539428473
     },
     {
       "date": "2016-02-10",
-      "mirror": 12532.392182114585,
-      "spy": 11543.169565777796
+      "mirror": 12535.13499267317,
+      "spy": 11543.175726192314
     },
     {
       "date": "2016-02-17",
-      "mirror": 13198.288214299115,
-      "spy": 12017.305693510467
+      "mirror": 13199.843487557282,
+      "spy": 12017.310886654344
     },
     {
       "date": "2016-02-24",
-      "mirror": 13204.737549976106,
-      "spy": 12037.24066522227
+      "mirror": 13207.060456923162,
+      "spy": 12037.244737438583
     },
     {
       "date": "2016-03-02",
-      "mirror": 13476.402538687384,
-      "spy": 12398.607416265057
+      "mirror": 13477.312595300953,
+      "spy": 12398.613866075466
     },
     {
       "date": "2016-03-09",
-      "mirror": 13540.678833577425,
-      "spy": 12422.288511748024
+      "mirror": 13540.77274334002,
+      "spy": 12422.289331211807
     },
     {
       "date": "2016-03-16",
-      "mirror": 13598.872103515296,
-      "spy": 12669.010568872915
+      "mirror": 13598.784181751553,
+      "spy": 12669.014854817919
     },
     {
       "date": "2016-03-23",
-      "mirror": 13887.129506140001,
-      "spy": 12726.212818847627
+      "mirror": 13887.717649553697,
+      "spy": 12726.217124144237
     },
     {
       "date": "2016-03-30",
-      "mirror": 14214.458962067078,
-      "spy": 12902.196060751257
+      "mirror": 14214.818645055377,
+      "spy": 12902.19817024007
     },
     {
       "date": "2016-04-06",
-      "mirror": 14546.29537230343,
-      "spy": 12927.243893744955
+      "mirror": 14547.312585417787,
+      "spy": 12927.243756364296
     },
     {
       "date": "2016-04-13",
-      "mirror": 14691.197247497752,
-      "spy": 13026.19027670007
+      "mirror": 14692.10081908598,
+      "spy": 13026.195811151092
     },
     {
       "date": "2016-04-20",
-      "mirror": 15096.064163056362,
-      "spy": 13157.706059642756
+      "mirror": 15096.364921085225,
+      "spy": 13157.712766257358
     },
     {
       "date": "2016-04-27",
-      "mirror": 15077.603453940827,
-      "spy": 13110.73855360154
+      "mirror": 15077.592037757751,
+      "spy": 13110.740733640585
     },
     {
       "date": "2016-05-04",
-      "mirror": 14870.315454619105,
-      "spy": 12838.944982387467
+      "mirror": 14869.737701521111,
+      "spy": 12838.945942806751
     },
     {
       "date": "2016-05-11",
-      "mirror": 14717.562090406333,
-      "spy": 12932.255264617635
+      "mirror": 14717.679688633598,
+      "spy": 12932.259639618711
     },
     {
       "date": "2016-05-18",
-      "mirror": 14698.526811054879,
-      "spy": 12832.680768796616
+      "mirror": 14699.008412293197,
+      "spy": 12832.680599425112
     },
     {
       "date": "2016-05-25",
-      "mirror": 15095.945752549163,
-      "spy": 13106.353040252337
+      "mirror": 15095.93061828491,
+      "spy": 13106.355218807757
     },
     {
       "date": "2016-06-01",
-      "mirror": 15186.435717389204,
-      "spy": 13168.354658911598
+      "mirror": 15187.130640850954,
+      "spy": 13168.360241457041
     },
     {
       "date": "2016-06-08",
-      "mirror": 15401.095179271497,
-      "spy": 13299.870441854284
+      "mirror": 15401.497748880909,
+      "spy": 13299.871558205332
     },
     {
       "date": "2016-06-15",
-      "mirror": 15065.546036139121,
-      "spy": 13010.535944914614
+      "mirror": 15064.945999136238,
+      "spy": 13010.536963383374
     },
     {
       "date": "2016-06-22",
-      "mirror": 15125.74602594756,
-      "spy": 13100.228657891957
+      "mirror": 15125.487347908096,
+      "spy": 13100.235345061868
     },
     {
       "date": "2016-06-29",
-      "mirror": 14769.909255835631,
-      "spy": 13009.577424383162
+      "mirror": 14769.874621580442,
+      "spy": 13009.579570199247
     },
     {
       "date": "2016-07-06",
-      "mirror": 15094.126826274398,
-      "spy": 13198.430777846179
+      "mirror": 15094.13918020916,
+      "spy": 13198.437498238012
     },
     {
       "date": "2016-07-13",
-      "mirror": 15388.754201019154,
-      "spy": 13529.556769957217
+      "mirror": 15389.623648422192,
+      "spy": 13529.563602369462
     },
     {
       "date": "2016-07-20",
-      "mirror": 15817.546106407677,
-      "spy": 13666.165116099954
+      "mirror": 15817.103301189,
+      "spy": 13666.16861171222
     },
     {
       "date": "2016-07-27",
-      "mirror": 15604.584636046402,
-      "spy": 13630.278107402339
+      "mirror": 15604.202867275184,
+      "spy": 13630.284973888763
     },
     {
       "date": "2016-08-03",
-      "mirror": 15793.111779527942,
-      "spy": 13608.873780099379
+      "mirror": 15792.377522102324,
+      "spy": 13608.88176701628
     },
     {
       "date": "2016-08-10",
-      "mirror": 16200.181490659375,
-      "spy": 13700.792516052119
+      "mirror": 16198.371882310068,
+      "spy": 13700.791512692507
     },
     {
       "date": "2016-08-17",
-      "mirror": 16372.951548329987,
-      "spy": 13746.74286265878
+      "mirror": 16370.87729890841,
+      "spy": 13746.74638553062
     },
     {
       "date": "2016-08-24",
-      "mirror": 16271.681025119788,
-      "spy": 13714.007695002827
+      "mirror": 16269.780547376395,
+      "spy": 13714.012334471905
     },
     {
       "date": "2016-08-31",
-      "mirror": 16677.773091847066,
-      "spy": 13684.420985374894
+      "mirror": 16676.833973168905,
+      "spy": 13684.426742506339
     },
     {
       "date": "2016-09-07",
-      "mirror": 16752.150238339407,
-      "spy": 13787.031172102588
+      "mirror": 16750.782396018578,
+      "spy": 13787.03696394721
     },
     {
       "date": "2016-09-14",
-      "mirror": 15909.698767809788,
-      "spy": 13418.133832696218
+      "mirror": 15909.343400358559,
+      "spy": 13418.13837207073
     },
     {
       "date": "2016-09-21",
-      "mirror": 16256.8949531513,
-      "spy": 13654.845552459097
+      "mirror": 16256.267881335965,
+      "spy": 13654.847916570343
     },
     {
       "date": "2016-09-28",
-      "mirror": 16247.173319081652,
-      "spy": 13706.726321977421
+      "mirror": 16247.41687337219,
+      "spy": 13706.72870364001
     },
     {
       "date": "2016-10-05",
-      "mirror": 16091.457345806828,
-      "spy": 13642.82232198103
+      "mirror": 16092.761561298428,
+      "spy": 13642.83144805437
     },
     {
       "date": "2016-10-12",
-      "mirror": 15959.639772008994,
-      "spy": 13521.342812838267
+      "mirror": 15960.167558318542,
+      "spy": 13521.34964247172
     },
     {
       "date": "2016-10-19",
-      "mirror": 16188.088621264464,
-      "spy": 13557.411376601252
+      "mirror": 16187.3333011969,
+      "spy": 13557.412580078779
     },
     {
       "date": "2016-10-26",
-      "mirror": 15847.996339741601,
-      "spy": 13523.242938832971
+      "mirror": 15849.149258410143,
+      "spy": 13523.248641437645
     },
     {
       "date": "2016-11-02",
-      "mirror": 15997.640333842664,
-      "spy": 13270.164199077724
+      "mirror": 15997.896381766695,
+      "spy": 13270.170943737081
     },
     {
       "date": "2016-11-09",
-      "mirror": 16351.62610087984,
-      "spy": 13690.276981986468
+      "mirror": 16351.064726461014,
+      "spy": 13690.280485755815
     },
     {
       "date": "2016-11-16",
-      "mirror": 16063.21860358657,
-      "spy": 13784.546912419302
+      "mirror": 16062.883931580764,
+      "spy": 13784.553831095092
     },
     {
       "date": "2016-11-23",
-      "mirror": 16423.723263735625,
-      "spy": 13963.600803037225
+      "mirror": 16420.790262805313,
+      "spy": 13963.606654615614
     },
     {
       "date": "2016-11-30",
-      "mirror": 16160.500534961418,
-      "spy": 13943.351211056863
+      "mirror": 16156.856615937064,
+      "spy": 13943.359311127975
     },
     {
       "date": "2016-12-07",
-      "mirror": 16596.634975233665,
-      "spy": 14210.35330728488
+      "mirror": 16591.996791764148,
+      "spy": 14210.355859325222
     },
     {
       "date": "2016-12-14",
-      "mirror": 16505.474392835342,
-      "spy": 14291.338143151772
+      "mirror": 16501.97068374673,
+      "spy": 14291.340722589404
     },
     {
       "date": "2016-12-21",
-      "mirror": 16753.133753092505,
-      "spy": 14368.572344562646
+      "mirror": 16750.676146617494,
+      "spy": 14368.574950128723
     },
     {
       "date": "2016-12-28",
-      "mirror": 16632.09380148565,
-      "spy": 14281.379678665578
+      "mirror": 16630.037958320034,
+      "spy": 14281.386765420626
     },
     {
       "date": "2017-01-04",
-      "mirror": 16777.57496964706,
-      "spy": 14420.122706415425
+      "mirror": 16775.525874310984,
+      "spy": 14420.127584764254
     },
     {
       "date": "2017-01-11",
-      "mirror": 17148.805888575556,
-      "spy": 14453.216473517263
+      "mirror": 17145.205028738434,
+      "spy": 14453.219107718573
     },
     {
       "date": "2017-01-18",
-      "mirror": 17043.337882006184,
-      "spy": 14430.938201023859
+      "mirror": 17040.786061659917,
+      "spy": 14430.944210703181
     },
     {
       "date": "2017-01-25",
-      "mirror": 17199.72109188729,
-      "spy": 14610.411585333193
+      "mirror": 17197.13260094116,
+      "spy": 14610.415400385436
     },
     {
       "date": "2017-02-01",
-      "mirror": 16819.063210679444,
-      "spy": 14486.310240619101
+      "mirror": 16815.784210152724,
+      "spy": 14486.317396702461
     },
     {
       "date": "2017-02-08",
-      "mirror": 17157.980089160985,
-      "spy": 14589.40870898223
+      "mirror": 17153.605528585635,
+      "spy": 14589.415899943953
     },
     {
       "date": "2017-02-15",
-      "mirror": 18037.388992999164,
-      "spy": 14950.90063152971
+      "mirror": 18030.33128927851,
+      "spy": 14950.903434098307
     },
     {
       "date": "2017-02-22",
-      "mirror": 18110.57830347653,
-      "spy": 15037.456163191166
+      "mirror": 18102.279018969457,
+      "spy": 15037.456739698437
     },
     {
       "date": "2017-03-01",
-      "mirror": 17988.17487756661,
-      "spy": 15260.200547303948
+      "mirror": 17980.715381851973,
+      "spy": 15260.204582180757
     },
     {
       "date": "2017-03-08",
-      "mirror": 17631.35337631282,
-      "spy": 15055.272240692851
+      "mirror": 17623.35888152509,
+      "spy": 15055.276206242112
     },
     {
       "date": "2017-03-15",
-      "mirror": 17993.563705784618,
-      "spy": 15207.379299993585
+      "mirror": 17986.217998242442,
+      "spy": 15207.384444672483
     },
     {
       "date": "2017-03-22",
-      "mirror": 17699.82068682247,
-      "spy": 14975.03392316928
+      "mirror": 17692.450177714643,
+      "spy": 14975.0378615738
     },
     {
       "date": "2017-03-29",
-      "mirror": 18146.723367605846,
-      "spy": 15055.56769055078
+      "mirror": 18138.077688618374,
+      "spy": 15055.577294557968
     },
     {
       "date": "2017-04-05",
-      "mirror": 18114.33065327184,
-      "spy": 15006.990997687937
+      "mirror": 18105.697034814228,
+      "spy": 15006.994946903582
     },
     {
       "date": "2017-04-12",
-      "mirror": 18217.647388271667,
-      "spy": 14959.054822074346
+      "mirror": 18208.948289527645,
+      "spy": 14959.059882744707
     },
     {
       "date": "2017-04-19",
-      "mirror": 18226.844884224472,
-      "spy": 14921.342113682114
+      "mirror": 18218.43416067644,
+      "spy": 14921.34716159421
     },
     {
       "date": "2017-04-26",
-      "mirror": 18499.646650326835,
-      "spy": 15238.378981652
+      "mirror": 18491.70686973178,
+      "spy": 15238.388647504518
     },
     {
       "date": "2017-05-03",
-      "mirror": 18557.869918308716,
-      "spy": 15243.494098276322
+      "mirror": 18549.935008410146,
+      "spy": 15243.500382844506
     },
     {
       "date": "2017-05-10",
-      "mirror": 19046.484141217457,
-      "spy": 15332.343313185984
+      "mirror": 19035.970972237265,
+      "spy": 15332.34962781199
     },
     {
       "date": "2017-05-17",
-      "mirror": 19085.867490332283,
-      "spy": 15073.468343393477
+      "mirror": 19076.569926860953,
+      "spy": 15073.474570441696
     },
     {
       "date": "2017-05-24",
-      "mirror": 19605.263533776117,
-      "spy": 15379.643482235177
+      "mirror": 19595.822364090986,
+      "spy": 15379.646429848113
     },
     {
       "date": "2017-05-31",
-      "mirror": 20035.344112974766,
-      "spy": 15432.699285157942
+      "mirror": 20025.997166495785,
+      "spy": 15432.70112304814
     },
     {
       "date": "2017-06-07",
-      "mirror": 19736.487321456643,
-      "spy": 15574.599792305517
+      "mirror": 19728.962848180792,
+      "spy": 15574.60280587246
     },
     {
       "date": "2017-06-14",
-      "mirror": 19521.402984565837,
-      "spy": 15611.668600434854
+      "mirror": 19513.69732397821,
+      "spy": 15611.672754213825
     },
     {
       "date": "2017-06-21",
-      "mirror": 19830.20449917615,
-      "spy": 15604.946552331332
+      "mirror": 19819.63152759613,
+      "spy": 15604.94957616463
     },
     {
       "date": "2017-06-28",
-      "mirror": 19915.66052392994,
-      "spy": 15639.631463515383
+      "mirror": 19904.435489706026,
+      "spy": 15639.631116067852
     },
     {
       "date": "2017-07-05",
-      "mirror": 19738.9365764195,
-      "spy": 15593.386794722004
+      "mirror": 19727.543582717575,
+      "spy": 15593.388686973023
     },
     {
       "date": "2017-07-12",
-      "mirror": 19559.932932181444,
-      "spy": 15673.02631883122
+      "mirror": 19549.38717098067,
+      "spy": 15673.032748710788
     },
     {
       "date": "2017-07-19",
-      "mirror": 19857.27746980812,
-      "spy": 15864.437230606396
+      "mirror": 19847.336136765225,
+      "spy": 15864.444852912155
     },
     {
       "date": "2017-07-26",
-      "mirror": 19837.075803755037,
-      "spy": 15892.701181900922
+      "mirror": 19827.12447156076,
+      "spy": 15892.706558425229
     },
     {
       "date": "2017-08-02",
-      "mirror": 19428.706231382217,
-      "spy": 15893.34282682139
+      "mirror": 19419.82885070874,
+      "spy": 15893.34707589117
     },
     {
       "date": "2017-08-09",
-      "mirror": 19561.213548172796,
-      "spy": 15881.135785935528
+      "mirror": 19551.292869982608,
+      "spy": 15881.142286218837
     },
     {
       "date": "2017-08-16",
-      "mirror": 19723.86889539374,
-      "spy": 15861.227878332847
+      "mirror": 19715.297443800377,
+      "spy": 15861.232116538093
     },
     {
       "date": "2017-08-23",
-      "mirror": 19853.91016606472,
-      "spy": 15708.357385620591
+      "mirror": 19843.46691396607,
+      "spy": 15708.362699781117
     },
     {
       "date": "2017-08-30",
-      "mirror": 19530.440014314503,
-      "spy": 15801.491751141457
+      "mirror": 19520.717872705674,
+      "spy": 15801.495969137883
     },
     {
       "date": "2017-09-06",
-      "mirror": 19303.110951223436,
-      "spy": 15858.659043308551
+      "mirror": 19292.12160215126,
+      "spy": 15858.662152973162
     },
     {
       "date": "2017-09-13",
-      "mirror": 20104.17495273196,
-      "spy": 16068.692317503048
+      "mirror": 20092.053422178833,
+      "spy": 16068.700008908605
     },
     {
       "date": "2017-09-20",
-      "mirror": 20481.872513840593,
-      "spy": 16141.338024746294
+      "mirror": 20467.35423156502,
+      "spy": 16141.344613056406
     },
     {
       "date": "2017-09-27",
-      "mirror": 20117.358876138605,
-      "spy": 16140.692996812188
+      "mirror": 20104.087112964604,
+      "spy": 16140.699584904085
     },
     {
       "date": "2017-10-04",
-      "mirror": 20195.128401649043,
-      "spy": 16341.441026234934
+      "mirror": 20182.03335888111,
+      "spy": 16341.44880991178
     },
     {
       "date": "2017-10-11",
-      "mirror": 20690.125896750753,
-      "spy": 16461.506435676
+      "mirror": 20676.403689011015,
+      "spy": 16461.51313229956
     },
     {
       "date": "2017-10-18",
-      "mirror": 20985.54233637476,
-      "spy": 16506.6899658575
+      "mirror": 20970.09282971396,
+      "spy": 16506.693294751927
     },
     {
       "date": "2017-10-25",
-      "mirror": 20992.772338102248,
-      "spy": 16478.933466609036
+      "mirror": 20977.585049021833,
+      "spy": 16478.941296799778
     },
     {
       "date": "2017-11-01",
-      "mirror": 20480.836974716825,
-      "spy": 16620.94110252189
+      "mirror": 20467.98084440365,
+      "spy": 16620.95236376881
     },
     {
       "date": "2017-11-08",
-      "mirror": 20573.3739423262,
-      "spy": 16725.5111818186
+      "mirror": 20559.446638328067,
+      "spy": 16725.52135077014
     },
     {
       "date": "2017-11-15",
-      "mirror": 20129.62035430662,
-      "spy": 16553.165807249643
+      "mirror": 20117.124406101433,
+      "spy": 16553.173662553294
     },
     {
       "date": "2017-11-22",
-      "mirror": 20519.412129938522,
-      "spy": 16767.472955343204
+      "mirror": 20504.94131444009,
+      "spy": 16767.474117117716
     },
     {
       "date": "2017-11-29",
-      "mirror": 20542.56673075228,
-      "spy": 16957.89602713538
+      "mirror": 20530.176889973656,
+      "spy": 16957.8961256587
     },
     {
       "date": "2017-12-06",
-      "mirror": 20214.439559267492,
-      "spy": 16992.102805724917
+      "mirror": 20205.460190189388,
+      "spy": 16992.113064864796
     },
     {
       "date": "2017-12-13",
-      "mirror": 20341.206160509213,
-      "spy": 17218.672250593805
+      "mirror": 20332.187493139158,
+      "spy": 17218.68033103927
     },
     {
       "date": "2017-12-20",
-      "mirror": 20369.891152637152,
-      "spy": 17324.854899725786
+      "mirror": 20361.087563030247,
+      "spy": 17324.85850540662
     },
     {
       "date": "2017-12-27",
-      "mirror": 20340.23447450594,
-      "spy": 17343.668966251396
+      "mirror": 20331.50203628959,
+      "spy": 17343.678216655033
     },
     {
       "date": "2018-01-03",
-      "mirror": 20702.902541867566,
-      "spy": 17548.040203283035
+      "mirror": 20691.954055397327,
+      "spy": 17548.055161183736
     },
     {
       "date": "2018-01-10",
-      "mirror": 20332.493201368823,
-      "spy": 17784.852285783913
+      "mirror": 20323.783176625206,
+      "spy": 17784.856047082543
     },
     {
       "date": "2018-01-17",
-      "mirror": 20893.360950215858,
-      "spy": 18141.04866431292
+      "mirror": 20885.07472712367,
+      "spy": 18141.046907755335
     },
     {
       "date": "2018-01-24",
-      "mirror": 20781.208951167842,
-      "spy": 18372.665565533316
+      "mirror": 20773.458385331352,
+      "spy": 18372.668398018453
     },
     {
       "date": "2018-01-31",
-      "mirror": 20726.59269528406,
-      "spy": 18289.618219016982
+      "mirror": 20720.399788809133,
+      "spy": 18289.618768063887
     },
     {
       "date": "2018-02-07",
-      "mirror": 19909.815906239324,
-      "spy": 17366.37913681956
+      "mirror": 19902.127387106662,
+      "spy": 17366.385011891296
     },
     {
       "date": "2018-02-14",
-      "mirror": 19532.455732004426,
-      "spy": 17490.945082073602
+      "mirror": 19525.484945135,
+      "spy": 17490.954382300966
     },
     {
       "date": "2018-02-21",
-      "mirror": 19862.132414432665,
-      "spy": 17520.786645395783
+      "mirror": 19855.069431559004,
+      "spy": 17520.79144503221
     },
     {
       "date": "2018-02-28",
-      "mirror": 19849.62969220286,
-      "spy": 17624.59667429461
+      "mirror": 19842.60666550648,
+      "spy": 17624.603764393316
     },
     {
       "date": "2018-03-07",
-      "mirror": 19635.806090338832,
-      "spy": 17697.91109056745
+      "mirror": 19628.925204866322,
+      "spy": 17697.920460811718
     },
     {
       "date": "2018-03-14",
-      "mirror": 19887.781893335963,
-      "spy": 17861.414395151554
+      "mirror": 19880.903991614276,
+      "spy": 17861.41141632169
     },
     {
       "date": "2018-03-21",
-      "mirror": 19688.60127779166,
-      "spy": 17615.718518830927
+      "mirror": 19681.174967146715,
+      "spy": 17615.71883989657
     },
     {
       "date": "2018-03-28",
-      "mirror": 18996.042002590762,
-      "spy": 16925.236413450726
+      "mirror": 18989.346740716283,
+      "spy": 16925.23762859685
     },
     {
       "date": "2018-04-04",
-      "mirror": 19774.920256143298,
-      "spy": 17168.207836119604
+      "mirror": 19767.972244221233,
+      "spy": 17168.21477182129
     },
     {
       "date": "2018-04-11",
-      "mirror": 19396.218206985573,
-      "spy": 17181.238076991303
+      "mirror": 19390.387479781122,
+      "spy": 17181.243889429545
     },
     {
       "date": "2018-04-18",
-      "mirror": 19435.58557347016,
-      "spy": 17613.11021531416
+      "mirror": 19430.804889732113,
+      "spy": 17613.107152482626
     },
     {
       "date": "2018-04-25",
-      "mirror": 19071.249282167668,
-      "spy": 17172.76701083568
+      "mirror": 19065.57376174154,
+      "spy": 17172.776203422934
     },
     {
       "date": "2018-05-02",
-      "mirror": 19052.8424877893,
-      "spy": 17144.759040906614
+      "mirror": 19048.29833352285,
+      "spy": 17144.763713332348
     },
     {
       "date": "2018-05-09",
-      "mirror": 19604.101856460107,
-      "spy": 17555.13551055822
+      "mirror": 19599.096150930127,
+      "spy": 17555.139194143325
     },
     {
       "date": "2018-05-16",
-      "mirror": 19916.644324005338,
-      "spy": 17733.61879954212
+      "mirror": 19911.567706789952,
+      "spy": 17733.62479885158
     },
     {
       "date": "2018-05-23",
-      "mirror": 20145.38840941108,
-      "spy": 17806.57574404029
+      "mirror": 20139.6139716334,
+      "spy": 17806.581768031185
     },
     {
       "date": "2018-05-30",
-      "mirror": 20581.900562558287,
-      "spy": 17757.7193887165
+      "mirror": 20574.60277228412,
+      "spy": 17757.728779194007
     },
     {
       "date": "2018-06-06",
-      "mirror": 21102.893330323073,
-      "spy": 18069.739247457637
+      "mirror": 21095.328786346123,
+      "spy": 18069.743105133948
     },
     {
       "date": "2018-06-13",
-      "mirror": 21298.611373846325,
-      "spy": 18110.774075244764
+      "mirror": 21293.06084003378,
+      "spy": 18110.78696817598
     },
     {
       "date": "2018-06-20",
-      "mirror": 21326.531828674248,
-      "spy": 18057.31231068515
+      "mirror": 21320.213512190076,
+      "spy": 18057.316164157408
     },
     {
       "date": "2018-06-27",
-      "mirror": 20738.113818172424,
-      "spy": 17624.14786115165
+      "mirror": 20732.863959638446,
+      "spy": 17624.15269575533
     },
     {
       "date": "2018-07-04",
-      "mirror": 21029.755015312032,
-      "spy": 17725.5660994067
+      "mirror": 21023.213770865477,
+      "spy": 17725.572095991916
     },
     {
       "date": "2018-07-11",
-      "mirror": 21722.593271179583,
-      "spy": 18115.54412447776
+      "mirror": 21714.57432571413,
+      "spy": 18115.54799764993
     },
     {
       "date": "2018-07-18",
-      "mirror": 21928.091049509454,
-      "spy": 18390.36662057123
+      "mirror": 21919.867298507612,
+      "spy": 18390.36720370147
     },
     {
       "date": "2018-07-25",
-      "mirror": 22046.75881564454,
-      "spy": 18583.37882546954
+      "mirror": 22038.07256775519,
+      "spy": 18583.39075061204
     },
     {
       "date": "2018-08-01",
-      "mirror": 21753.23801983514,
-      "spy": 18377.267591755506
+      "mirror": 21744.19937830524,
+      "spy": 18377.277191827085
     },
     {
       "date": "2018-08-08",
-      "mirror": 21777.53602756099,
-      "spy": 18678.259953700075
+      "mirror": 21770.69734759463,
+      "spy": 18678.267400254626
     },
     {
       "date": "2018-08-15",
-      "mirror": 21821.43063932447,
-      "spy": 18437.469447158062
+      "mirror": 21814.878828293713,
+      "spy": 18437.485833625586
     },
     {
       "date": "2018-08-22",
-      "mirror": 22063.250389716548,
-      "spy": 18724.72000769523
+      "mirror": 22060.382603577644,
+      "spy": 18724.727469967285
     },
     {
       "date": "2018-08-29",
-      "mirror": 22112.845359203493,
-      "spy": 19072.163402265243
+      "mirror": 22112.115287954188,
+      "spy": 19072.16985440632
     },
     {
       "date": "2018-09-05",
-      "mirror": 21928.69344429002,
-      "spy": 18911.857045571338
+      "mirror": 21929.788187161783,
+      "spy": 18911.85780512256
     },
     {
       "date": "2018-09-12",
-      "mirror": 22681.496226606458,
-      "spy": 18917.752510675382
+      "mirror": 22681.065057685984,
+      "spy": 18917.749889206265
     },
     {
       "date": "2018-09-19",
-      "mirror": 22888.57948936277,
-      "spy": 19055.153609681194
+      "mirror": 22888.023161149948,
+      "spy": 19055.15329003826
     },
     {
       "date": "2018-09-26",
-      "mirror": 22825.400764502836,
-      "spy": 19053.333548342645
+      "mirror": 22824.911594911726,
+      "spy": 19053.339994113554
     },
     {
       "date": "2018-10-03",
-      "mirror": 22511.650920608863,
-      "spy": 19174.278541330223
+      "mirror": 22511.778981480235,
+      "spy": 19174.28277267381
     },
     {
       "date": "2018-10-10",
-      "mirror": 21720.623055791024,
-      "spy": 18292.197203082196
+      "mirror": 21719.886875395907,
+      "spy": 18292.20339135955
     },
     {
       "date": "2018-10-17",
-      "mirror": 21513.201596878425,
-      "spy": 18433.516959554832
+      "mirror": 21511.235129614368,
+      "spy": 18433.52319564087
     },
     {
       "date": "2018-10-24",
-      "mirror": 20951.145111802518,
-      "spy": 17439.04852515829
+      "mirror": 20948.50688881438,
+      "spy": 17439.049914127805
     },
     {
       "date": "2018-10-31",
-      "mirror": 20971.263635502502,
-      "spy": 17788.065021071103
+      "mirror": 20970.367997192356,
+      "spy": 17788.0699111282
     },
     {
       "date": "2018-11-07",
-      "mirror": 21838.230130759235,
-      "spy": 18470.31963727779
+      "mirror": 21837.492039713172,
+      "spy": 18470.329268829013
     },
     {
       "date": "2018-11-14",
-      "mirror": 21197.333565696776,
-      "spy": 17759.80219744779
+      "mirror": 21196.39711311979,
+      "spy": 17759.810460958317
     },
     {
       "date": "2018-11-21",
-      "mirror": 20592.282102161895,
-      "spy": 17419.32555563462
+      "mirror": 20589.57096981893,
+      "spy": 17419.335959304586
     },
     {
       "date": "2018-11-28",
-      "mirror": 21771.731368410838,
-      "spy": 18047.688764549355
+      "mirror": 21768.82962452727,
+      "spy": 18047.692614765954
     },
     {
       "date": "2018-12-05",
-      "mirror": 21034.122386123236,
-      "spy": 17763.089359035068
+      "mirror": 21031.188242250922,
+      "spy": 17763.095368314458
     },
     {
       "date": "2018-12-12",
-      "mirror": 20647.553637245073,
-      "spy": 17448.24919458903
+      "mirror": 20646.599781449615,
+      "spy": 17448.25396968593
     },
     {
       "date": "2018-12-19",
-      "mirror": 20106.36632038671,
-      "spy": 16514.907305990087
+      "mirror": 20104.233068432313,
+      "spy": 16514.90725464967
     },
     {
       "date": "2018-12-26",
-      "mirror": 19959.035198899448,
-      "spy": 16275.497069013367
+      "mirror": 19957.24908892659,
+      "spy": 16275.502575038086
     },
     {
       "date": "2019-01-02",
-      "mirror": 20001.292062896275,
-      "spy": 16539.94386227165
+      "mirror": 20001.029562472395,
+      "spy": 16539.950585430706
     },
     {
       "date": "2019-01-09",
-      "mirror": 20972.922025220585,
-      "spy": 17054.956943821562
+      "mirror": 20971.36813703113,
+      "spy": 17054.966096553497
     },
     {
       "date": "2019-01-16",
-      "mirror": 21083.481820123146,
-      "spy": 17253.954827520996
+      "mirror": 21079.761826545822,
+      "spy": 17253.9651752458
     },
     {
       "date": "2019-01-23",
-      "mirror": 22021.721516885555,
-      "spy": 17414.611889962296
+      "mirror": 22012.48351826093,
+      "spy": 17414.615526008052
     },
     {
       "date": "2019-01-30",
-      "mirror": 22461.299250813398,
-      "spy": 17690.30156521892
+      "mirror": 22454.028427035097,
+      "spy": 17690.298528501335
     },
     {
       "date": "2019-02-06",
-      "mirror": 22806.301900642407,
-      "spy": 18031.437894691975
+      "mirror": 22800.096135671585,
+      "spy": 18031.43948406769
     },
     {
       "date": "2019-02-13",
-      "mirror": 23633.773597831147,
-      "spy": 18180.18674911898
+      "mirror": 23627.93683004484,
+      "spy": 18180.192899503032
     },
     {
       "date": "2019-02-20",
-      "mirror": 23964.193024982065,
-      "spy": 18406.297231803983
+      "mirror": 23958.949585398663,
+      "spy": 18406.29894799517
     },
     {
       "date": "2019-02-27",
-      "mirror": 23911.65412970228,
-      "spy": 18458.517430357566
+      "mirror": 23908.07820664501,
+      "spy": 18458.529313259274
     },
     {
       "date": "2019-03-06",
-      "mirror": 23683.568970048924,
-      "spy": 18334.89196289556
+      "mirror": 23680.12833241791,
+      "spy": 18334.898165616614
     },
     {
       "date": "2019-03-13",
-      "mirror": 23677.40260930983,
-      "spy": 18599.99731614251
+      "mirror": 23672.92788103309,
+      "spy": 18600.0036085491
     },
     {
       "date": "2019-03-20",
-      "mirror": 24033.93765300402,
-      "spy": 18695.871922712122
+      "mirror": 24029.888983550183,
+      "spy": 18695.879375224828
     },
     {
       "date": "2019-03-27",
-      "mirror": 24384.292453726284,
-      "spy": 18569.706939677373
+      "mirror": 24379.2397285821,
+      "spy": 18569.710966493494
     },
     {
       "date": "2019-04-03",
-      "mirror": 25159.659794897125,
-      "spy": 19019.25757961387
+      "mirror": 25155.408840720604,
+      "spy": 19019.259503170448
     },
     {
       "date": "2019-04-10",
-      "mirror": 25366.175621803148,
-      "spy": 19143.434478299267
+      "mirror": 25362.515027560054,
+      "spy": 19143.44772058102
     },
     {
       "date": "2019-04-17",
-      "mirror": 25617.034200564005,
-      "spy": 19220.46118820686
+      "mirror": 25613.184166543342,
+      "spy": 19220.465435174105
     },
     {
       "date": "2019-04-24",
-      "mirror": 25483.739877281143,
-      "spy": 19405.060965852652
+      "mirror": 25480.330287036504,
+      "spy": 19405.07204129984
     },
     {
       "date": "2019-05-01",
-      "mirror": 25548.02261113227,
-      "spy": 19377.17591208585
+      "mirror": 25545.080134771215,
+      "spy": 19377.180212069918
     },
     {
       "date": "2019-05-08",
-      "mirror": 25441.205906655552,
-      "spy": 19092.964425468996
+      "mirror": 25436.956143359686,
+      "spy": 19092.97088464709
     },
     {
       "date": "2019-05-15",
-      "mirror": 25681.38146719826,
-      "spy": 18928.955924181253
+      "mirror": 25677.430063861415,
+      "spy": 18928.957817188646
     },
     {
       "date": "2019-05-22",
-      "mirror": 25320.521077827423,
-      "spy": 18966.796059420605
+      "mirror": 25314.24211156056,
+      "spy": 18966.806986602132
     },
     {
       "date": "2019-05-29",
-      "mirror": 24425.381100543113,
-      "spy": 18478.067866185575
+      "mirror": 24419.620280840594,
+      "spy": 18478.07637268644
     },
     {
       "date": "2019-06-05",
-      "mirror": 24985.20546425724,
-      "spy": 18789.50697425177
+      "mirror": 24980.399466632094,
+      "spy": 18789.508820083378
     },
     {
       "date": "2019-06-12",
-      "mirror": 25628.29646008618,
-      "spy": 19150.078717089058
+      "mirror": 25623.10325912258,
+      "spy": 19150.08068490262
     },
     {
       "date": "2019-06-19",
-      "mirror": 26206.556862203503,
-      "spy": 19460.17476874001
+      "mirror": 26201.037469890118,
+      "spy": 19460.183607489093
     },
     {
       "date": "2019-06-26",
-      "mirror": 25879.34746384128,
-      "spy": 19382.00460022195
+      "mirror": 25874.329661269367,
+      "spy": 19382.00664649638
     },
     {
       "date": "2019-07-03",
-      "mirror": 26987.61104900293,
-      "spy": 19937.833741343573
+      "mirror": 26982.717923869164,
+      "spy": 19937.835975655824
     },
     {
       "date": "2019-07-10",
-      "mirror": 26984.86880833554,
-      "spy": 19925.15646156169
+      "mirror": 26979.472125452172,
+      "spy": 19925.15643624201
     },
     {
       "date": "2019-07-17",
-      "mirror": 27249.052089272922,
-      "spy": 19867.10394749202
+      "mirror": 27242.878737914274,
+      "spy": 19867.11066856266
     },
     {
       "date": "2019-07-24",
-      "mirror": 27221.50829395252,
-      "spy": 20113.99177228529
+      "mirror": 27213.89082113861,
+      "spy": 20113.998576878446
     },
     {
       "date": "2019-07-31",
-      "mirror": 27375.824145734012,
-      "spy": 19846.42020209447
+      "mirror": 27369.08908817788,
+      "spy": 19846.424660824574
     },
     {
       "date": "2019-08-07",
-      "mirror": 27402.294281962513,
-      "spy": 19215.188197612653
+      "mirror": 27392.05361450753,
+      "spy": 19215.192442796037
     },
     {
       "date": "2019-08-14",
-      "mirror": 26664.295870359736,
-      "spy": 18943.60888392914
+      "mirror": 26656.01750284743,
+      "spy": 18943.61529258003
     },
     {
       "date": "2019-08-21",
-      "mirror": 27721.487560542202,
-      "spy": 19514.124814935058
+      "mirror": 27714.052724667974,
+      "spy": 19514.131416592332
     },
     {
       "date": "2019-08-28",
-      "mirror": 27929.077233325166,
-      "spy": 19276.57861847421
+      "mirror": 27920.272825046693,
+      "spy": 19276.591905798825
     },
     {
       "date": "2019-09-04",
-      "mirror": 27946.463810630154,
-      "spy": 19620.220633383604
+      "mirror": 27939.615727113982,
+      "spy": 19620.22050490368
     },
     {
       "date": "2019-09-11",
-      "mirror": 27523.31905507477,
-      "spy": 20034.58342077484
+      "mirror": 27517.825620038195,
+      "spy": 20034.59470919041
     },
     {
       "date": "2019-09-18",
-      "mirror": 27574.9280918578,
-      "spy": 20091.303027470185
+      "mirror": 27568.273764773698,
+      "spy": 20091.31207973089
     },
     {
       "date": "2019-09-25",
-      "mirror": 27204.399628074025,
-      "spy": 19950.808726325813
+      "mirror": 27198.3782087578,
+      "spy": 19950.81322037071
     },
     {
       "date": "2019-10-02",
-      "mirror": 26321.140244725095,
-      "spy": 19309.957686393056
+      "mirror": 26314.280655620118,
+      "spy": 19309.9619636371
     },
     {
       "date": "2019-10-09",
-      "mirror": 26529.70382242027,
-      "spy": 19525.13765200585
+      "mirror": 26522.830358863386,
+      "spy": 19525.146512731975
     },
     {
       "date": "2019-10-16",
-      "mirror": 26950.64090881538,
-      "spy": 20003.080797755214
+      "mirror": 26945.6208382034,
+      "spy": 20003.10109688616
     },
     {
       "date": "2019-10-23",
-      "mirror": 26727.961732948184,
-      "spy": 20102.30684317127
+      "mirror": 26723.902045933093,
+      "spy": 20102.313643811394
     },
     {
       "date": "2019-10-30",
-      "mirror": 26797.849890086552,
-      "spy": 20387.87379058672
+      "mirror": 26795.71540207947,
+      "spy": 20387.878432491376
     },
     {
       "date": "2019-11-06",
-      "mirror": 26884.06065215444,
-      "spy": 20586.28979594
+      "mirror": 26881.84252496116,
+      "spy": 20586.296760312274
     },
     {
       "date": "2019-11-13",
-      "mirror": 27227.855719329662,
-      "spy": 20720.36313719485
+      "mirror": 27224.766448641403,
+      "spy": 20720.37014692433
     },
     {
       "date": "2019-11-20",
-      "mirror": 27473.235301892368,
-      "spy": 20832.311569241327
+      "mirror": 27472.092921079202,
+      "spy": 20832.311850813556
     },
     {
       "date": "2019-11-27",
-      "mirror": 28283.322195046443,
-      "spy": 21148.041466274793
+      "mirror": 28283.59935286446,
+      "spy": 21148.050876031677
     },
     {
       "date": "2019-12-04",
-      "mirror": 27822.381983540363,
-      "spy": 20878.564131733197
+      "mirror": 27822.33232369183,
+      "spy": 20878.56893963912
     },
     {
       "date": "2019-12-11",
-      "mirror": 28233.9571829107,
-      "spy": 21076.991413798616
+      "mirror": 28234.121061176833,
+      "spy": 21076.98952280321
     },
     {
       "date": "2019-12-18",
-      "mirror": 28629.53417118905,
-      "spy": 21423.55184180848
+      "mirror": 28631.35820317857,
+      "spy": 21423.55683408455
     },
     {
       "date": "2019-12-25",
-      "mirror": 28817.970734599654,
-      "spy": 21639.36104795839
+      "mirror": 28820.649117823563,
+      "spy": 21639.368368586223
     },
     {
       "date": "2020-01-01",
-      "mirror": 28691.110336081765,
-      "spy": 21681.79531572144
+      "mirror": 28693.991569463393,
+      "spy": 21681.80490604804
     },
     {
       "date": "2020-01-08",
-      "mirror": 28593.43280254394,
-      "spy": 21856.27537189751
+      "mirror": 28597.311388943643,
+      "spy": 21856.2782552214
     },
     {
       "date": "2020-01-15",
-      "mirror": 28710.347579090067,
-      "spy": 22108.217419069577
+      "mirror": 28714.179987443335,
+      "spy": 22108.22038762583
     },
     {
       "date": "2020-01-22",
-      "mirror": 29293.040847317276,
-      "spy": 22320.41131130909
+      "mirror": 29295.961515524756,
+      "spy": 22320.423373023612
     },
     {
       "date": "2020-01-29",
-      "mirror": 28531.903258977414,
-      "spy": 22002.453135957792
+      "mirror": 28535.291819671445,
+      "spy": 22002.462834763406
     },
     {
       "date": "2020-02-05",
-      "mirror": 29009.1192469464,
-      "spy": 22422.801602150153
+      "mirror": 29013.243314243442,
+      "spy": 22422.806932473897
     },
     {
       "date": "2020-02-12",
-      "mirror": 29605.413526444445,
-      "spy": 22729.98826207034
+      "mirror": 29608.02182462035,
+      "spy": 22729.99369631578
     },
     {
       "date": "2020-02-19",
-      "mirror": 29466.3715982121,
-      "spy": 22791.96056127805
+      "mirror": 29468.960251010372,
+      "spy": 22791.966016488812
     },
     {
       "date": "2020-02-26",
-      "mirror": 26606.090413564976,
-      "spy": 20983.90892115357
+      "mirror": 26606.538580625653,
+      "spy": 20983.9115093546
     },
     {
       "date": "2020-03-04",
-      "mirror": 26338.520932499898,
-      "spy": 21075.523185878672
+      "mirror": 26342.20602111303,
+      "spy": 21075.530315759323
     },
     {
       "date": "2020-03-11",
-      "mirror": 22203.973342685986,
-      "spy": 18482.002311049386
+      "mirror": 22207.589972535854,
+      "spy": 18482.014201896065
     },
     {
       "date": "2020-03-18",
-      "mirror": 15637.870476511967,
-      "spy": 16167.377080736636
+      "mirror": 15644.908868626084,
+      "spy": 16167.382550184204
     },
     {
       "date": "2020-03-25",
-      "mirror": 20077.664404252373,
-      "spy": 16722.531874472603
+      "mirror": 20079.87956646996,
+      "spy": 16722.542042416237
     },
     {
       "date": "2020-04-01",
-      "mirror": 18237.111428967917,
-      "spy": 16679.16840562965
+      "mirror": 18242.1359470882,
+      "spy": 16679.175175888577
     },
     {
       "date": "2020-04-08",
-      "mirror": 20803.528895992546,
-      "spy": 18568.325542440867
+      "mirror": 20808.99737138782,
+      "spy": 18568.329568789657
     },
     {
       "date": "2020-04-15",
-      "mirror": 20818.828093842305,
-      "spy": 18821.069363845712
+      "mirror": 20824.550946183175,
+      "spy": 18821.080241727683
     },
     {
       "date": "2020-04-22",
-      "mirror": 21495.046277529047,
-      "spy": 18911.870577625898
+      "mirror": 21498.958597141373,
+      "spy": 18911.878103211267
     },
     {
       "date": "2020-04-29",
-      "mirror": 23558.55942336866,
-      "spy": 19867.96323295669
+      "mirror": 23561.48653013501,
+      "spy": 19867.967698974833
     },
     {
       "date": "2020-05-06",
-      "mirror": 22667.181792272415,
-      "spy": 19260.829562306822
+      "mirror": 22670.226973362547,
+      "spy": 19260.83833361713
     },
     {
       "date": "2020-05-13",
-      "mirror": 22429.133241857737,
-      "spy": 19081.263708957984
+      "mirror": 22430.75234052486,
+      "spy": 19081.272419520898
     },
     {
       "date": "2020-05-20",
-      "mirror": 24257.29003296427,
-      "spy": 20120.038345331945
+      "mirror": 24259.94399454892,
+      "spy": 20120.036130597902
     },
     {
       "date": "2020-05-27",
-      "mirror": 25764.275809129438,
-      "spy": 20567.245684486843
+      "mirror": 25767.2805815343,
+      "spy": 20567.254897759653
     },
     {
       "date": "2020-06-03",
-      "mirror": 26763.605397557934,
-      "spy": 21153.377606456957
+      "mirror": 26766.21722058417,
+      "spy": 21153.382507332684
     },
     {
       "date": "2020-06-10",
-      "mirror": 26252.098544546625,
-      "spy": 21615.508546450976
+      "mirror": 26254.551491820792,
+      "spy": 21615.506837636713
     },
     {
       "date": "2020-06-17",
-      "mirror": 25848.939949693384,
-      "spy": 21118.14239172073
+      "mirror": 25851.363906320883,
+      "spy": 21118.145025333142
     },
     {
       "date": "2020-06-24",
-      "mirror": 25056.041560859336,
-      "spy": 20695.867863095755
+      "mirror": 25058.42204480193,
+      "spy": 20695.87711988164
     },
     {
       "date": "2020-07-01",
-      "mirror": 25494.963691084995,
-      "spy": 21133.485486251266
+      "mirror": 25497.797760353464,
+      "spy": 21133.488125054268
     },
     {
       "date": "2020-07-08",
-      "mirror": 25658.645864834423,
-      "spy": 21518.695717431758
+      "mirror": 25661.540783901663,
+      "spy": 21518.70074189514
     },
     {
       "date": "2020-07-15",
-      "mirror": 26864.629197494054,
-      "spy": 21904.589317367616
+      "mirror": 26867.29200651639,
+      "spy": 21904.596727722565
     },
     {
       "date": "2020-07-22",
-      "mirror": 27492.07963720453,
-      "spy": 22245.563262185926
+      "mirror": 27495.82828510797,
+      "spy": 22245.564021863294
     },
     {
       "date": "2020-07-29",
-      "mirror": 27334.534992726596,
-      "spy": 22127.141997374107
+      "mirror": 27338.56137338452,
+      "spy": 22127.149483018955
     },
     {
       "date": "2020-08-05",
-      "mirror": 27631.39035297552,
-      "spy": 22602.86588617535
+      "mirror": 27635.32329411772,
+      "spy": 22602.871277415103
     },
     {
       "date": "2020-08-12",
-      "mirror": 28354.336252846733,
-      "spy": 22965.61290678343
+      "mirror": 28361.198468565624,
+      "spy": 22965.627442113797
     },
     {
       "date": "2020-08-19",
-      "mirror": 28305.9358536089,
-      "spy": 22951.32305716628
+      "mirror": 28312.73646341821,
+      "spy": 22951.32856628961
     },
     {
       "date": "2020-08-26",
-      "mirror": 29400.37261081678,
-      "spy": 23655.04853327752
+      "mirror": 29409.249615268032,
+      "spy": 23655.05428047222
     },
     {
       "date": "2020-09-02",
-      "mirror": 30455.81977902158,
-      "spy": 24344.479649086763
+      "mirror": 30464.359739821433,
+      "spy": 24344.49014020341
     },
     {
       "date": "2020-09-09",
-      "mirror": 29240.79678981054,
-      "spy": 23125.559536360237
+      "mirror": 29248.209935374227,
+      "spy": 23125.560593741648
     },
     {
       "date": "2020-09-16",
-      "mirror": 30128.84240395107,
-      "spy": 23059.54115283858
+      "mirror": 30137.50555974143,
+      "spy": 23059.548953915444
     },
     {
       "date": "2020-09-23",
-      "mirror": 28565.792352980454,
-      "spy": 22046.254141231573
+      "mirror": 28572.060097054196,
+      "spy": 22046.25708882556
     },
     {
       "date": "2020-09-30",
-      "mirror": 29641.21480260419,
-      "spy": 22883.306440254346
+      "mirror": 29647.432757366507,
+      "spy": 22883.316437053934
     },
     {
       "date": "2020-10-07",
-      "mirror": 30541.439808639876,
-      "spy": 23284.410069517548
+      "mirror": 30548.874866432623,
+      "spy": 23284.415691324706
     },
     {
       "date": "2020-10-14",
-      "mirror": 30841.675285604077,
-      "spy": 23774.338104923718
+      "mirror": 30848.47840268429,
+      "spy": 23774.346147817447
     },
     {
       "date": "2020-10-21",
-      "mirror": 30617.95593674067,
-      "spy": 23419.015671585155
+      "mirror": 30627.00716091305,
+      "spy": 23419.032615645538
     },
     {
       "date": "2020-10-28",
-      "mirror": 28983.789964105184,
-      "spy": 22320.941316779423
+      "mirror": 28993.019805841956,
+      "spy": 22320.948867986866
     },
     {
       "date": "2020-11-04",
-      "mirror": 30551.416107409437,
-      "spy": 23474.370796112198
+      "mirror": 30562.628805548557,
+      "spy": 23474.37648218335
     },
     {
       "date": "2020-11-11",
-      "mirror": 31326.22007079584,
-      "spy": 24371.550524237435
+      "mirror": 31335.786120720855,
+      "spy": 24371.565535198577
     },
     {
       "date": "2020-11-18",
-      "mirror": 30777.77879958715,
-      "spy": 24344.89688743575
+      "mirror": 30784.82201631299,
+      "spy": 24344.914144723116
     },
     {
       "date": "2020-11-25",
-      "mirror": 31920.48359972975,
-      "spy": 24780.852323222596
+      "mirror": 31929.517786463974,
+      "spy": 24780.858451278382
     },
     {
       "date": "2020-12-02",
-      "mirror": 31719.52304937549,
-      "spy": 25063.058810421895
+      "mirror": 31729.151887727596,
+      "spy": 25063.062778605363
     },
     {
       "date": "2020-12-09",
-      "mirror": 32649.022966891433,
-      "spy": 25067.154512269233
+      "mirror": 32657.645509432965,
+      "spy": 25067.167503211043
     },
     {
       "date": "2020-12-16",
-      "mirror": 32918.49443274909,
-      "spy": 25294.014896311197
+      "mirror": 32927.026219377134,
+      "spy": 25294.02796400021
     },
     {
       "date": "2020-12-23",
-      "mirror": 32894.02477439415,
-      "spy": 25223.418167662832
+      "mirror": 32903.13380890286,
+      "spy": 25223.43121146887
     },
     {
       "date": "2020-12-30",
-      "mirror": 33299.501796512704,
-      "spy": 25526.727893951094
+      "mirror": 33308.46402917669,
+      "spy": 25526.734274337687
     },
     {
       "date": "2021-01-06",
-      "mirror": 33570.06746738646,
-      "spy": 25633.77546690381
+      "mirror": 33580.88520060217,
+      "spy": 25633.790904877515
     },
     {
       "date": "2021-01-13",
-      "mirror": 34470.146313694895,
-      "spy": 26061.98154611166
+      "mirror": 34480.174179039626,
+      "spy": 26061.990362918546
     },
     {
       "date": "2021-01-20",
-      "mirror": 34368.158150659045,
-      "spy": 26343.333258531144
+      "mirror": 34379.739933374054,
+      "spy": 26343.34442586292
     },
     {
       "date": "2021-01-27",
-      "mirror": 32262.735638359216,
-      "spy": 25692.793267532215
+      "mirror": 32273.976234340786,
+      "spy": 25692.808725471732
     },
     {
       "date": "2021-02-03",
-      "mirror": 33521.95942140513,
-      "spy": 26203.335132720702
+      "mirror": 33532.8872026429,
+      "spy": 26203.346252690902
     },
     {
       "date": "2021-02-10",
-      "mirror": 34467.6260209025,
-      "spy": 26768.102195880325
+      "mirror": 34480.490770005985,
+      "spy": 26768.1044855393
     },
     {
       "date": "2021-02-17",
-      "mirror": 34765.94011865986,
-      "spy": 26926.616683016022
+      "mirror": 34779.965307465565,
+      "spy": 26926.628047673443
     },
     {
       "date": "2021-02-24",
-      "mirror": 34933.655302355066,
-      "spy": 26884.07190347405
+      "mirror": 34945.662358605994,
+      "spy": 26884.085509081702
     },
     {
       "date": "2021-03-03",
-      "mirror": 34384.178643667554,
-      "spy": 26173.835253776208
+      "mirror": 34393.456888368004,
+      "spy": 26173.844108423367
     },
     {
       "date": "2021-03-10",
-      "mirror": 35160.33891004058,
-      "spy": 26733.787160854292
+      "mirror": 35170.87168169849,
+      "spy": 26733.80297096358
     },
     {
       "date": "2021-03-17",
-      "mirror": 35990.148747057945,
-      "spy": 27260.804302471643
+      "mirror": 36001.664303216574,
+      "spy": 27260.81578018523
     },
     {
       "date": "2021-03-24",
-      "mirror": 35562.49332853326,
-      "spy": 26679.52136671947
+      "mirror": 35572.062893618146,
+      "spy": 26679.53941381375
     },
     {
       "date": "2021-03-31",
-      "mirror": 36724.92467508658,
-      "spy": 27286.0663929959
+      "mirror": 36737.24108876824,
+      "spy": 27286.0756239125
     },
     {
       "date": "2021-04-07",
-      "mirror": 37616.129995399286,
-      "spy": 27992.4328750891
+      "mirror": 37628.75830786049,
+      "spy": 27992.442344970525
     },
     {
       "date": "2021-04-14",
-      "mirror": 38316.56136019116,
-      "spy": 28327.030966866427
+      "mirror": 38331.37695422809,
+      "spy": 28327.03829459969
     },
     {
       "date": "2021-04-21",
-      "mirror": 38516.51846980456,
-      "spy": 28645.10190933907
+      "mirror": 38531.44804329029,
+      "spy": 28645.111600019394
     },
     {
       "date": "2021-04-28",
-      "mirror": 38418.09534549529,
-      "spy": 28736.662045845926
+      "mirror": 38431.629865833595,
+      "spy": 28736.68304421713
     },
     {
       "date": "2021-05-05",
-      "mirror": 38353.81907660524,
-      "spy": 28623.069469170205
+      "mirror": 38365.640081985206,
+      "spy": 28623.0836630833
     },
     {
       "date": "2021-05-12",
-      "mirror": 37204.82099993462,
-      "spy": 27911.199951555245
+      "mirror": 37216.30138541716,
+      "spy": 27911.204883269074
     },
     {
       "date": "2021-05-19",
-      "mirror": 37297.39667532628,
-      "spy": 28286.409994414647
+      "mirror": 37308.2690081621,
+      "spy": 28286.417308405773
     },
     {
       "date": "2021-05-26",
-      "mirror": 37973.89833020467,
-      "spy": 28851.639402771794
+      "mirror": 37985.43200035898,
+      "spy": 28851.64916332406
     },
     {
       "date": "2021-06-02",
-      "mirror": 38120.0317369227,
-      "spy": 28938.38663853954
+      "mirror": 38130.71645653176,
+      "spy": 28938.398683781714
     },
     {
       "date": "2021-06-09",
-      "mirror": 38350.529597489905,
-      "spy": 29029.263406291033
+      "mirror": 38363.54637052438,
+      "spy": 29029.279992963326
     },
     {
       "date": "2021-06-16",
-      "mirror": 38464.727120155476,
-      "spy": 29060.937435335105
+      "mirror": 38477.398326159266,
+      "spy": 29060.9472666932
     },
     {
       "date": "2021-06-23",
-      "mirror": 38687.22654250268,
-      "spy": 29189.855063801948
+      "mirror": 38702.876524221625,
+      "spy": 29189.871704802637
     },
     {
       "date": "2021-06-30",
-      "mirror": 38586.870199778736,
-      "spy": 29566.995679778815
+      "mirror": 38602.92991318167,
+      "spy": 29566.998916307595
     },
     {
       "date": "2021-07-07",
-      "mirror": 39180.45645291687,
-      "spy": 30009.05181683056
+      "mirror": 39197.57857960356,
+      "spy": 30009.059713593964
     },
     {
       "date": "2021-07-14",
-      "mirror": 38919.96026610299,
-      "spy": 30131.997298550843
+      "mirror": 38937.216538374785,
+      "spy": 30132.007492250075
     },
     {
       "date": "2021-07-21",
-      "mirror": 39029.59241097827,
-      "spy": 30015.267540559234
+      "mirror": 39047.301491308586,
+      "spy": 30015.279950111806
     },
     {
       "date": "2021-07-28",
-      "mirror": 39928.624394923085,
-      "spy": 30310.90008122616
+      "mirror": 39947.440761684586,
+      "spy": 30310.899058732517
     },
     {
       "date": "2021-08-04",
-      "mirror": 39845.91990491265,
-      "spy": 30321.261124335564
+      "mirror": 39863.6667380809,
+      "spy": 30321.271382063027
     },
     {
       "date": "2021-08-11",
-      "mirror": 40023.26260017046,
-      "spy": 30652.807737809228
+      "mirror": 40041.73868988741,
+      "spy": 30652.811341669832
     },
     {
       "date": "2021-08-18",
-      "mirror": 40265.99437947785,
-      "spy": 30335.075096700628
+      "mirror": 40285.85534042914,
+      "spy": 30335.07859307181
     },
     {
       "date": "2021-08-25",
-      "mirror": 41652.98954060235,
-      "spy": 31007.142331164785
+      "mirror": 41675.57626851855,
+      "spy": 31007.155076270064
     },
     {
       "date": "2021-09-01",
-      "mirror": 41602.319677952204,
-      "spy": 31206.758178689204
+      "mirror": 41624.25531357156,
+      "spy": 31206.77324666801
     },
     {
       "date": "2021-09-08",
-      "mirror": 41683.00202224226,
-      "spy": 31145.286565500275
+      "mirror": 41705.46152215637,
+      "spy": 31145.294846653574
     },
     {
       "date": "2021-09-15",
-      "mirror": 41858.261365891485,
-      "spy": 30936.004320333956
+      "mirror": 41881.34606409665,
+      "spy": 30936.01027534357
     },
     {
       "date": "2021-09-22",
-      "mirror": 41621.33009584756,
-      "spy": 30340.783368383236
+      "mirror": 41644.58416748812,
+      "spy": 30340.798143401484
     },
     {
       "date": "2021-09-29",
-      "mirror": 40915.40870201991,
-      "spy": 30104.500163681478
+      "mirror": 40938.377781747346,
+      "spy": 30104.510348078387
     },
     {
       "date": "2021-10-06",
-      "mirror": 40570.2629293089,
-      "spy": 30135.68252807648
+      "mirror": 40593.408423122164,
+      "spy": 30135.690467679236
     },
     {
       "date": "2021-10-13",
-      "mirror": 40823.48939376346,
-      "spy": 30155.080728290668
+      "mirror": 40846.90880381721,
+      "spy": 30155.093185142247
     },
     {
       "date": "2021-10-20",
-      "mirror": 41729.36086581631,
-      "spy": 31349.009391584168
+      "mirror": 41754.64718537266,
+      "spy": 31349.019997000392
     },
     {
       "date": "2021-10-27",
-      "mirror": 42129.59150656154,
-      "spy": 31455.028528390194
+      "mirror": 42160.04680167656,
+      "spy": 31455.03240364328
     },
     {
       "date": "2021-11-03",
-      "mirror": 42522.88791210773,
-      "spy": 32202.006961565472
+      "mirror": 42552.60690206198,
+      "spy": 32202.01560020884
     },
     {
       "date": "2021-11-10",
-      "mirror": 42645.536565106995,
-      "spy": 32125.780898219444
+      "mirror": 42675.94176435223,
+      "spy": 32125.796277104993
     },
     {
       "date": "2021-11-17",
-      "mirror": 43672.09502039506,
-      "spy": 32438.991577762008
+      "mirror": 43704.96874572377,
+      "spy": 32439.004807264006
     },
     {
       "date": "2021-11-24",
-      "mirror": 44320.54266412571,
-      "spy": 32529.06995429436
+      "mirror": 44353.87200889482,
+      "spy": 32529.080958926814
     },
     {
       "date": "2021-12-01",
-      "mirror": 41603.52968636683,
-      "spy": 31216.65236591623
+      "mirror": 41635.773612815996,
+      "spy": 31216.667437242253
     },
     {
       "date": "2021-12-08",
-      "mirror": 44681.49660468124,
-      "spy": 32534.6135859798
+      "mirror": 44714.17311806459,
+      "spy": 32534.631358517243
     },
     {
       "date": "2021-12-15",
-      "mirror": 43944.47675143493,
-      "spy": 32609.454869075682
+      "mirror": 43978.11449144957,
+      "spy": 32609.465900902473
     },
     {
       "date": "2021-12-22",
-      "mirror": 44904.20469162289,
-      "spy": 32521.665665106684
+      "mirror": 44938.07644335848,
+      "spy": 32521.68117792064
     },
     {
       "date": "2021-12-29",
-      "mirror": 46221.12401339728,
-      "spy": 33202.43401065401
+      "mirror": 46256.23042889751,
+      "spy": 33202.44524308653
     },
     {
       "date": "2022-01-05",
-      "mirror": 44795.52235479937,
-      "spy": 32569.643564555176
+      "mirror": 44830.37295831843,
+      "spy": 32569.65683825693
     },
     {
       "date": "2022-01-12",
-      "mirror": 43998.178542784575,
-      "spy": 32753.221672081556
+      "mirror": 44030.44578060726,
+      "spy": 32753.23726323125
     },
     {
       "date": "2022-01-19",
-      "mirror": 41788.270984461094,
-      "spy": 31413.246054588537
+      "mirror": 41818.01275582663,
+      "spy": 31413.261192422495
     },
     {
       "date": "2022-01-26",
-      "mirror": 40720.78409283173,
-      "spy": 30135.85618944335
+      "mirror": 40750.13542852367,
+      "spy": 30135.873150477622
     },
     {
       "date": "2022-02-02",
-      "mirror": 42159.846123065865,
-      "spy": 31802.657988710434
+      "mirror": 42189.45560380196,
+      "spy": 31802.66198156708
     },
     {
       "date": "2022-02-09",
-      "mirror": 42593.858840713445,
-      "spy": 31815.8697846475
+      "mirror": 42623.446307974256,
+      "spy": 31815.878292660094
     },
     {
       "date": "2022-02-16",
-      "mirror": 42388.001730558855,
-      "spy": 31055.133762667836
+      "mirror": 42416.124505565465,
+      "spy": 31055.14652400869
     },
     {
       "date": "2022-02-23",
-      "mirror": 39672.45139046605,
-      "spy": 29341.055475447047
+      "mirror": 39697.53712653385,
+      "spy": 29341.065401569493
     },
     {
       "date": "2022-03-02",
-      "mirror": 41089.69820285471,
-      "spy": 30449.470575280342
+      "mirror": 41117.9773415086,
+      "spy": 30449.478621038066
     },
     {
       "date": "2022-03-09",
-      "mirror": 40105.852610549395,
-      "spy": 29720.724330284524
+      "mirror": 40130.03288954436,
+      "spy": 29720.736640192696
     },
     {
       "date": "2022-03-16",
-      "mirror": 41664.01436699541,
-      "spy": 30291.614648133316
+      "mirror": 41691.896263036964,
+      "spy": 30291.627151174525
     },
     {
       "date": "2022-03-23",
-      "mirror": 40592.41947735927,
-      "spy": 30956.302402176498
+      "mirror": 40618.02302484344,
+      "spy": 30956.308364052984
     },
     {
       "date": "2022-03-30",
-      "mirror": 40668.21273116562,
-      "spy": 31995.62283141778
+      "mirror": 40691.83535576698,
+      "spy": 31995.631400241095
     },
     {
       "date": "2022-04-06",
-      "mirror": 39379.703973941294,
-      "spy": 31146.028573158743
+      "mirror": 39398.962635699914,
+      "spy": 31146.039109906254
     },
     {
       "date": "2022-04-13",
-      "mirror": 40530.05290643485,
-      "spy": 30922.12494303851
+      "mirror": 40551.16171451453,
+      "spy": 30922.137659382282
     },
     {
       "date": "2022-04-20",
-      "mirror": 41824.81998739599,
-      "spy": 31019.783525467836
+      "mirror": 41847.24222219023,
+      "spy": 31019.784998133702
     },
     {
       "date": "2022-04-27",
-      "mirror": 39864.86092778429,
-      "spy": 29105.760110728294
+      "mirror": 39887.27614856814,
+      "spy": 29105.769957249966
     },
     {
       "date": "2022-05-04",
-      "mirror": 39119.33252300667,
-      "spy": 29928.14817329104
+      "mirror": 39144.30399325465,
+      "spy": 29928.158298027814
     },
     {
       "date": "2022-05-11",
-      "mirror": 35395.91797229669,
-      "spy": 27395.418925908958
+      "mirror": 35417.44754383888,
+      "spy": 27395.42819381968
     },
     {
       "date": "2022-05-18",
-      "mirror": 34777.96794482988,
-      "spy": 27333.340625607183
+      "mirror": 34796.812508831674,
+      "spy": 27333.349872516723
     },
     {
       "date": "2022-05-25",
-      "mirror": 35599.20497641671,
-      "spy": 27717.678039268445
+      "mirror": 35621.06191688161,
+      "spy": 27717.687416199904
     },
     {
       "date": "2022-06-01",
-      "mirror": 36707.992881828606,
-      "spy": 28570.05990076719
+      "mirror": 36730.33096914018,
+      "spy": 28570.071821403882
     },
     {
       "date": "2022-06-08",
-      "mirror": 37337.16112215854,
-      "spy": 28683.753967852124
+      "mirror": 37360.50461261719,
+      "spy": 28683.768182294876
     },
     {
       "date": "2022-06-15",
-      "mirror": 34484.0005604867,
-      "spy": 26450.272575047366
+      "mirror": 34505.044195483315,
+      "spy": 26450.28377855687
     },
     {
       "date": "2022-06-22",
-      "mirror": 33440.42916154822,
-      "spy": 26227.564276413417
+      "mirror": 33459.01048910199,
+      "spy": 26227.575404580373
     },
     {
       "date": "2022-06-29",
-      "mirror": 33932.023670069335,
-      "spy": 26644.389897734884
+      "mirror": 33949.587515915526,
+      "spy": 26644.396656228186
     },
     {
       "date": "2022-07-06",
-      "mirror": 34304.37482978201,
-      "spy": 26848.24804436439
+      "mirror": 34320.4960590601,
+      "spy": 26848.261637852775
     },
     {
       "date": "2022-07-13",
-      "mirror": 34936.84707059675,
-      "spy": 26538.60531654126
+      "mirror": 34953.98318955061,
+      "spy": 26538.61429459067
     },
     {
       "date": "2022-07-20",
-      "mirror": 36677.656697373866,
-      "spy": 27655.26820362991
+      "mirror": 36697.268223059364,
+      "spy": 27655.279814791214
     },
     {
       "date": "2022-07-27",
-      "mirror": 36691.276616637,
-      "spy": 28094.5164393601
+      "mirror": 36712.47473925445,
+      "spy": 28094.519177746977
     },
     {
       "date": "2022-08-03",
-      "mirror": 37630.51846767458,
-      "spy": 29033.938731142098
+      "mirror": 37650.00195938129,
+      "spy": 29033.950808709684
     },
     {
       "date": "2022-08-10",
-      "mirror": 39255.474381295724,
-      "spy": 29422.033545286657
+      "mirror": 39272.25500966326,
+      "spy": 29422.050264833673
     },
     {
       "date": "2022-08-17",
-      "mirror": 40677.486712136204,
-      "spy": 29888.593977807206
+      "mirror": 40697.26593114158,
+      "spy": 29888.604089162734
     },
     {
       "date": "2022-08-24",
-      "mirror": 39615.79616141176,
-      "spy": 28979.296294821972
+      "mirror": 39633.2438855905,
+      "spy": 28979.30609856075
     },
     {
       "date": "2022-08-31",
-      "mirror": 37652.58181634071,
-      "spy": 27683.99450012196
+      "mirror": 37666.53463337597,
+      "spy": 27684.001610315034
     },
     {
       "date": "2022-09-07",
-      "mirror": 38426.88071471405,
-      "spy": 27866.135954522375
+      "mirror": 38441.79911508687,
+      "spy": 27866.138615647793
     },
     {
       "date": "2022-09-14",
-      "mirror": 37740.870990277595,
-      "spy": 27643.362250958042
+      "mirror": 37754.25791991755,
+      "spy": 27643.37160274836
     },
     {
       "date": "2022-09-21",
-      "mirror": 36366.34592163121,
-      "spy": 26546.332119695984
+      "mirror": 36378.36508297614,
+      "spy": 26546.34335570258
     },
     {
       "date": "2022-09-28",
-      "mirror": 36269.132717946464,
-      "spy": 26063.78582005322
+      "mirror": 36283.361138034175,
+      "spy": 26063.794637470495
     },
     {
       "date": "2022-10-05",
-      "mirror": 36843.148203474295,
-      "spy": 26525.226625264597
+      "mirror": 36859.75636539753,
+      "spy": 26525.240109474355
     },
     {
       "date": "2022-10-12",
-      "mirror": 35236.78147666627,
-      "spy": 25081.110571207195
+      "mirror": 35252.93116841704,
+      "spy": 25081.12131152717
     },
     {
       "date": "2022-10-19",
-      "mirror": 35989.60941157535,
-      "spy": 25920.988814290933
+      "mirror": 36003.08277746562,
+      "spy": 25921.00209408615
     },
     {
       "date": "2022-10-26",
-      "mirror": 37017.28471935296,
-      "spy": 26872.014842859582
+      "mirror": 37030.84057396993,
+      "spy": 26872.02393370193
     },
     {
       "date": "2022-11-02",
-      "mirror": 36763.711460955834,
-      "spy": 26369.06897096506
+      "mirror": 36775.843210907246,
+      "spy": 26369.082402346456
     },
     {
       "date": "2022-11-09",
-      "mirror": 37207.2868135652,
-      "spy": 26317.022433778355
+      "mirror": 37217.22536836305,
+      "spy": 26317.02682617957
     },
     {
       "date": "2022-11-16",
-      "mirror": 41039.76959285593,
-      "spy": 27816.70561455093
+      "mirror": 41054.58409800599,
+      "spy": 27816.71953566994
     },
     {
       "date": "2022-11-23",
-      "mirror": 41245.49269876063,
-      "spy": 28306.992249402985
+      "mirror": 41256.0859927492,
+      "spy": 28307.00182570031
     },
     {
       "date": "2022-11-30",
-      "mirror": 41674.756545259675,
-      "spy": 28676.99245125613
+      "mirror": 41687.143176372774,
+      "spy": 28676.993131352312
     },
     {
       "date": "2022-12-07",
-      "mirror": 40418.13324266313,
-      "spy": 27655.620037048513
+      "mirror": 40427.54593710162,
+      "spy": 27655.633903672035
     },
     {
       "date": "2022-12-14",
-      "mirror": 41245.685164980896,
-      "spy": 28094.559290866215
+      "mirror": 41255.23604055938,
+      "spy": 28094.568795297157
     },
     {
       "date": "2022-12-21",
-      "mirror": 39540.07418773061,
-      "spy": 27292.91361260412
+      "mirror": 39546.06139227041,
+      "spy": 27292.92735652352
     },
     {
       "date": "2022-12-28",
-      "mirror": 38827.11293648773,
-      "spy": 26616.64918588341
+      "mirror": 38833.19368565834,
+      "spy": 26616.658190335176
     },
     {
       "date": "2023-01-04",
-      "mirror": 39317.85946344635,
-      "spy": 27118.368151497667
+      "mirror": 39324.806291946785,
+      "spy": 27118.375070338512
     },
     {
       "date": "2023-01-11",
-      "mirror": 40652.81499920312,
-      "spy": 27949.385154185922
+      "mirror": 40662.08457324658,
+      "spy": 27949.39686484743
     },
     {
       "date": "2023-01-18",
-      "mirror": 40498.11931663082,
-      "spy": 27664.607576619903
+      "mirror": 40508.39347769705,
+      "spy": 27664.616935597547
     },
     {
       "date": "2023-01-25",
-      "mirror": 41571.219158772336,
-      "spy": 28290.697400368277
+      "mirror": 41579.881297796965,
+      "spy": 28290.70922649622
     },
     {
       "date": "2023-02-01",
-      "mirror": 42480.10746455822,
-      "spy": 29029.14612848483
+      "mirror": 42492.7688955951,
+      "spy": 29029.15594908788
     },
     {
       "date": "2023-02-08",
-      "mirror": 42463.53814263184,
-      "spy": 29018.550529763022
+      "mirror": 42475.599328720375,
+      "spy": 29018.553580751995
     },
     {
       "date": "2023-02-15",
-      "mirror": 42876.98591550724,
-      "spy": 29253.861681878763
+      "mirror": 42892.39895565706,
+      "spy": 29253.8760891898
     },
     {
       "date": "2023-02-22",
-      "mirror": 41308.94612162744,
-      "spy": 28162.799186678414
+      "mirror": 41317.859032898756,
+      "spy": 28162.804203508636
     },
     {
       "date": "2023-03-01",
-      "mirror": 40132.817271345935,
-      "spy": 27894.266840613713
+      "mirror": 40143.97127857471,
+      "spy": 27894.280787971802
     },
     {
       "date": "2023-03-08",
-      "mirror": 40640.82628193158,
-      "spy": 28189.642272243964
+      "mirror": 40655.50992736787,
+      "spy": 28189.658574871188
     },
     {
       "date": "2023-03-15",
-      "mirror": 39308.6498199065,
-      "spy": 27508.438645608236
+      "mirror": 39320.88671088721,
+      "spy": 27508.445696410505
     },
     {
       "date": "2023-03-22",
-      "mirror": 39100.58222354815,
-      "spy": 27814.163843635757
+      "mirror": 39110.29705821168,
+      "spy": 27814.182274581264
     },
     {
       "date": "2023-03-29",
-      "mirror": 39429.690419673956,
-      "spy": 28469.611459755728
+      "mirror": 39436.39780353491,
+      "spy": 28469.614325037805
     },
     {
       "date": "2023-04-05",
-      "mirror": 40591.3125036979,
-      "spy": 28912.946375963555
+      "mirror": 40599.25138791402,
+      "spy": 28912.953901912868
     },
     {
       "date": "2023-04-12",
-      "mirror": 40629.34304711388,
-      "spy": 28944.866237332168
+      "mirror": 40636.43464418638,
+      "spy": 28944.873774080013
     },
     {
       "date": "2023-04-19",
-      "mirror": 42456.20873235109,
-      "spy": 29376.86129181729
+      "mirror": 42465.568902788524,
+      "spy": 29376.871230052897
     },
     {
       "date": "2023-04-26",
-      "mirror": 41542.62595995175,
-      "spy": 28683.113450602872
+      "mirror": 41548.42036933897,
+      "spy": 28683.129920172127
     },
     {
       "date": "2023-05-03",
-      "mirror": 42816.725724619,
-      "spy": 28942.737194081124
+      "mirror": 42821.471351838125,
+      "spy": 28942.749240795096
     },
     {
       "date": "2023-05-10",
-      "mirror": 42682.80733557135,
-      "spy": 29285.355283528683
+      "mirror": 42685.10097831284,
+      "spy": 29285.365190807668
     },
     {
       "date": "2023-05-17",
-      "mirror": 43279.61437714331,
-      "spy": 29454.176685555536
+      "mirror": 43283.31886438497,
+      "spy": 29454.184394603864
     },
     {
       "date": "2023-05-24",
-      "mirror": 42404.61532984733,
-      "spy": 29160.50403745763
+      "mirror": 42407.82464112505,
+      "spy": 29160.522923872017
     },
     {
       "date": "2023-05-31",
-      "mirror": 42492.162361234965,
-      "spy": 29640.028178248285
+      "mirror": 42494.034239572415,
+      "spy": 29640.042716200016
     },
     {
       "date": "2023-06-07",
-      "mirror": 43557.356199163914,
-      "spy": 30257.159781876813
+      "mirror": 43561.726723624146,
+      "spy": 30257.16776257551
     },
     {
       "date": "2023-06-14",
-      "mirror": 44463.10148810751,
-      "spy": 31011.192926163585
+      "mirror": 44465.14688436646,
+      "spy": 31011.20567263919
     },
     {
       "date": "2023-06-21",
-      "mirror": 44106.67144823311,
-      "spy": 30966.907022268013
+      "mirror": 44107.30110327063,
+      "spy": 30966.91298773206
     },
     {
       "date": "2023-06-28",
-      "mirror": 44686.7989329245,
-      "spy": 31070.140811176756
+      "mirror": 44688.91043781214,
+      "spy": 31070.155832937708
     },
     {
       "date": "2023-07-05",
-      "mirror": 45350.75491619331,
-      "spy": 31550.021296070867
+      "mirror": 45353.09488047611,
+      "spy": 31550.029714146523
     },
     {
       "date": "2023-07-12",
-      "mirror": 45803.75751306177,
-      "spy": 31755.778441023867
+      "mirror": 45808.64256743417,
+      "spy": 31755.78918405066
     },
     {
       "date": "2023-07-19",
-      "mirror": 46058.02503473882,
-      "spy": 32409.37667635374
+      "mirror": 46061.37163983118,
+      "spy": 32409.389895836972
     },
     {
       "date": "2023-07-26",
-      "mirror": 46823.09367972113,
-      "spy": 32431.44971268629
+      "mirror": 46829.17268925751,
+      "spy": 32431.462939636865
     },
     {
       "date": "2023-08-02",
-      "mirror": 46195.183544549494,
-      "spy": 32048.40461023567
+      "mirror": 46203.56013226157,
+      "spy": 32048.41770760152
     },
     {
       "date": "2023-08-09",
-      "mirror": 45554.46486660329,
-      "spy": 31736.553902176554
+      "mirror": 45562.52720265788,
+      "spy": 31736.566894042848
     },
     {
       "date": "2023-08-16",
-      "mirror": 45156.21459764508,
-      "spy": 31301.536688839315
+      "mirror": 45167.04790249988,
+      "spy": 31301.547278195452
     },
     {
       "date": "2023-08-23",
-      "mirror": 45379.716077866506,
-      "spy": 31542.898924686564
+      "mirror": 45392.21705600503,
+      "spy": 31542.90734035271
     },
     {
       "date": "2023-08-30",
-      "mirror": 45863.51477403296,
-      "spy": 32111.05576751389
+      "mirror": 45877.51563633833,
+      "spy": 32111.07114141791
     },
     {
       "date": "2023-09-06",
-      "mirror": 45171.69271484638,
-      "spy": 31770.02318379248
+      "mirror": 45187.086289781015,
+      "spy": 31770.02942095191
     },
     {
       "date": "2023-09-13",
-      "mirror": 45604.34357040905,
-      "spy": 31790.666333026344
+      "mirror": 45620.05085605063,
+      "spy": 31790.679343198954
     },
     {
       "date": "2023-09-20",
-      "mirror": 45040.13854338008,
-      "spy": 31340.497729264862
+      "mirror": 45051.95227572984,
+      "spy": 31340.50833180158
     },
     {
       "date": "2023-09-27",
-      "mirror": 43407.652884450006,
-      "spy": 30440.954402276184
+      "mirror": 43420.1107766085,
+      "spy": 30440.96470049606
     },
     {
       "date": "2023-10-04",
-      "mirror": 43212.8215728661,
-      "spy": 30341.635887820623
+      "mirror": 43227.19789559866,
+      "spy": 30341.65066312728
     },
     {
       "date": "2023-10-11",
-      "mirror": 44007.027245054844,
-      "spy": 31174.739082253807
+      "mirror": 44022.785680591274,
+      "spy": 31174.747373370934
     },
     {
       "date": "2023-10-18",
-      "mirror": 43056.08902681145,
-      "spy": 30738.176959354107
+      "mirror": 43070.22134097984,
+      "spy": 30738.189613468006
     },
     {
       "date": "2023-10-25",
-      "mirror": 42071.46189644464,
-      "spy": 29833.62902752003
+      "mirror": 42079.74916434966,
+      "spy": 29833.64137562402
     },
     {
       "date": "2023-11-01",
-      "mirror": 42557.87117053695,
-      "spy": 30198.735136306695
+      "mirror": 42567.25063950146,
+      "spy": 30198.749863269815
     },
     {
       "date": "2023-11-08",
-      "mirror": 43813.86682466294,
-      "spy": 31241.185980836584
+      "mirror": 43824.582432520496,
+      "spy": 31241.196549775985
     },
     {
       "date": "2023-11-15",
-      "mirror": 45069.486930495004,
-      "spy": 32129.292466378203
+      "mirror": 45081.0699695857,
+      "spy": 32129.307846451724
     },
     {
       "date": "2023-11-22",
-      "mirror": 45226.29058331831,
-      "spy": 32510.837766114902
+      "mirror": 45238.312927099476,
+      "spy": 32510.844253893003
     },
     {
       "date": "2023-11-29",
-      "mirror": 44827.279637448875,
-      "spy": 32481.54086798883
+      "mirror": 44839.12605759494,
+      "spy": 32481.554111885318
     },
     {
       "date": "2023-12-06",
-      "mirror": 45529.439439601025,
-      "spy": 32492.26276588655
+      "mirror": 45538.608635855395,
+      "spy": 32492.26699203751
     },
     {
       "date": "2023-12-13",
-      "mirror": 47181.42956453238,
-      "spy": 33616.86896900291
+      "mirror": 47192.7540624824,
+      "spy": 33616.88485232576
     },
     {
       "date": "2023-12-20",
-      "mirror": 48132.33520238544,
-      "spy": 33592.47067462818
+      "mirror": 48144.46009354665,
+      "spy": 33592.48429435386
     },
     {
       "date": "2023-12-27",
-      "mirror": 49447.56432501782,
-      "spy": 34184.31537896575
+      "mirror": 49458.49395587726,
+      "spy": 34184.32919891337
     },
     {
       "date": "2024-01-03",
-      "mirror": 48340.8049094404,
-      "spy": 33630.49574794654
+      "mirror": 48351.400584385345,
+      "spy": 33630.50486984978
     },
     {
       "date": "2024-01-10",
-      "mirror": 49371.81898370644,
-      "spy": 34187.90362876703
+      "mirror": 49382.3027669988,
+      "spy": 34187.91293924218
     },
     {
       "date": "2024-01-17",
-      "mirror": 48378.05898603589,
-      "spy": 33881.57850965394
+      "mirror": 48389.811304022725,
+      "spy": 33881.592227185225
     },
     {
       "date": "2024-01-24",
-      "mirror": 49221.14219317132,
-      "spy": 34821.35714553939
+      "mirror": 49233.97989716909,
+      "spy": 34821.375691685564
     },
     {
       "date": "2024-01-31",
-      "mirror": 49202.41901484993,
-      "spy": 34641.29511685662
+      "mirror": 49212.84331117932,
+      "spy": 34641.30683605797
     },
     {
       "date": "2024-02-07",
-      "mirror": 50178.758578399335,
-      "spy": 35733.162769303395
+      "mirror": 50191.659578987936,
+      "spy": 35733.177113228376
     },
     {
       "date": "2024-02-14",
-      "mirror": 50037.0995673477,
-      "spy": 35766.877883243855
+      "mirror": 50050.13299834334,
+      "spy": 35766.892238574714
     },
     {
       "date": "2024-02-21",
-      "mirror": 50178.17887201507,
-      "spy": 35669.30951451161
+      "mirror": 50192.34120699596,
+      "spy": 35669.32158149175
     },
     {
       "date": "2024-02-28",
-      "mirror": 49981.15079109421,
-      "spy": 36318.55268361504
+      "mirror": 49994.07101780994,
+      "spy": 36318.56497023511
     },
     {
       "date": "2024-03-06",
-      "mirror": 50298.772114030086,
-      "spy": 36568.91824643067
+      "mirror": 50306.32930722749,
+      "spy": 36568.93287309296
     },
     {
       "date": "2024-03-13",
-      "mirror": 51842.68262196558,
-      "spy": 37015.13323491771
+      "mirror": 51851.42115942078,
+      "spy": 37015.145757192004
     },
     {
       "date": "2024-03-20",
-      "mirror": 52015.87126688014,
-      "spy": 37454.692707902825
+      "mirror": 52026.907802439106,
+      "spy": 37454.69861285117
     },
     {
       "date": "2024-03-27",
-      "mirror": 52157.73890438336,
-      "spy": 37648.264237723015
+      "mirror": 52171.36568504345,
+      "spy": 37648.27471884328
     },
     {
       "date": "2024-04-03",
-      "mirror": 51598.94842309661,
-      "spy": 37377.688551419495
+      "mirror": 51614.28224499633,
+      "spy": 37377.701196346796
     },
     {
       "date": "2024-04-10",
-      "mirror": 50490.350578372934,
-      "spy": 36997.01606920203
+      "mirror": 50507.90923130823,
+      "spy": 36997.024074660876
     },
     {
       "date": "2024-04-17",
-      "mirror": 48735.80773482726,
-      "spy": 36020.49113915429
+      "mirror": 48752.05922951041,
+      "spy": 36020.503324939695
     },
     {
       "date": "2024-04-24",
-      "mirror": 50037.78282587265,
-      "spy": 36370.2270893013
+      "mirror": 50054.11054840957,
+      "spy": 36370.2371380597
     },
     {
       "date": "2024-05-01",
-      "mirror": 49730.306130405224,
-      "spy": 36006.10205447036
+      "mirror": 49747.22236093122,
+      "spy": 36006.11423538791
     },
     {
       "date": "2024-05-08",
-      "mirror": 50893.946892720334,
-      "spy": 37217.938136633835
+      "mirror": 50912.64714694673,
+      "spy": 37217.94847217414
     },
     {
       "date": "2024-05-15",
-      "mirror": 51182.67458997025,
-      "spy": 38123.943019675724
+      "mirror": 51204.53788875528,
+      "spy": 38123.95140637563
     },
     {
       "date": "2024-05-22",
-      "mirror": 50884.03111347235,
-      "spy": 38127.533524819424
+      "mirror": 50909.08615767244,
+      "spy": 38127.54642342038
     },
     {
       "date": "2024-05-29",
-      "mirror": 49528.09787980821,
-      "spy": 37859.116201218494
+      "mirror": 49553.04755480745,
+      "spy": 37859.133519699855
     },
     {
       "date": "2024-06-05",
-      "mirror": 50913.69863588728,
-      "spy": 38475.82154512833
+      "mirror": 50936.18666032703,
+      "spy": 38475.8435829284
     },
     {
       "date": "2024-06-12",
-      "mirror": 51237.8204271995,
-      "spy": 38957.25145026976
+      "mirror": 51263.81963578775,
+      "spy": 38957.264629565514
     },
     {
       "date": "2024-06-19",
-      "mirror": 51157.74979846388,
-      "spy": 39470.3418524007
+      "mirror": 51183.31746114259,
+      "spy": 39470.35520527569
     },
     {
       "date": "2024-06-26",
-      "mirror": 51922.70558608949,
-      "spy": 39382.54137171956
+      "mirror": 51948.44733881045,
+      "spy": 39382.55018420515
     },
     {
       "date": "2024-07-03",
-      "mirror": 52504.441448452286,
-      "spy": 39812.098401041156
+      "mirror": 52530.637173020616,
+      "spy": 39812.10735884652
     },
     {
       "date": "2024-07-10",
-      "mirror": 53363.12284281541,
-      "spy": 40523.92957783486
+      "mirror": 53391.468365761604,
+      "spy": 40523.93877645376
     },
     {
       "date": "2024-07-17",
-      "mirror": 54086.1732289903,
-      "spy": 40207.71252683717
+      "mirror": 54109.43616075216,
+      "spy": 40207.73063985214
     },
     {
       "date": "2024-07-24",
-      "mirror": 51736.40601758257,
-      "spy": 39073.54592717296
+      "mirror": 51760.663062218606,
+      "spy": 39073.563656497696
     },
     {
       "date": "2024-07-31",
-      "mirror": 52524.445850633514,
-      "spy": 39765.16472513635
+      "mirror": 52549.99233043609,
+      "spy": 39765.18268843674
     },
     {
       "date": "2024-08-07",
-      "mirror": 49799.39538730501,
-      "spy": 37444.128683974996
+      "mirror": 49818.91176653912,
+      "spy": 37444.13909603589
     },
     {
       "date": "2024-08-14",
-      "mirror": 50689.80792109611,
-      "spy": 39255.484400754955
+      "mirror": 50711.26895032665,
+      "spy": 39255.49317025698
     },
     {
       "date": "2024-08-21",
-      "mirror": 52442.136773239945,
-      "spy": 40473.38735404693
+      "mirror": 52465.33716993267,
+      "spy": 40473.410067626464
     },
     {
       "date": "2024-08-28",
-      "mirror": 52701.92487996989,
-      "spy": 40305.89660405197
+      "mirror": 52728.44267772188,
+      "spy": 40305.91023959638
     },
     {
       "date": "2024-09-04",
-      "mirror": 51697.54555145704,
-      "spy": 39775.27316989393
+      "mirror": 51722.0793456001,
+      "spy": 39775.29564730041
     },
     {
       "date": "2024-09-11",
-      "mirror": 51691.24295638534,
-      "spy": 40025.787585309736
+      "mirror": 51715.225206410505,
+      "spy": 40025.79661540647
     },
     {
       "date": "2024-09-18",
-      "mirror": 53218.048127355265,
-      "spy": 40529.712275817554
+      "mirror": 53244.92959210927,
+      "spy": 40529.71696570638
     },
     {
       "date": "2024-09-25",
-      "mirror": 54123.15066364589,
-      "spy": 41279.68129305096
+      "mirror": 54151.07702630836,
+      "spy": 41279.69525802817
     },
     {
       "date": "2024-10-02",
-      "mirror": 54661.736337219896,
-      "spy": 41194.23538986357
+      "mirror": 54688.21228574762,
+      "spy": 41194.25383662068
     },
     {
       "date": "2024-10-09",
-      "mirror": 54113.82513313315,
-      "spy": 41793.83621680742
+      "mirror": 54141.65065353463,
+      "spy": 41793.850355724004
     },
     {
       "date": "2024-10-16",
-      "mirror": 55034.61129974315,
-      "spy": 42167.501350104365
+      "mirror": 55062.43099372853,
+      "spy": 42167.51561543241
     },
     {
       "date": "2024-10-23",
-      "mirror": 54513.99782507528,
-      "spy": 41855.38902232372
+      "mirror": 54539.81729002276,
+      "spy": 41855.39416069094
     },
     {
       "date": "2024-10-30",
-      "mirror": 54382.15617470171,
-      "spy": 42001.67053213564
+      "mirror": 54411.33456132763,
+      "spy": 42001.680230676495
     },
     {
       "date": "2024-11-06",
-      "mirror": 55712.13782979686,
-      "spy": 42800.41358469426
+      "mirror": 55746.024147087024,
+      "spy": 42800.42806413745
     },
     {
       "date": "2024-11-13",
-      "mirror": 56100.491604488045,
-      "spy": 43245.76252168935
+      "mirror": 56135.99355043211,
+      "spy": 43245.77715179474
     },
     {
       "date": "2024-11-20",
-      "mirror": 55237.31818460005,
-      "spy": 42761.3014363261
+      "mirror": 55270.030670980974,
+      "spy": 42761.32492391035
     },
     {
       "date": "2024-11-27",
-      "mirror": 57016.65846570235,
-      "spy": 43364.52434320764
+      "mirror": 57051.82897702881,
+      "spy": 43364.54352417671
     },
     {
       "date": "2024-12-04",
-      "mirror": 57652.743068034266,
-      "spy": 44003.95451741142
+      "mirror": 57688.15093599073,
+      "spy": 44003.9648933279
     },
     {
       "date": "2024-12-11",
-      "mirror": 58669.13683661036,
-      "spy": 43989.4752190304
+      "mirror": 58707.71295307597,
+      "spy": 43989.4901007349
     },
     {
       "date": "2024-12-18",
-      "mirror": 55474.49600777446,
-      "spy": 42455.71606952905
+      "mirror": 55510.863696829205,
+      "spy": 42455.730432360564
     },
     {
       "date": "2024-12-25",
-      "mirror": 56641.95139477162,
-      "spy": 43689.943191307284
+      "mirror": 56680.25943295749,
+      "spy": 43689.95797167965
     },
     {
       "date": "2025-01-01",
-      "mirror": 55635.62989602089,
-      "spy": 42584.076628416435
+      "mirror": 55672.550159677325,
+      "spy": 42584.091034672514
     },
     {
       "date": "2025-01-08",
-      "mirror": 54920.47724654357,
-      "spy": 42831.839526071366
+      "mirror": 54957.86621435167,
+      "spy": 42831.854016146
     },
     {
       "date": "2025-01-15",
-      "mirror": 54809.07514409783,
-      "spy": 43070.887780588564
+      "mirror": 54848.44004114418,
+      "spy": 43070.906862219956
     },
     {
       "date": "2025-01-22",
-      "mirror": 55375.410509411915,
-      "spy": 44063.418875840354
+      "mirror": 55415.166588089356,
+      "spy": 44063.4337825601
     },
     {
       "date": "2025-01-29",
-      "mirror": 56322.0209931704,
-      "spy": 43727.00297806691
+      "mirror": 56362.21345310431,
+      "spy": 43727.008749603905
     },
     {
       "date": "2025-02-05",
-      "mirror": 55933.00692993619,
-      "spy": 43902.1122747801
+      "mirror": 55971.90859463883,
+      "spy": 43902.12261624321
     },
     {
       "date": "2025-02-12",
-      "mirror": 55993.17528521166,
-      "spy": 43839.62124681419
+      "mirror": 56029.38387620214,
+      "spy": 43839.63607782287
     },
     {
       "date": "2025-02-19",
-      "mirror": 55661.539995761734,
-      "spy": 44534.97038115175
+      "mirror": 55699.4762031822,
+      "spy": 44534.98093671168
     },
     {
       "date": "2025-02-26",
-      "mirror": 54789.79580980201,
-      "spy": 43198.765696196584
+      "mirror": 54825.629222606556,
+      "spy": 43198.78482108926
     },
     {
       "date": "2025-03-05",
-      "mirror": 54836.478851660926,
-      "spy": 42364.64083164399
+      "mirror": 54869.76917489092,
+      "spy": 42364.65516366461
     },
     {
       "date": "2025-03-12",
-      "mirror": 51777.49436694261,
-      "spy": 40607.02090352852
+      "mirror": 51805.168149942685,
+      "spy": 40607.03013025734
     },
     {
       "date": "2025-03-19",
-      "mirror": 52236.43500564793,
-      "spy": 41207.181055394256
+      "mirror": 52263.69974666177,
+      "spy": 41207.19950653091
     },
     {
       "date": "2025-03-26",
-      "mirror": 51952.21917129491,
-      "spy": 41437.54173088285
+      "mirror": 51978.66248097517,
+      "spy": 41437.56477063723
     },
     {
       "date": "2025-04-02",
-      "mirror": 51381.60843688701,
-      "spy": 41140.932626945054
+      "mirror": 51407.93580249029,
+      "spy": 41140.94654498338
     },
     {
       "date": "2025-04-09",
-      "mirror": 48936.752310975186,
-      "spy": 39982.17828414225
+      "mirror": 48962.989068738294,
+      "spy": 39982.19181017227
     },
     {
       "date": "2025-04-16",
-      "mirror": 47219.9664217877,
-      "spy": 38308.89914142497
+      "mirror": 47242.46536639563,
+      "spy": 38308.912101382186
     },
     {
       "date": "2025-04-23",
-      "mirror": 48310.452853728224,
-      "spy": 39020.184525351346
+      "mirror": 48334.65879899981,
+      "spy": 39020.20223662384
     },
     {
       "date": "2025-04-30",
-      "mirror": 49299.00079028947,
-      "spy": 40413.61175836306
+      "mirror": 49323.60479060153,
+      "spy": 40413.62091966129
     },
     {
       "date": "2025-05-07",
-      "mirror": 50497.08685663055,
-      "spy": 40895.334858019996
+      "mirror": 50520.52179884684,
+      "spy": 40895.348692972235
     },
     {
       "date": "2025-05-14",
-      "mirror": 53031.98938003837,
-      "spy": 42822.213724593144
+      "mirror": 53059.14549590539,
+      "spy": 42822.23272209774
     },
     {
       "date": "2025-05-21",
-      "mirror": 52221.73069039236,
-      "spy": 42477.50718805823
+      "mirror": 52246.09441308922,
+      "spy": 42477.51704757533
     },
     {
       "date": "2025-05-28",
-      "mirror": 52877.606815511936,
-      "spy": 42832.42140441752
+      "mirror": 52901.14034318917,
+      "spy": 42832.435894689
     },
     {
       "date": "2025-06-04",
-      "mirror": 52188.85603567244,
-      "spy": 43430.01948728624
+      "mirror": 52211.16484757791,
+      "spy": 43430.02966903966
     },
     {
       "date": "2025-06-11",
-      "mirror": 52993.65476132513,
-      "spy": 43825.7463802036
+      "mirror": 53021.0432979406,
+      "spy": 43825.75669583201
     },
     {
       "date": "2025-06-18",
-      "mirror": 52044.12779301499,
-      "spy": 43540.06215498195
+      "mirror": 52071.18601588174,
+      "spy": 43540.076884649345
     },
     {
       "date": "2025-06-25",
-      "mirror": 52957.56422111379,
-      "spy": 44376.32508415529
+      "mirror": 52987.148312854195,
+      "spy": 44376.34009673166
     },
     {
       "date": "2025-07-02",
-      "mirror": 54989.45723719073,
-      "spy": 45350.655566021596
+      "mirror": 55019.223676482026,
+      "spy": 45350.6754189018
     },
     {
       "date": "2025-07-09",
-      "mirror": 55444.72613819759,
-      "spy": 45614.52160860495
+      "mirror": 55476.2773706404,
+      "spy": 45614.53704006504
     },
     {
       "date": "2025-07-16",
-      "mirror": 55120.558398842055,
-      "spy": 45626.21330374625
+      "mirror": 55150.964973377624,
+      "spy": 45626.23324984804
     },
     {
       "date": "2025-07-23",
-      "mirror": 55681.50995863135,
-      "spy": 46356.42101063473
+      "mirror": 55710.643731398,
+      "spy": 46356.43218239411
     },
     {
       "date": "2025-07-30",
-      "mirror": 54386.89753344162,
-      "spy": 46374.69379497787
+      "mirror": 54416.00789608306,
+      "spy": 46374.70497291896
     },
     {
       "date": "2025-08-06",
-      "mirror": 54242.5494892829,
-      "spy": 46251.894910515344
+      "mirror": 54271.38209468777,
+      "spy": 46251.91506828615
     },
     {
       "date": "2025-08-13",
-      "mirror": 54937.60802680103,
-      "spy": 47137.05366350494
+      "mirror": 54970.549005611596,
+      "spy": 47137.069610039885
     },
     {
       "date": "2025-08-20",
-      "mirror": 54345.66248434786,
-      "spy": 46641.47825066169
+      "mirror": 54379.34840174851,
+      "spy": 46641.49854022911
     },
     {
       "date": "2025-08-27",
-      "mirror": 55326.6983963529,
-      "spy": 47264.23242296061
+      "mirror": 55362.91880520334,
+      "spy": 47264.25292320669
     },
     {
       "date": "2025-09-03",
-      "mirror": 55977.45914154503,
-      "spy": 47052.99254056769
+      "mirror": 56014.91554407937,
+      "spy": 47053.00845866463
     },
     {
       "date": "2025-09-10",
-      "mirror": 56720.78627282377,
-      "spy": 47672.0975688198
+      "mirror": 56759.86022312667,
+      "spy": 47672.109185674504
     },
     {
       "date": "2025-09-17",
-      "mirror": 57847.863832117786,
-      "spy": 48181.556869643355
+      "mirror": 57887.08543333656,
+      "spy": 48181.56865884889
     },
     {
       "date": "2025-09-24",
-      "mirror": 57998.3450472091,
-      "spy": 48455.86063697862
+      "mirror": 58036.772948311205,
+      "spy": 48455.87702966791
     },
     {
       "date": "2025-10-01",
-      "mirror": 58001.21432480491,
-      "spy": 48994.58977181912
+      "mirror": 58038.215750492396,
+      "spy": 48994.601836074886
     },
     {
       "date": "2025-10-08",
-      "mirror": 58546.645342798656,
-      "spy": 49336.14333964115
+      "mirror": 58583.5513247971,
+      "spy": 49336.16003013138
     },
     {
       "date": "2025-10-15",
-      "mirror": 58179.158360956826,
-      "spy": 48754.179290476044
+      "mirror": 58213.757474182654,
+      "spy": 48754.19127340059
     },
     {
       "date": "2025-10-22",
-      "mirror": 57857.93008950843,
-      "spy": 48946.94340770739
+      "mirror": 57893.4066278104,
+      "spy": 48946.95545584433
     },
     {
       "date": "2025-10-29",
-      "mirror": 59314.64575940055,
-      "spy": 50382.80716382458
+      "mirror": 59353.888950337874,
+      "spy": 50382.82420840273
     },
     {
       "date": "2025-11-05",
-      "mirror": 59273.738276709584,
-      "spy": 49663.77693400406
+      "mirror": 59312.04812300216,
+      "spy": 49663.793735333216
     },
     {
       "date": "2025-11-12",
-      "mirror": 60504.95533067319,
-      "spy": 50088.89093874457
+      "mirror": 60543.4446314383,
+      "spy": 50088.90788389042
     },
     {
       "date": "2025-11-19",
-      "mirror": 58422.84344490989,
-      "spy": 48568.00979450109
+      "mirror": 58459.09626172468,
+      "spy": 48568.02171444423
     },
     {
       "date": "2025-11-26",
-      "mirror": 61331.837787898985,
-      "spy": 49817.699543958486
+      "mirror": 61369.02422563778,
+      "spy": 49817.716397359894
     },
     {
       "date": "2025-12-03",
-      "mirror": 61785.301210260965,
-      "spy": 50126.27549481367
+      "mirror": 61823.45674326236,
+      "spy": 50126.29245260678
     },
     {
       "date": "2025-12-10",
-      "mirror": 60724.291345322934,
-      "spy": 50396.00542770709
+      "mirror": 60761.75143760533,
+      "spy": 50396.017966063846
     },
     {
       "date": "2025-12-17",
-      "mirror": 58499.49006483903,
-      "spy": 49210.80945029073
+      "mirror": 58533.824734735965,
+      "spy": 49210.82609838032
     },
     {
       "date": "2025-12-24",
-      "mirror": 59979.02274626826,
-      "spy": 50751.487990357964
+      "mirror": 60015.76594113073,
+      "spy": 50751.50515966138
     },
     {
       "date": "2025-12-31",
-      "mirror": 59596.97299033086,
-      "spy": 50129.57280544187
+      "mirror": 59634.26472819759,
+      "spy": 50129.589764350465
     },
     {
       "date": "2026-01-07",
-      "mirror": 61341.06264696585,
-      "spy": 50692.67768123284
+      "mirror": 61381.85363811929,
+      "spy": 50692.694830640634
     },
     {
       "date": "2026-01-14",
-      "mirror": 62286.68226925944,
-      "spy": 50750.01750709559
+      "mirror": 62326.90071204341,
+      "spy": 50750.03016521516
     },
     {
       "date": "2026-01-21",
-      "mirror": 61462.07331522717,
-      "spy": 50385.39629693072
+      "mirror": 61502.573634855995,
+      "spy": 50385.413342384774
     },
     {
       "date": "2026-01-28",
-      "mirror": 61202.092848134496,
-      "spy": 51121.98662288747
+      "mirror": 61242.675190955306,
+      "spy": 51122.00391753112
     },
     {
       "date": "2026-02-04",
-      "mirror": 60383.45139358289,
-      "spy": 50443.47136442466
+      "mirror": 60421.09691444643,
+      "spy": 50443.4884295256
     },
     {
       "date": "2026-02-11",
-      "mirror": 58652.25722763669,
-      "spy": 50867.638125345846
+      "mirror": 58685.86424936074,
+      "spy": 50867.655333943025
     },
     {
       "date": "2026-02-18",
-      "mirror": 58414.50507958679,
-      "spy": 50450.81927005166
+      "mirror": 58449.341083375795,
+      "spy": 50450.8363376384
     },
     {
       "date": "2026-02-25",
-      "mirror": 57659.15359231779,
-      "spy": 50955.11834740235
+      "mirror": 57693.81525384502,
+      "spy": 50955.13558559422
     },
     {
       "date": "2026-03-04",
-      "mirror": 57794.33845896749,
-      "spy": 50365.54477288871
+      "mirror": 57826.24287320109,
+      "spy": 50365.566322313345
     },
     {
       "date": "2026-03-11",
-      "mirror": 56160.80328096498,
-      "spy": 49718.64039388202
+      "mirror": 56189.69048866688,
+      "spy": 49718.65721377157
     },
     {
       "date": "2026-03-18",
-      "mirror": 55632.71401765117,
-      "spy": 48623.30176944018
+      "mirror": 55659.00902480669,
+      "spy": 48623.31821877505
     },
     {
       "date": "2026-03-25",
-      "mirror": 54906.33034385645,
-      "spy": 48416.274866700805
+      "mirror": 54932.06502036493,
+      "spy": 48416.291245998174
     },
     {
       "date": "2026-04-01",
-      "mirror": 55133.951044137175,
-      "spy": 48299.80898377315
+      "mirror": 55158.29018111104,
+      "spy": 48299.82532366994
     },
     {
       "date": "2026-04-08",
-      "mirror": 57193.63956275892,
-      "spy": 49830.834658253036
+      "mirror": 57219.164392397026,
+      "spy": 49830.851516098075
     },
     {
       "date": "2026-04-15",
-      "mirror": 61359.21487237189,
-      "spy": 51594.78758790338
+      "mirror": 61390.18958384973,
+      "spy": 51594.8050424963
     },
     {
       "date": "2026-04-22",
-      "mirror": 61512.348539527215,
-      "spy": 52425.53846018526
+      "mirror": 61543.3337300861,
+      "spy": 52425.55619582242
     },
     {
       "date": "2026-04-29",
-      "mirror": 60659.45938257765,
-      "spy": 52452.81006081193
+      "mirror": 60689.37883381831,
+      "spy": 52452.827805675115
     },
     {
       "date": "2026-05-06",
-      "mirror": 63263.377917254584,
-      "spy": 54092.92664848335
+      "mirror": 63298.48471043939,
+      "spy": 54092.9449482004
     },
     {
       "date": "2026-05-13",
-      "mirror": 62177.773173835056,
-      "spy": 54718.01284485173
+      "mirror": 62211.82560276654,
+      "spy": 54718.031356036365
     },
     {
       "date": "2026-05-20",
-      "mirror": 61739.58189999779,
-      "spy": 54639.8787618125
+      "mirror": 61772.863820040424,
+      "spy": 54639.897246564266
     },
     {
       "date": "2026-05-27",
-      "mirror": 61746.99935816517,
-      "spy": 55318.77742848789
+      "mirror": 61781.7989383325,
+      "spy": 55318.79614291207
     },
     {
       "date": "2026-06-03",
-      "mirror": 60272.408351185586,
-      "spy": 55597.4114532829
+      "mirror": 60306.522935412715,
+      "spy": 55597.430261969384
     },
     {
       "date": "2026-06-10",
-      "mirror": 58520.78863013353,
-      "spy": 53473.73591721901
+      "mirror": 58551.78657845422,
+      "spy": 53473.75400746293
     },
     {
       "date": "2026-06-17",
-      "mirror": 58482.72104465597,
-      "spy": 54618.502626289875
+      "mirror": 58512.85146202232,
+      "spy": 54618.52110381006
     },
     {
-      "date": "2026-06-22",
-      "mirror": 58928.95259703045,
-      "spy": 55186.370785286555
+      "date": "2026-06-24",
+      "mirror": 57978.37503765008,
+      "spy": 54188.69779867228
+    },
+    {
+      "date": "2026-06-29",
+      "mirror": 58568.406374125356,
+      "spy": 53874.60968466919
     }
   ],
   "pnlSeries": [
     {
       "date": "2013-11-14",
-      "cumulative": -605187.951064773,
+      "cumulative": -605189.8572097422,
       "trade": {
         "cusip": "57686G105",
         "ticker": "MATX",
@@ -5241,18 +5246,18 @@
         "entryDate": "2013-08-14",
         "exitAccession": "0001172661-13-001539",
         "exitDate": "2013-11-14",
-        "entrySharePrice": 22.35315704345703,
+        "entrySharePrice": 22.353166580200195,
         "exitSharePrice": 19.6865177154541,
         "entryValueUsd": 5073000,
         "shares": 202913,
-        "returnPct": -11.929587050360201,
-        "pnlUsd": -605187.951064773,
+        "returnPct": -11.929624624674595,
+        "pnlUsd": -605189.8572097422,
         "status": "closed"
       }
     },
     {
       "date": "2013-11-14",
-      "cumulative": -605187.951064773,
+      "cumulative": -605189.8572097422,
       "trade": {
         "cusip": "708160106",
         "ticker": "JCPCHF",
@@ -5272,7 +5277,7 @@
     },
     {
       "date": "2014-05-15",
-      "cumulative": -605187.951064773,
+      "cumulative": -605189.8572097422,
       "trade": {
         "cusip": "370023103",
         "ticker": null,
@@ -5292,7 +5297,7 @@
     },
     {
       "date": "2014-05-15",
-      "cumulative": 9364983.54962173,
+      "cumulative": 9364839.236461688,
       "trade": {
         "cusip": "742718109",
         "ticker": "PG",
@@ -5301,18 +5306,18 @@
         "entryDate": "2013-08-14",
         "exitAccession": "0001172661-14-001128",
         "exitDate": "2014-05-15",
-        "entrySharePrice": 56.648494720458984,
-        "exitSharePrice": 57.469058990478516,
+        "entrySharePrice": 56.64851379394531,
+        "exitSharePrice": 57.46906661987305,
         "entryValueUsd": 688301000,
         "shares": 8940133,
-        "returnPct": 1.4485191072926673,
-        "pnlUsd": 9970171.500686502,
+        "returnPct": 1.4484984176503346,
+        "pnlUsd": 9970029.09367143,
         "status": "closed"
       }
     },
     {
       "date": "2014-08-14",
-      "cumulative": 9364983.54962173,
+      "cumulative": 9364839.236461688,
       "trade": {
         "cusip": "073730103",
         "ticker": "BEAM",
@@ -5332,7 +5337,7 @@
     },
     {
       "date": "2014-08-14",
-      "cumulative": 9364983.54962173,
+      "cumulative": 9364839.236461688,
       "trade": {
         "cusip": "03748R101",
         "ticker": null,
@@ -5352,7 +5357,7 @@
     },
     {
       "date": "2014-08-14",
-      "cumulative": 9364983.54962173,
+      "cumulative": 9364839.236461688,
       "trade": {
         "cusip": "437306103",
         "ticker": null,
@@ -5372,7 +5377,7 @@
     },
     {
       "date": "2015-02-17",
-      "cumulative": 9364983.54962173,
+      "cumulative": 9364839.236461688,
       "trade": {
         "cusip": "121220107",
         "ticker": null,
@@ -5392,7 +5397,7 @@
     },
     {
       "date": "2015-05-15",
-      "cumulative": 9364983.54962173,
+      "cumulative": 9364839.236461688,
       "trade": {
         "cusip": "018490102",
         "ticker": null,
@@ -5412,7 +5417,7 @@
     },
     {
       "date": "2015-08-14",
-      "cumulative": 9364983.54962173,
+      "cumulative": 9364839.236461688,
       "trade": {
         "cusip": "G0083B108",
         "ticker": null,
@@ -5432,7 +5437,7 @@
     },
     {
       "date": "2016-11-14",
-      "cumulative": 9364983.54962173,
+      "cumulative": 9364839.236461688,
       "trade": {
         "cusip": "13645T100",
         "ticker": null,
@@ -5452,7 +5457,7 @@
     },
     {
       "date": "2017-02-14",
-      "cumulative": 70336242.04340793,
+      "cumulative": 70336206.87875605,
       "trade": {
         "cusip": "98978V103",
         "ticker": "ZTS",
@@ -5461,18 +5466,18 @@
         "entryDate": "2014-11-14",
         "exitAccession": "0001172661-17-000770",
         "exitDate": "2017-02-14",
-        "entrySharePrice": 39.25556564331055,
-        "exitSharePrice": 50.95455551147461,
+        "entrySharePrice": 39.25554656982422,
+        "exitSharePrice": 50.954551696777344,
         "entryValueUsd": 204587000,
         "shares": 5536862,
-        "returnPct": 29.802117677949337,
-        "pnlUsd": 60971258.49378621,
+        "returnPct": 29.802171028606097,
+        "pnlUsd": 60971367.642294355,
         "status": "closed"
       }
     },
     {
       "date": "2017-05-15",
-      "cumulative": 70336242.04340793,
+      "cumulative": 70336206.87875605,
       "trade": {
         "cusip": "91911K102",
         "ticker": null,
@@ -5492,7 +5497,7 @@
     },
     {
       "date": "2017-08-14",
-      "cumulative": 718307164.673135,
+      "cumulative": 718307919.3711646,
       "trade": {
         "cusip": "009158106",
         "ticker": "APD",
@@ -5501,18 +5506,18 @@
         "entryDate": "2013-08-14",
         "exitAccession": "0001172661-17-001635",
         "exitDate": "2017-08-14",
-        "entrySharePrice": 69.68303680419922,
-        "exitSharePrice": 118.52494049072266,
+        "entrySharePrice": 69.6830062866211,
+        "exitSharePrice": 118.52494812011719,
         "entryValueUsd": 924464000,
         "shares": 10095708,
-        "returnPct": 70.09152575219015,
-        "pnlUsd": 647970922.6297271,
+        "returnPct": 70.09161119225935,
+        "pnlUsd": 647971712.4924085,
         "status": "closed"
       }
     },
     {
       "date": "2017-11-14",
-      "cumulative": 949639802.9135561,
+      "cumulative": 949640484.8617209,
       "trade": {
         "cusip": "G6564A105",
         "ticker": "NOMD",
@@ -5521,18 +5526,18 @@
         "entryDate": "2016-05-16",
         "exitAccession": "0001172661-17-002144",
         "exitDate": "2017-11-14",
-        "entrySharePrice": 7.421838760375977,
-        "exitSharePrice": 13.138538360595703,
+        "entrySharePrice": 7.421839237213135,
+        "exitSharePrice": 13.138537406921387,
         "entryValueUsd": 300333000,
         "shares": 33333334,
-        "returnPct": 77.02538124029697,
-        "pnlUsd": 231332638.2404211,
+        "returnPct": 77.02535701722965,
+        "pnlUsd": 231332565.49055633,
         "status": "closed"
       }
     },
     {
       "date": "2018-05-15",
-      "cumulative": 959041057.8524215,
+      "cumulative": 959041714.961824,
       "trade": {
         "cusip": "654106103",
         "ticker": "NKE",
@@ -5541,18 +5546,18 @@
         "entryDate": "2018-02-14",
         "exitAccession": "0001172661-18-001246",
         "exitDate": "2018-05-15",
-        "entrySharePrice": 60.394195556640625,
-        "exitSharePrice": 61.94957733154297,
+        "entrySharePrice": 60.39420700073242,
+        "exitSharePrice": 61.9495849609375,
         "entryValueUsd": 365043000,
         "shares": 5836020,
-        "returnPct": 2.5753828833494863,
-        "pnlUsd": 9401254.938865466,
+        "returnPct": 2.575376079010727,
+        "pnlUsd": 9401230.100103129,
         "status": "closed"
       }
     },
     {
       "date": "2018-11-14",
-      "cumulative": 1052236606.5261929,
+      "cumulative": 1052236843.105428,
       "trade": {
         "cusip": "609207105",
         "ticker": "MDLZ",
@@ -5561,18 +5566,18 @@
         "entryDate": "2015-11-16",
         "exitAccession": "0001172661-18-002178",
         "exitDate": "2018-11-14",
-        "entrySharePrice": 34.63268280029297,
+        "entrySharePrice": 34.6326904296875,
         "exitSharePrice": 36.410247802734375,
         "entryValueUsd": 1815749000,
         "shares": 43366342,
-        "returnPct": 5.132622883106164,
-        "pnlUsd": 93195548.67377134,
+        "returnPct": 5.13259972295752,
+        "pnlUsd": 93195128.14360395,
         "status": "closed"
       }
     },
     {
       "date": "2019-05-15",
-      "cumulative": 1052236606.5261929,
+      "cumulative": 1052236843.105428,
       "trade": {
         "cusip": "72766Q105",
         "ticker": null,
@@ -5592,7 +5597,7 @@
     },
     {
       "date": "2019-08-14",
-      "cumulative": 1052236606.5261929,
+      "cumulative": 1052236843.105428,
       "trade": {
         "cusip": "913017109",
         "ticker": "UTXZ",
@@ -5612,7 +5617,7 @@
     },
     {
       "date": "2019-11-14",
-      "cumulative": 1164369265.4373658,
+      "cumulative": 1164369490.638069,
       "trade": {
         "cusip": "053015103",
         "ticker": "ADP",
@@ -5621,18 +5626,18 @@
         "entryDate": "2017-08-14",
         "exitAccession": "0001172661-19-002370",
         "exitDate": "2019-11-14",
-        "entrySharePrice": 90.19852447509766,
-        "exitSharePrice": 146.57833862304688,
+        "entrySharePrice": 90.1985092163086,
+        "exitSharePrice": 146.57830810546875,
         "entryValueUsd": 179394000,
         "shares": 1750867,
-        "returnPct": 62.50635969495795,
-        "pnlUsd": 112132658.91117287,
+        "returnPct": 62.506353352197365,
+        "pnlUsd": 112132647.53264093,
         "status": "closed"
       }
     },
     {
       "date": "2020-08-14",
-      "cumulative": 1164369265.4373658,
+      "cumulative": 1164369490.638069,
       "trade": {
         "cusip": "084670702",
         "ticker": "BRK/B",
@@ -5652,7 +5657,7 @@
     },
     {
       "date": "2020-08-14",
-      "cumulative": 1165362534.8206732,
+      "cumulative": 1165362762.4154787,
       "trade": {
         "cusip": "09260D107",
         "ticker": "BX",
@@ -5661,18 +5666,18 @@
         "entryDate": "2020-05-15",
         "exitAccession": "0001172661-20-001845",
         "exitDate": "2020-08-14",
-        "entrySharePrice": 41.41059494018555,
+        "entrySharePrice": 41.41059112548828,
         "exitSharePrice": 43.05613327026367,
         "entryValueUsd": 24996000,
         "shares": 548526,
-        "returnPct": 3.9737133273621827,
-        "pnlUsd": 993269.3833074511,
+        "returnPct": 3.973722905304178,
+        "pnlUsd": 993271.7774098323,
         "status": "closed"
       }
     },
     {
       "date": "2020-08-14",
-      "cumulative": 1166939592.2368467,
+      "cumulative": 1166939822.3169832,
       "trade": {
         "cusip": "700517105",
         "ticker": "PK",
@@ -5681,18 +5686,18 @@
         "entryDate": "2020-05-15",
         "exitAccession": "0001172661-20-001845",
         "exitDate": "2020-08-14",
-        "entrySharePrice": 5.022753715515137,
-        "exitSharePrice": 6.500032901763916,
+        "entrySharePrice": 5.022752285003662,
+        "exitSharePrice": 6.500033378601074,
         "entryValueUsd": 5362000,
         "shares": 677888,
-        "returnPct": 29.411738459035085,
-        "pnlUsd": 1577057.4161734614,
+        "returnPct": 29.4117848098562,
+        "pnlUsd": 1577059.9015044896,
         "status": "closed"
       }
     },
     {
       "date": "2021-05-17",
-      "cumulative": 1646778485.7037525,
+      "cumulative": 1646778698.2931743,
       "trade": {
         "cusip": "855244109",
         "ticker": "SBUX",
@@ -5701,18 +5706,18 @@
         "entryDate": "2019-02-14",
         "exitAccession": "0001172661-21-001367",
         "exitDate": "2021-05-17",
-        "entrySharePrice": 60.445350646972656,
-        "exitSharePrice": 98.760498046875,
+        "entrySharePrice": 60.44534683227539,
+        "exitSharePrice": 98.76049041748047,
         "entryValueUsd": 756986000,
         "shares": 11754441,
-        "returnPct": 63.38808029037602,
-        "pnlUsd": 479838893.4669058,
+        "returnPct": 63.38807797980295,
+        "pnlUsd": 479838875.97619116,
         "status": "closed"
       }
     },
     {
       "date": "2021-11-15",
-      "cumulative": 1885355595.0818546,
+      "cumulative": 1885355844.8594394,
       "trade": {
         "cusip": "00846U101",
         "ticker": "A",
@@ -5721,18 +5726,18 @@
         "entryDate": "2020-02-14",
         "exitAccession": "0001172661-21-002355",
         "exitDate": "2021-11-15",
-        "entrySharePrice": 82.08612060546875,
-        "exitSharePrice": 152.76126098632812,
+        "entrySharePrice": 82.08609008789062,
+        "exitSharePrice": 152.76121520996094,
         "entryValueUsd": 277097000,
         "shares": 3248114,
-        "returnPct": 86.09877024222637,
-        "pnlUsd": 238577109.37810197,
+        "returnPct": 86.09878366285635,
+        "pnlUsd": 238577146.56626505,
         "status": "closed"
       }
     },
     {
       "date": "2022-08-15",
-      "cumulative": 2276362122.9131823,
+      "cumulative": 2276362372.6907673,
       "trade": {
         "cusip": "64110L106",
         "ticker": "NFLX",
@@ -5752,7 +5757,7 @@
     },
     {
       "date": "2022-11-14",
-      "cumulative": 2177423311.9045315,
+      "cumulative": 2177423463.2307086,
       "trade": {
         "cusip": "25754A201",
         "ticker": "DPZ",
@@ -5761,18 +5766,18 @@
         "entryDate": "2021-05-17",
         "exitAccession": "0001172661-22-002568",
         "exitDate": "2022-11-14",
-        "entrySharePrice": 402.82818603515625,
+        "entrySharePrice": 402.8282470703125,
         "exitSharePrice": 349.5963134765625,
         "entryValueUsd": 748712000,
         "shares": 2035704,
-        "returnPct": -13.214535229654468,
-        "pnlUsd": -98938811.00865056,
+        "returnPct": -13.214548379090829,
+        "pnlUsd": -98938909.46005853,
         "status": "closed"
       }
     },
     {
       "date": "2023-08-14",
-      "cumulative": 2177423311.9045315,
+      "cumulative": 2177423463.2307086,
       "trade": {
         "cusip": "13645T100",
         "ticker": null,
@@ -5792,7 +5797,7 @@
     },
     {
       "date": "2023-11-14",
-      "cumulative": 2177423311.9045315,
+      "cumulative": 2177423463.2307086,
       "trade": {
         "cusip": "44267D107",
         "ticker": "HHC*",
@@ -5812,7 +5817,7 @@
     },
     {
       "date": "2024-05-15",
-      "cumulative": 3405348804.56549,
+      "cumulative": 3405349175.654107,
       "trade": {
         "cusip": "548661107",
         "ticker": "LOW",
@@ -5821,18 +5826,18 @@
         "entryDate": "2018-08-14",
         "exitAccession": "0001172661-24-002519",
         "exitDate": "2024-05-15",
-        "entrySharePrice": 85.25869750976562,
-        "exitSharePrice": 227.23806762695312,
+        "entrySharePrice": 85.25868225097656,
+        "exitSharePrice": 227.23805236816406,
         "entryValueUsd": 737370000,
         "shares": 7715501,
-        "returnPct": 166.52772592605584,
-        "pnlUsd": 1227925492.660958,
+        "returnPct": 166.52775572960635,
+        "pnlUsd": 1227925712.4233985,
         "status": "closed"
       }
     },
     {
       "date": "2025-02-14",
-      "cumulative": 3405348804.56549,
+      "cumulative": 3405349175.654107,
       "trade": {
         "cusip": "812215101",
         "ticker": "SPTX",
@@ -5852,7 +5857,7 @@
     },
     {
       "date": "2025-05-15",
-      "cumulative": 3360984219.2831907,
+      "cumulative": 3360984552.689143,
       "trade": {
         "cusip": "654106103",
         "ticker": "NKE",
@@ -5861,18 +5866,18 @@
         "entryDate": "2024-08-14",
         "exitAccession": "0001172661-25-002315",
         "exitDate": "2025-05-15",
-        "entrySharePrice": 74.81871032714844,
+        "entrySharePrice": 74.8187255859375,
         "exitSharePrice": 60.33246994018555,
         "entryValueUsd": 229134749,
         "shares": 3040132,
-        "returnPct": -19.361788413113644,
-        "pnlUsd": -44364585.28229903,
+        "returnPct": -19.361804858748766,
+        "pnlUsd": -44364622.96496379,
         "status": "closed"
       }
     },
     {
       "date": "2025-08-14",
-      "cumulative": 3278630143.372247,
+      "cumulative": 3278630409.990388,
       "trade": {
         "cusip": "13646K108",
         "ticker": "CP",
@@ -5881,18 +5886,18 @@
         "entryDate": "2023-08-14",
         "exitAccession": "0001172661-25-003509",
         "exitDate": "2025-08-14",
-        "entrySharePrice": 78.89157104492188,
-        "exitSharePrice": 73.56291961669922,
+        "entrySharePrice": 78.72026824951172,
+        "exitSharePrice": 73.40318298339844,
         "entryValueUsd": 1219265797,
         "shares": 15095528,
-        "returnPct": -6.75439892709001,
-        "pnlUsd": -82354075.91094346,
+        "returnPct": -6.7544044047973095,
+        "pnlUsd": -82354142.69875503,
         "status": "closed"
       }
     },
     {
       "date": "2026-02-17",
-      "cumulative": 4117219869.520027,
+      "cumulative": 4117220136.138168,
       "trade": {
         "cusip": "169656105",
         "ticker": "CMG",
@@ -5912,7 +5917,7 @@
     },
     {
       "date": "2026-05-15",
-      "cumulative": 6497210013.167955,
+      "cumulative": 6497209971.921503,
       "trade": {
         "cusip": "43300A203",
         "ticker": "HLT",
@@ -5921,12 +5926,12 @@
         "entryDate": "2019-02-14",
         "exitAccession": "0001172661-26-002336",
         "exitDate": "2026-05-15",
-        "entrySharePrice": 78.45919036865234,
+        "entrySharePrice": 78.45919799804688,
         "exitSharePrice": 316.0230712890625,
         "entryValueUsd": 786029000,
         "shares": 10947479,
-        "returnPct": 302.78655668530405,
-        "pnlUsd": 2379990143.647928,
+        "returnPct": 302.78651751822576,
+        "pnlUsd": 2379989835.7833347,
         "status": "closed"
       }
     }
@@ -5935,17 +5940,17 @@
   "mappedCusipCount": 35,
   "unmappedCusipCount": 9,
   "stats": {
-    "mirrorFinal": 58928.95259703045,
-    "spyFinal": 55186.370785286555,
-    "mirrorReturnPct": 489.2895259703045,
-    "spyReturnPct": 451.86370785286556,
-    "excessReturnPct": 37.42581811743897,
-    "maxDrawdownPct": -47.179016896542414,
-    "realizedPnlUsd": 6497210013.167955,
+    "mirrorFinal": 58568.406374125356,
+    "spyFinal": 53874.60968466919,
+    "mirrorReturnPct": 485.6840637412535,
+    "spyReturnPct": 438.7460968466919,
+    "excessReturnPct": 46.93796689456169,
+    "maxDrawdownPct": -47.159898215095666,
+    "realizedPnlUsd": 6497209971.921503,
     "closedTrades": 35,
     "openTrades": 11,
     "winRate": 0.42857142857142855,
-    "avgReturnPct": 35.438891250380465,
+    "avgReturnPct": 35.43889246749382,
     "bestTrade": {
       "cusip": "169656105",
       "ticker": "CMG",
@@ -5970,12 +5975,12 @@
       "entryDate": "2024-08-14",
       "exitAccession": "0001172661-25-002315",
       "exitDate": "2025-05-15",
-      "entrySharePrice": 74.81871032714844,
+      "entrySharePrice": 74.8187255859375,
       "exitSharePrice": 60.33246994018555,
       "entryValueUsd": 229134749,
       "shares": 3040132,
-      "returnPct": -19.361788413113644,
-      "pnlUsd": -44364585.28229903,
+      "returnPct": -19.361804858748766,
+      "pnlUsd": -44364622.96496379,
       "status": "closed"
     }
   }
