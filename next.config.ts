@@ -39,6 +39,11 @@ const nextConfig: NextConfig = {
     // error, so the discipline of running tsc locally before pushing stays.
     ignoreBuildErrors: true,
   },
+  // src/lib/snapshots.ts reads the backtest snapshots from disk at request
+  // time instead of bundling them, so the server functions need the files.
+  outputFileTracingIncludes: {
+    "/*": ["src/data/backtest/*.json"],
+  },
   async headers() {
     return [
       {
