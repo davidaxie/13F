@@ -1,87 +1,57 @@
 # 13F
 
-An elegant, minimalist research tool for SEC Form 13F filings — the quarterly
-reports that institutional investment managers (with $100M+ in qualifying
-assets) file to disclose their U.S. equity holdings.
+A research platform for SEC Form 13F filings: what the big funds hold, what they just bought and sold, and what you would have made copying them.
 
-Data is pulled live from **SEC EDGAR** — no third-party API, no key required.
+## What it does
 
-## Features
+Every quarter, institutional managers with $100M+ in US equities disclose their long positions on Form 13F. This app pulls those filings straight from SEC EDGAR, with no third-party aggregator, and turns them into:
 
-- **Search** any fund manager by name (uses EDGAR full-text search)
-- **Browse** a manager's quarterly 13F filings in chronological order
-- **Inspect** any filing's holdings: position values, % of portfolio, shares
-- **Compare** quarter over quarter — new positions, exited positions, share-change %
-- Designed for personal research with **tabular figures**, hairline rules, and a serif/sans pairing
+- **Fund pages**: every 13F a manager has filed, holdings with position value and % of portfolio, and quarter-over-quarter or year-over-year diffs (new, increased, decreased, exited). Also recent 13D/13G ownership filings, and CSV export.
+- **Cross-fund views** across 27 curated funds (value, activist, Tiger Cub, quant, macro): a dashboard of the latest moves, a consensus page for the most crowded names and consensus buys and exits, a new-entries feed ranked by signal quality, and side-by-side fund comparison.
+- **Stock pages**: which tracked funds hold a ticker, ownership over time, fundamentals from SEC XBRL, and recent insider (Form 4) filings.
+- **Backtests**: a $10,000 "mirror" of each fund's disclosed book against SPY, plus two follower strategies, with transaction-cost overlays.
+- **Performance analytics**: Sharpe, Sortino, max drawdown with recovery dates, beta, information ratio, tracking error, up and down capture, rolling one-year alpha, and a switchable benchmark (SPY, IWM, QQQ, EFA, AGG).
+- **Accounts and alerts**: sign in to sync watchlists across devices, and get an email when a watched fund files.
 
-## Stack
+## How it works
 
-- Next.js 16 (App Router, RSC)
-- React 19
-- Tailwind CSS v4
-- TypeScript
-- `fast-xml-parser` for SEC information tables
-- `lucide-react` for icons
+**EDGAR client** (`src/lib/edgar.ts`). Every SEC request goes through one process-wide queue spaced 105 ms apart, just under SEC's 10 requests a second, with retries. Parsed holdings are cached on disk by accession number with no expiry, because a filing never changes.
 
-## Setup
+**The 13F unit trap.** Filings due before 25 May 2023 report values in thousands of dollars; later ones in whole dollars. The conversion happens once, at the data boundary. Each filing's total is also cross-checked against the cover page's `tableValueTotal`, which caught a residual 1000x error that slipped through the date rule.
+
+**CUSIP to ticker.** 13Fs identify securities by CUSIP. A bundled seed of about 15,800 mappings, built from OpenFIGI and SEC's ticker file, means the app renders without calling OpenFIGI or needing an API key. Options rows are excluded so the mirror holds common stock only.
+
+**Mirror backtest** (`src/lib/backtest.ts`). At each filing, the $10,000 portfolio rebalances to the fund's disclosed weights. Trades fill at the close on the **filing date**, when the data became public, not at quarter end, which a real follower could never trade on. The book is marked weekly against SPY. Snapshots for 25 funds are precomputed (`scripts/generate-all-snapshots.ts`), refreshed every Monday by a GitHub Action, and committed. The leaderboard and performance pages are therefore static, which keeps them inside Vercel's function time limits.
+
+**Style decomposition** (`src/lib/factor-decomp.ts`). A five-factor regression of the mirror's weekly excess return on SPY, IWM minus SPY, QQQ minus SPY, EFA minus SPY and AGG minus SPY, with t-stats and R². It separates passive tilts (size, growth, international, bonds) from what is left over.
+
+**Alerts** (`src/app/api/alerts/`). A GitHub Actions job calls the send endpoint hourly with a bearer secret, and the endpoint fails closed in production if the secret is unset. Per-fund "last seen filing" markers and per-user, per-filing dedup in Vercel KV make every run idempotent, so a retry cannot double-send. Unsubscribe links are HMAC-signed. Email goes out through Resend.
+
+**Honest caveats in the UI.** 13F covers long positions only, arrives up to 45 days after quarter end, and the fund list has survivorship bias. These are shown as callouts on the pages they affect, and the methodology is on `/about`.
+
+## Tech stack
+
+TypeScript, Next.js 16 (App Router), React 19, Tailwind CSS v4, fast-xml-parser, yahoo-finance2, Clerk, Vercel KV, Resend, Sentry, Vitest, GitHub Actions, Vercel.
+
+## Running locally
 
 ```bash
 npm install
-cp .env.example .env.local   # then edit with your name + email
-npm run dev
+cp .env.example .env.local   # set EDGAR_USER_AGENT to "Your Name you@example.com" (SEC requires a contact)
+npm run dev                  # http://localhost:3000
+npm test                     # Vitest
 ```
 
-Open <http://localhost:3000>.
+Without Clerk keys the app runs in Clerk's keyless dev mode. Without Resend and `CRON_SECRET`, alerts are off. Without Sentry the SDK no-ops. `OPENFIGI_API_KEY` is optional and only speeds up lookups for CUSIPs missing from the bundled seed. Set `HTTPS_PROXY` if Yahoo Finance blocks your IP.
 
-### Environment variables
+Regenerate the backtest snapshots:
 
-| Var | Required? | Why |
-| --- | --- | --- |
-| `EDGAR_USER_AGENT` | yes | SEC fair-access policy. Format: `"Your Name your.email@example.com"`. |
-| `OPENFIGI_API_KEY` | recommended | Without a key, OpenFIGI rate-limits CUSIP→ticker lookups to 25 req/min in batches of 10. With a free key, it's 100 req/min in batches of 100 (~40× faster). Critical for the leaderboard on Vercel. Get one at <https://openfigi.com/api>. |
-| `HTTPS_PROXY` | dev only | Set when Yahoo Finance geo-blocks your IP (e.g. routing through ClashX or a similar proxy). Picked up by `src/instrumentation.ts`. |
-
-### Production deployment
-
-This is a Next.js App Router app — deploys cleanly to Vercel. Two caveats:
-
-1. **Function timeouts.** The backtest engine fits Vercel Hobby's 60s limit
-   for single-fund pages but the leaderboard's 9-fund cold start can exceed
-   it. Pro plan's 300s ceiling removes the problem.
-2. **Persistent cache.** Local dev caches to `.cache/`; Vercel caches to
-   `/tmp`, which is per-container and resets on cold starts. For an
-   always-fast leaderboard, wire a persistent store (Vercel KV / Upstash
-   Redis) and have `lib/disk-cache.ts` read/write through that.
-
-## Notes on 13F data
-
-- **Value column units**: Filings due on or before **2023-05-25** report
-  values in **thousands of dollars**; later filings report in **whole
-  dollars**. The app handles this automatically.
-- **Long positions only**: 13F covers long positions in 13(f)-securities. Short
-  positions, cash, and most non-equity holdings are not reported.
-- **45-day lag**: Filings are due 45 days after quarter-end, so holdings reflect
-  a snapshot at quarter-end, not real-time positions.
-
-## Project layout
-
-```
-src/
-├── app/
-│   ├── page.tsx                       Landing + search
-│   ├── search/page.tsx                Manager search results
-│   ├── fund/[cik]/page.tsx            Manager overview + filings list
-│   └── fund/[cik]/[accession]/page.tsx Filing holdings + QoQ diff
-├── components/
-│   ├── search-input.tsx
-│   └── holdings-table.tsx
-└── lib/
-    ├── edgar.ts          SEC EDGAR client
-    ├── parse-13f.ts      Information-table XML parser
-    ├── format.ts         USD/pct/date formatters
-    └── utils.ts          cn helper
+```bash
+EDGAR_USER_AGENT="Your Name you@example.com" npx tsx scripts/generate-all-snapshots.ts
 ```
 
-## Disclaimer
+## Notes on the data
 
-For personal research only. Not investment advice.
+- Prices are Yahoo Finance daily adjusted closes. Sector tags come from the S&P 500, 400 and 600 constituent lists on Wikipedia.
+- Backtests are stylized: by default there are no transaction costs, no market impact, and no shorts. The follower pages add a 5, 10 or 25 bps per side cost overlay.
+- For research only. Not investment advice.
