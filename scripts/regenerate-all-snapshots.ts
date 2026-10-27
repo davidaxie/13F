@@ -210,7 +210,7 @@ async function main(): Promise<void> {
         job.mode,
         job.maxQuarters,
       );
-      writeFileSync(outPath, JSON.stringify(snapshot, null, 2));
+      writeFileSync(outPath, JSON.stringify(snapshot));
       const elapsedMs = Date.now() - startedAt;
       console.error(
         `[${job.cik}] OK ${snapshot.trades.length} trades in ${(elapsedMs / 1000).toFixed(1)}s — wrote ${outPath}`,

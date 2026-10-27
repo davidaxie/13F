@@ -83,7 +83,7 @@ async function main(): Promise<void> {
         fund.mode,
         fund.maxQuarters,
       );
-      writeFileSync(outPath, JSON.stringify(snapshot, null, 2));
+      writeFileSync(outPath, JSON.stringify(snapshot));
       process.stderr.write(`[${fund.cik}] ✓ ${snapshot.trades.length} trades — wrote ${outPath}\n`);
       results.push({ cik: fund.cik, name: fund.displayName, ok: true, trades: snapshot.trades.length });
     } catch (err) {
